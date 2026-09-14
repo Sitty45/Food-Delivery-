@@ -1,7 +1,8 @@
 /* Dessert run — offline shell.
-   Caches the app itself so it opens with no signal. Data writes are queued
-   in the page (see flushQueue in index.html), not here. */
-const V = "dr-v1";
+   The page itself is network-first so a new deploy always wins; the cached copy
+   is only used when the network fails. Fonts, libraries and map tiles stay
+   cache-first because they don't change. */
+const V = "dr-v3";
 const SHELL = [
   "./",
   "./index.html",
@@ -25,16 +26,36 @@ self.addEventListener("install", e => {
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys()
-      .then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k))))
+      .then(ks => Promise.all(ks.filter(k => k !== V && k !== V + "-tiles").map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
+const isPage = req =>
+  req.mode === "navigate" ||
+  (req.headers.get("accept") || "").includes("text/html");
+
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
-  if (e.request.method !== "GET") return;                 // writes go straight through
-  if (url.hostname.endsWith("supabase.co")) return;       // never cache data
-  if (url.hostname.includes("tile.openstreetmap")) {      // map tiles: cache what we've seen
+  if (e.request.method !== "GET") return;
+  if (url.hostname.endsWith("supabase.co")) return;
+
+  // The app itself: always try the network, so a redeploy lands immediately.
+  if (isPage(e.request)) {
+    e.respondWith(
+      fetch(e.request)
+        .then(r => {
+          const copy = r.clone();
+          caches.open(V).then(c => c.put("./index.html", copy));
+          return r;
+        })
+        .catch(() => caches.match("./index.html").then(hit => hit || caches.match("./")))
+    );
+    return;
+  }
+
+  // Map tiles: keep whatever we've already seen.
+  if (url.hostname.includes("tile.openstreetmap")) {
     e.respondWith(
       caches.open(V + "-tiles").then(c =>
         c.match(e.request).then(hit =>
@@ -43,6 +64,8 @@ self.addEventListener("fetch", e => {
     );
     return;
   }
+
+  // Fonts, libraries, icons: cache-first, they don't change.
   e.respondWith(
     caches.match(e.request).then(hit =>
       hit || fetch(e.request).then(r => {
@@ -51,6 +74,6 @@ self.addEventListener("fetch", e => {
           caches.open(V).then(c => c.put(e.request, copy));
         }
         return r;
-      }).catch(() => caches.match("./index.html")))
+      }))
   );
 });
