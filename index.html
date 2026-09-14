@@ -157,6 +157,7 @@ th{font-size:calc(var(--fs)*.72);color:var(--ink2);font-weight:500}
   <div id="pane"></div>
   <div id="err"></div>
 </div>
+<input type="file" accept="image/*" capture="environment" id="fp" style="display:none">
 <nav class="nav"><div class="nav-in" id="nav"></div></nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -207,7 +208,12 @@ const I={
   costFromMum:"Cost from mum",comesBack:"Comes back?",inStores:n=>"in "+n+" store"+(n===1?"":"s"),
   noReturns:"no returns",addProd:"+ Add product",search:"Search products",cancel:"Cancel",
   lang:"Language",size:"Text size",route:"Route",loadUp:"Load up",
-  perDrop:"per drop",each:"each",remove:"Remove",collect:"Collect"},
+  perDrop:"per drop",each:"each",remove:"Remove",collect:"Collect",
+  submit:"Mark submitted",submitted:"Submitted",
+  stSent:"Sent to mum",stCooking:"Cooking",stPacked:"Packed",stCollected:"Collected",
+  markCooking:"Mum started",markPacked:"Packed",markCollected:"Picked up",
+  history:"History",showStore:"Show the shop",docket:"Docket photo",
+  addDocket:"Add docket photo",noHistory:"No deliveries yet",back:"Back"},
  th:{order:"สั่งของ",deliver:"ส่งของ",batches:"รอบส่ง",stats:"สถิติ",setup:"ตั้งค่า",
   today:d=>"วันนี้วัน"+d+"!",orderFor:d=>"สั่งของสำหรับวัน"+d,noOrder:"วันนี้ไม่ต้องสั่งของ",
   noRound:"วันนี้ไม่มีรอบส่ง",runsOn:"ส่งของตามวันที่ตั้งไว้",
@@ -233,7 +239,12 @@ const I={
   costFromMum:"ต้นทุนจากแม่",comesBack:"คืนได้ไหม?",inStores:n=>"ใน "+n+" ร้าน",
   noReturns:"ไม่มีของคืน",addProd:"+ เพิ่มสินค้า",search:"ค้นหาสินค้า",cancel:"ยกเลิก",
   lang:"ภาษา",size:"ขนาดตัวอักษร",route:"เส้นทาง",loadUp:"โหลดของ",
-  perDrop:"ต่อรอบ",each:"ต่อกล่อง",remove:"ลบ",collect:"เก็บเงิน"}};
+  perDrop:"ต่อรอบ",each:"ต่อกล่อง",remove:"ลบ",collect:"เก็บเงิน",
+  submit:"ส่งออเดอร์แล้ว",submitted:"ส่งแล้ว",
+  stSent:"ส่งให้แม่แล้ว",stCooking:"กำลังทำ",stPacked:"แพ็คเสร็จ",stCollected:"รับของแล้ว",
+  markCooking:"แม่เริ่มทำ",markPacked:"แพ็คเสร็จ",markCollected:"รับของแล้ว",
+  history:"ประวัติ",showStore:"โชว์ให้ร้านดู",docket:"รูปใบส่งของ",
+  addDocket:"ถ่ายรูปใบส่งของ",noHistory:"ยังไม่มีประวัติ",back:"ย้อนกลับ"}};
 
 /* ============ state ============ */
 const S={tab:"order",lang:localStorage?.getItem?.("dr_lang")||"en",fz:+(localStorage?.getItem?.("dr_fz")||1),
@@ -243,6 +254,7 @@ const S={tab:"order",lang:localStorage?.getItem?.("dr_lang")||"en",fz:+(localSto
  bPane:"des",bSel:new Set(),bOpen:null,bDrawn:false,forced:new Set(),
  sPane:"stores",sOpen:null,picking:null,pq:"",map:null,mapLayer:null,
  user:null,role:"owner",name:"",
+ orders:[],curOrder:null,histStore:null,
  dv:{phase:"brief",si:0,pi:0,loaded:{},stops:null}};
 
 const $=i=>document.getElementById(i);
@@ -400,7 +412,8 @@ async function load(){
   const {data:pf}=await db.from("profiles").select("role,display_name,lang").eq("id",session.user.id).maybeSingle();
   S.role=pf?.role||"driver";
   S.name=pf?.display_name||session.user.email;
-  if(pf?.lang && !localStorage.getItem("dr_lang")){S.lang=pf.lang;applyType();}
+  if(pf?.role==="driver"){S.lang=pf.lang||"th";applyType();}
+  else if(pf?.lang && !localStorage.getItem("dr_lang")){S.lang=pf.lang;applyType();}
   flushQueue();
  } else { S.role="owner"; S.name="Demo"; }
  if(DRIVER) S.role="driver";
@@ -454,9 +467,15 @@ async function load(){
  const {data:spy}=await db.from("supplier_payments")
   .select("amount,paid_on,covers_dates").eq("supplier_id",S.supplierId);
  S.supPay=spy||[];
+ const {data:po}=await db.from("purchase_orders")
+  .select("id,for_delivery_on,status,sent_at,packed_at,collected_at")
+  .order("for_delivery_on",{ascending:false}).limit(8);
+ S.orders=po||[];
+
  const {data:rn}=await db.from("runs").select("id,run_date,started_at,finished_at").order("run_date",{ascending:false}).limit(10);
  S.runs=rn||[];
 
+ const nv=document.querySelector(".nav"); if(nv) nv.style.display=S.role==="driver"?"none":"";
  if(S.role==="driver") return renderDriver();
  renderAll();
 }
@@ -524,260 +543,90 @@ function renderNav(){
   aria-selected="${S.tab===k}"><i class="ti ti-${ic}" aria-hidden="true"></i>${esc(T()[k])}</button>`).join("");
  $("nav").querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;renderAll();});
 }
-function renderAll(){renderHero();renderNav();
+function renderAll(){
+ if(S.histStore){renderNav();return renderHistory();}
+ renderHero();renderNav();
  ({order:renderOrder,deliver:renderDeliver,batches:renderBatches,
    stats:renderStats,setup:renderSetup})[S.tab]();}
 
-/* ============ 0. AUTH ============ */
-function renderAuth(){
+/* ============ 0. ENTRY ============ */
+/* Two doors. Delivery is one tap with no typing — it signs in as the shared
+   driver account, whose credentials are public by design and whose RLS grants
+   read the round and record deliveries, nothing more. Reseller asks for a password. */
+const DRIVER_LOGIN={email:"driver@dessert-run.app",password:"run-2026-delivery"};
+
+function renderAuth(pane){
  setDay(new Date().getDay());
- document.querySelector(".nav").style.display="none";
+ const nav=document.querySelector(".nav"); if(nav) nav.style.display="none";
+ const d=new Date();
  $("hero").innerHTML="";
+ if(pane==="reseller") return renderResellerLogin();
  $("pane").innerHTML=`
- <div style="text-align:center;padding:26px 0 18px">
-  <img src="icon-192.png" alt="" style="width:76px;height:76px;border-radius:18px">
-  <div style="font-size:1.5em;font-weight:600;margin-top:12px">Dessert run</div>
-  <div class="mut">ส่งขนม</div></div>
- <div class="card"><div class="sec" style="border:0">
-  <span class="lbl">Email</span>
-  <input type="email" id="em" inputmode="email" autocomplete="username" style="text-align:left">
-  <span class="lbl" style="margin-top:10px">Password · รหัสผ่าน</span>
-  <input type="password" id="pw" autocomplete="current-password" style="text-align:left">
-  <div id="ae"></div>
- </div><button class="btn" id="si">Sign in · เข้าสู่ระบบ</button></div>
- <button class="btn ghost" id="dm" style="margin-top:10px">Try the demo · ลองใช้</button>`;
- $("si").onclick=async()=>{
-  const email=$("em").value.trim(), password=$("pw").value;
-  if(!email||!password){$("ae").innerHTML='<div class="msg err">Enter email and password.</div>';return;}
-  $("si").disabled=true; $("si").textContent="…";
-  const {error}=await db.auth.signInWithPassword({email,password});
-  $("si").disabled=false; $("si").textContent="Sign in · เข้าสู่ระบบ";
-  if(error){$("ae").innerHTML='<div class="msg err">'+esc(error.message)+'</div>';return;}
-  document.querySelector(".nav").style.display="";
+ <div style="text-align:center;padding:18px 0 20px">
+  <img src="icon-192.png" alt="" style="width:74px;height:74px;border-radius:18px">
+  <div style="font-size:calc(var(--fs)*1.5);font-weight:600;margin-top:11px;line-height:1.4">ส่งขนม</div>
+  <div style="font-size:calc(var(--fs)*.95);color:var(--ink2)">${esc(dayName(d.getDay()))} ${d.getDate()} ${esc(monName(d.getMonth()))}</div></div>
+
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+ <button id="doorD" style="min-height:168px;border-radius:16px;border:2px solid var(--a);
+  background:var(--aw);color:var(--a);font-family:inherit;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px;padding:16px 8px;text-align:center">
+  <i class="ti ti-truck-delivery" style="font-size:44px" aria-hidden="true"></i>
+  <span style="font-size:calc(var(--fs)*1.6);font-weight:600;line-height:1.3">ส่งของ</span>
+  <span style="font-size:calc(var(--fs)*.9);opacity:.9;line-height:1.4">Delivery</span>
+  <span style="font-size:calc(var(--fs)*.75);opacity:.72;line-height:1.4">ไปส่งขนมวันนี้</span>
+ </button>
+ <button id="doorR" style="min-height:168px;border-radius:16px;border:1px solid var(--line);
+  background:var(--paper);font-family:inherit;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px;padding:16px 8px;text-align:center">
+  <i class="ti ti-lock" style="font-size:40px;color:var(--ink2)" aria-hidden="true"></i>
+  <span style="font-size:calc(var(--fs)*1.35);font-weight:600;line-height:1.3">เจ้าของ</span>
+  <span style="font-size:calc(var(--fs)*.9);color:var(--ink2);line-height:1.4">Reseller</span>
+  <span style="font-size:calc(var(--fs)*.75);color:var(--ink3);line-height:1.4">ออเดอร์ · เงิน</span>
+ </button>
+ </div>
+
+ <div id="ae"></div>
+ <div style="text-align:center;margin-top:18px;font-size:calc(var(--fs)*.85);color:var(--ink2);line-height:1.7">
+  กดปุ่มสีเพื่อเริ่มส่งของ ไม่ต้องใส่รหัส<br>
+  <span style="font-size:calc(var(--fs)*.78);color:var(--ink3)">Delivery needs no password</span></div>
+ <button class="btn ghost" id="dm" style="margin-top:16px">ลองใช้ · Try the demo</button>`;
+
+ $("doorD").onclick=async()=>{
+  $("doorD").style.opacity=".6";
+  const {error}=await db.auth.signInWithPassword(DRIVER_LOGIN);
+  if(error){$("doorD").style.opacity="1";
+   $("ae").innerHTML='<div class="msg err">'+esc(error.message)+'</div>';return;}
   load();
  };
+ $("doorR").onclick=()=>renderAuth("reseller");
  $("dm").onclick=()=>{location.search="?demo=1";};
 }
 
-/* ============ DRIVER SHELL ============ */
-/* One question per screen, no tabs, Thai first. */
-const DT={
- th:{ready:"พร้อมออกรอบหรือยัง?",loadFirst:"โหลดของขึ้นรถให้ครบก่อน",start:"เริ่มส่งของ",
-  boxes:"กล่อง",stops:"ร้าน",goTo:"ไปที่ร้าน",arrived:"ถึงแล้ว",openMap:"เปิดแผนที่",
-  howMany:"เหลือกี่กล่อง?",leftLast:n=>"วางไว้ "+n+" กล่อง",soldN:n=>"ขายได้ "+n+" กล่อง",
-  next:"ถัดไป",back:"ย้อนกลับ",collect:"เก็บเงินจากร้าน",got:"รับเงินแล้ว",
-  dropNew:"วางของใหม่",dropped:"วางเสร็จแล้ว",fix:"แก้ไขจำนวน",
-  allDone:"ส่งครบทุกร้านแล้ว!",totalGot:"เก็บเงินได้ทั้งหมด",home:"กลับหน้าแรก",
-  stopOf:(a,b)=>"ร้านที่ "+a+" จาก "+b,noRound:"วันนี้ไม่มีรอบส่ง",
-  practice:"โหมดฝึกซ้อม",exit:"ออกจากระบบ",noReturn:"ไม่มีของคืน"},
- en:{ready:"Ready to go?",loadFirst:"Load everything into the van first",start:"Start the round",
-  boxes:"boxes",stops:"stops",goTo:"Drive to",arrived:"I'm here",openMap:"Open map",
-  howMany:"How many left?",leftLast:n=>"You left "+n,soldN:n=>"Sold "+n,
-  next:"Next",back:"Back",collect:"Collect from the shop",got:"Got the money",
-  dropNew:"Drop the new boxes",dropped:"Done",fix:"Change amounts",
-  allDone:"All stops done!",totalGot:"Collected in total",home:"Back to start",
-  stopOf:(a,b)=>"Stop "+a+" of "+b,noRound:"No round today",
-  practice:"Practice mode",exit:"Sign out",noReturn:"no returns"}};
-const D_=()=>DT[S.lang]||DT.th;
-
-function driverStops(){
- if(S.dv.stops) return S.dv.stops;
- S.dv.stops=buildStops();
- return S.dv.stops;
-}
-function renderDriver(){
- document.querySelector(".nav").style.display="none";
- setDay(S.dow);
- const R=driverStops(), d=D_();
- $("hero").innerHTML="";
- if(!R.length){
-  $("pane").innerHTML=`<div class="empty" style="padding-top:70px">
-   <div style="font-size:1.4em;font-weight:600;color:var(--a)">${esc(T().today(dayName(S.dow)))}</div>
-   <div style="font-size:1.05em;margin-top:8px">${esc(d.noRound)}</div></div>
-   ${dvFooter()}`;
-  bindFooter(); return;
- }
- const ph=S.dv.phase;
- if(ph==="brief") return dvBrief(R,d);
- if(ph==="done")  return dvDone(R,d);
- const st=R[S.dv.si];
- if(ph==="go")    return dvGo(st,d,R);
- if(ph==="count") return dvCount(st,d,R);
- if(ph==="money") return dvMoney(st,d,R);
- return dvDrop(st,d,R);
-}
-const dvFooter=()=>`<div style="text-align:center;margin-top:24px">
- <button class="sm" id="dexit">${esc(D_().exit)}</button></div>`;
-function bindFooter(){const b=$("dexit");if(b)b.onclick=async()=>{
- if(!DEMO) await db.auth.signOut(); location.href=location.pathname;};}
-
-function dvProgress(R){
- const tot=R.length*3+2;
- let cur=1;
- if(S.dv.phase!=="brief"){cur=2+S.dv.si*3+({go:0,count:1,money:1,drop:2}[S.dv.phase]||0);}
- if(S.dv.phase==="done")cur=tot;
- return `<div style="display:flex;gap:2px;height:6px;margin-bottom:12px">
-  ${Array.from({length:tot},(_,i)=>`<div style="flex:1;border-radius:2px;background:${i<cur?"var(--a)":"var(--line)"}"></div>`).join("")}</div>`;
-}
-function dvShell(R,inner,actions){
- $("pane").innerHTML=dvProgress(R)+inner+
-  `<div style="position:sticky;bottom:8px;padding-top:14px;display:flex;flex-direction:column;gap:8px">${actions}</div>`;
-}
-function dvBrief(R,d){
- const items={};
- R.forEach(s=>s.out.forEach(o=>{if(o.qty)items[o.pid]=(items[o.pid]||0)+o.qty;}));
- const keys=Object.keys(items);
- const all=keys.every(k=>S.dv.loaded[k]);
- dvShell(R,`
-  <div class="hero"><div>
-   <div class="h1">${esc(T().today(dayName(S.dow)))}</div>
-   <div class="h2">${R.length} ${esc(d.stops)}</div></div>
-   <div><div class="dnum">${new Date().getDate()}</div>
-   <div class="dmon">${monName(new Date().getMonth())}</div></div></div>
-  <div id="map"></div>
-  <div class="sl" style="margin-bottom:6px">${esc(d.loadFirst)}</div>
-  <div class="card">${keys.map(k=>`
-   <div class="row" style="padding:13px;border-bottom:1px solid var(--line);cursor:pointer" data-ld="${k}">
-   <span style="display:flex;align-items:center;gap:11px">
-    <span class="cb" data-on="${S.dv.loaded[k]?1:0}">${S.dv.loaded[k]?"✓":""}</span>
-    <span style="font-size:1.05em">${esc(pname(k))}</span></span>
-   <span style="font-size:1.25em;font-weight:600" class="num">${items[k]}</span></div>`).join("")}</div>
-  ${R.map((s,i)=>`<div class="tuck"><span>${i+1}. ${esc(s.store.name)}</span>
-   <span class="mut">${esc(s.store.suburb||"")}</span></div>`).join("")}
-  ${dvFooter()}`,
-  `<button class="btn acc" id="dgo" ${all?"":"disabled"} style="min-height:66px;font-size:1.2em">
-   ${esc(all?d.start:d.loadFirst)}</button>`);
- drawMap(R.map(s=>s.store).filter(s=>s.latitude));
- $("pane").querySelectorAll("[data-ld]").forEach(e=>e.onclick=()=>{
-  S.dv.loaded[e.dataset.ld]=!S.dv.loaded[e.dataset.ld];renderDriver();});
- $("dgo").onclick=()=>{
-  S.run.started=Date.now();S.run.last=0;
-  S.dv.phase="go";S.dv.si=0;renderDriver();};
- bindFooter();
-}
-function dvGo(st,d,R){
- const s=st.store;
- const nav="https://www.google.com/maps/dir/?api=1&destination="+s.latitude+","+s.longitude+"&travelmode=driving";
- dvShell(R,`
-  <div style="text-align:center;padding:14px 6px">
-  <div class="mut">${esc(d.stopOf(S.dv.si+1,R.length))}</div>
-  <div class="mut" style="margin-top:14px">${esc(d.goTo)}</div>
-  <div style="font-size:1.9em;font-weight:600;line-height:1.35">${esc(s.name)}</div>
-  <div class="mut">${esc(s.suburb||"")}</div>
-  ${s.parking_note?`<div style="background:var(--aw);color:var(--a);border-radius:11px;
-   padding:11px 13px;margin-top:16px;font-size:.95em;text-align:left">🅿 ${esc(s.parking_note)}</div>`:""}
-  ${s.contact_note?`<div style="background:var(--wash);border-radius:11px;padding:11px 13px;
-   margin-top:8px;font-size:.95em;text-align:left">${esc(s.contact_note)}</div>`:""}
-  </div>`,
-  `<a href="${nav}" target="_blank" rel="noopener" class="btn ghost"
-    style="display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:52px">
-    ${esc(d.openMap)}</a>
-   <button class="btn acc" id="dn" style="min-height:62px;font-size:1.15em">${esc(d.arrived)}</button>`);
- $("dn").onclick=()=>{S.dv.phase=st.back.length?"count":"drop";S.dv.pi=0;renderDriver();};
-}
-function dvCount(st,d,R){
- const b=st.back[S.dv.pi];
- dvShell(R,`
-  <div style="text-align:center;padding:10px 6px">
-  <div class="mut">${esc(st.store.name)} · ${S.dv.pi+1}/${st.back.length}</div>
-  <div style="font-size:1.5em;font-weight:600;margin-top:12px">${esc(pname(b.pid))}</div>
-  <div style="font-size:1.15em;margin-top:6px">${esc(d.howMany)}</div>
-  <div class="mut">${esc(d.leftLast(b.out))}</div>
-  <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin:20px 0">
-   <button id="dm1" style="width:78px;height:78px;border-radius:20px;font-size:34px;
-    border:1px solid var(--line2);background:var(--paper)">−</button>
-   <span style="font-size:64px;font-weight:600;min-width:90px" class="num">${b.qty}</span>
-   <button id="dp1" style="width:78px;height:78px;border-radius:20px;font-size:34px;
-    border:1px solid var(--line2);background:var(--paper)">+</button></div>
-  <div style="font-size:1.1em;color:var(--good)">${esc(d.soldN(b.out-b.qty))}</div>
-  </div>`,
-  `<button class="btn acc" id="dn" style="min-height:62px;font-size:1.15em">${esc(d.next)}</button>
-   <button class="btn ghost" id="db">${esc(d.back)}</button>`);
- $("dm1").onclick=()=>{b.qty=Math.max(0,b.qty-1);renderDriver();};
- $("dp1").onclick=()=>{b.qty=Math.min(b.out,b.qty+1);renderDriver();};
- $("dn").onclick=()=>{if(S.dv.pi<st.back.length-1){S.dv.pi++;}else{S.dv.phase="money";}renderDriver();};
- $("db").onclick=()=>{if(S.dv.pi>0){S.dv.pi--;}else{S.dv.phase="go";}renderDriver();};
-}
-function dvMoney(st,d,R){
- const due=dueFor(st);
- dvShell(R,`
-  <div style="text-align:center;padding:10px 6px">
-  <div class="mut">${esc(st.store.name)}</div>
-  <div style="font-size:1.3em;font-weight:500;margin-top:14px">${esc(d.collect)}</div>
-  <div style="font-size:56px;font-weight:600;color:var(--a);margin:12px 0" class="num">${money(due)}</div>
-  <div class="card"><div class="sec" style="border:0">
-  ${st.back.map(b=>`<div class="row"><span class="rt">${esc(pname(b.pid))}</span>
-   <span class="mut">${b.out-b.qty} × ${money(b.price)}</span></div>`).join("")}</div></div>
-  </div>`,
-  `<button class="btn good" id="dn" style="min-height:62px;font-size:1.15em">${esc(d.got)}</button>
-   <button class="btn ghost" id="db">${esc(d.back)}</button>`);
- $("dn").onclick=()=>{S.dv.phase="drop";renderDriver();};
- $("db").onclick=()=>{S.dv.phase="count";S.dv.pi=Math.max(0,st.back.length-1);renderDriver();};
-}
-function dvDrop(st,d,R){
- dvShell(R,`
-  <div style="text-align:center;padding:10px 6px">
-  <div class="mut">${esc(st.store.name)}</div>
-  <div style="font-size:1.3em;font-weight:500;margin-top:12px">${esc(d.dropNew)}</div></div>
-  <div class="card"><div class="sec" style="border:0">
-  ${st.out.map((o,j)=>`<div class="row">
-   <span class="rt" style="font-size:1.05em">${esc(pname(o.pid))}
-   ${!isRet(o.pid)?`<span class="mut">${esc(d.noReturn)}</span>`:""}</span>
-   <span class="stp"><button data-dm="${j}" aria-label="−">−</button>
-   <span class="v" style="font-size:1.3em">${o.qty}</span>
-   <button data-dp="${j}" aria-label="+">+</button></span></div>`).join("")}
-  </div></div>`,
-  `<button class="btn good" id="dn" style="min-height:62px;font-size:1.15em">${esc(d.dropped)}</button>
-   <button class="btn ghost" id="db">${esc(d.back)}</button>`);
- $("pane").querySelectorAll("[data-dm]").forEach(b=>b.onclick=()=>{
-  const o=st.out[+b.dataset.dm];o.qty=Math.max(0,o.qty-1);renderDriver();});
- $("pane").querySelectorAll("[data-dp]").forEach(b=>b.onclick=()=>{
-  const o=st.out[+b.dataset.dp];o.qty=o.qty+1;renderDriver();});
- $("db").onclick=()=>{S.dv.phase=st.back.length?"money":"go";renderDriver();};
- $("dn").onclick=async()=>{
-  const btn=$("dn"); btn.disabled=true; btn.textContent="…";
-  await dvSave(st);
-  if(S.dv.si<R.length-1){S.dv.si++;S.dv.phase="go";S.dv.pi=0;}
-  else {S.dv.phase="done";}
-  renderDriver();};
-}
-async function dvSave(st){
- const now=new Date().toISOString();
- if(DEMO){
-  st.back.forEach(b=>{const l=S.lines.find(x=>x.id===b.id);if(l){l.qty_back=b.qty;l.settled_at=now;}});
-  st.done=true; return;
- }
- for(const b of st.back)
-  await write({kind:"update",table:"delivery_lines",
-   values:{qty_back:b.qty,reason:b.qty>0?"unsold":null,settled_at:now},match:{id:b.id}});
- const amt=dueFor(st);
- if(amt>0) await write({kind:"insert",table:"store_payments",
-  rows:{store_id:st.store.id,amount:amt,paid_on:S.today,notes:"Collected by driver"}});
- const rows=st.out.filter(o=>o.qty>0);
- if(rows.length){
-  const {data:del}=await db.from("deliveries")
-   .insert({store_id:st.store.id,delivered_on:S.today,completed_at:now,recorded_by:S.user?.id}).select("id").single();
-  if(del) await write({kind:"insert",table:"delivery_lines",rows:rows.map(o=>({
-   delivery_id:del.id,product_id:o.pid,supplier_id:S.supplierId,
-   qty_out:o.qty,unit_price:o.price,unit_cost:o.cost}))});
- }
- st.done=true;
-}
-function dvDone(R,d){
- const tot=R.reduce((a,s)=>a+dueFor(s),0);
- const secs=S.run.started?Math.floor((Date.now()-S.run.started)/1000):0;
- dvShell(R,`
-  <div style="text-align:center;padding:26px 10px">
-  <div style="font-size:62px;color:var(--good);line-height:1">✓</div>
-  <div style="font-size:1.5em;font-weight:600;margin-top:10px">${esc(d.allDone)}</div>
-  <div class="mut" style="margin-top:4px">${R.length} ${esc(d.stops)} · ${fmtM(secs)}</div>
-  <div class="mut" style="margin-top:18px">${esc(d.totalGot)}</div>
-  <div style="font-size:46px;font-weight:600;color:var(--good)" class="num">${money(tot)}</div>
-  </div>${dvFooter()}`,
-  `<button class="btn ghost" id="dn">${esc(d.home)}</button>`);
- $("dn").onclick=()=>{S.dv={phase:"brief",si:0,pi:0,loaded:{},stops:null};
-  S.run={started:null,finished:null,last:0,tick:null};renderDriver();};
- bindFooter();
+function renderResellerLogin(){
+ $("pane").innerHTML=`
+ <div style="text-align:center;padding:22px 0 16px">
+  <i class="ti ti-lock" style="font-size:38px;color:var(--ink2)" aria-hidden="true"></i>
+  <div style="font-size:calc(var(--fs)*1.4);font-weight:600;margin-top:9px;line-height:1.4">เจ้าของ</div>
+  <div style="font-size:calc(var(--fs)*.9);color:var(--ink2)">Reseller sign in</div></div>
+ <div class="card"><div class="sec" style="border:0">
+  <span class="lbl">อีเมล · Email</span>
+  <input type="email" id="em" inputmode="email" autocomplete="username" style="text-align:left">
+  <span class="lbl" style="margin-top:12px">รหัสผ่าน · Password</span>
+  <input type="password" id="pw" autocomplete="current-password" style="text-align:left">
+  <div id="ae"></div>
+ </div><button class="btn" id="si" style="min-height:58px;font-size:calc(var(--fs)*1.05)">เข้าสู่ระบบ · Sign in</button></div>
+ <button class="btn ghost" id="bk" style="margin-top:12px;min-height:52px">ย้อนกลับ · Back</button>`;
+ $("si").onclick=async()=>{
+  const email=$("em").value.trim(), password=$("pw").value;
+  if(!email||!password){$("ae").innerHTML='<div class="msg err">ใส่อีเมลและรหัสผ่าน · Enter email and password</div>';return;}
+  $("si").disabled=true; $("si").textContent="…";
+  const {error}=await db.auth.signInWithPassword({email,password});
+  $("si").disabled=false; $("si").textContent="เข้าสู่ระบบ · Sign in";
+  if(error){$("ae").innerHTML='<div class="msg err">'+esc(error.message)+'</div>';return;}
+  load();
+ };
+ $("bk").onclick=()=>renderAuth();
 }
 
 /* ============ 1. ORDER ============ */
@@ -811,7 +660,9 @@ function renderOrder(){
   <div class="sec"><div class="ordertxt">${esc(msg)}</div>
   <div class="chips">${L.map(l=>l.gs.map(g=>
    `<span class="chip">${esc(g.st.join(" + "))} ${g.q}</span>`).join("")).join("")}</div></div>
-  <button class="btn acc" id="cp">${esc(S.orderStep>1?T().copied:T().copy)}</button></div>
+  <button class="btn acc" id="cp">${esc(S.orderStep>1?T().copied:T().copy)}</button>
+  <button class="btn" id="sub" ${S.orderStep<2?"disabled":""}>${esc(T().submit)}</button></div>
+  ${statusStrip(t)}
  <div class="sl" style="margin:14px 0 6px">${esc(T().adjust)}</div>
  ${list.map(s=>`<div class="card"><div class="ch"><div>
   <div class="cn">${esc(s.name)}</div>
@@ -828,6 +679,60 @@ function renderOrder(){
   S.orderQty[oKey(sid,pid)]=Math.max(0,oVal(sid,pid)+ +d);S.orderStep=1;renderOrder();});
  $("cp").onclick=async()=>{try{await navigator.clipboard.writeText(msg);}catch(e){}
   S.orderStep=2;renderOrder();};
+ if($("sub"))$("sub").onclick=()=>submitOrder(iso(t),list);
+ bindStatus();
+}
+
+/* order status: sent -> cooking -> packed -> collected */
+const ORD_STEPS=[["sent","stSent"],["cooking","stCooking"],["packed","stPacked"],["collected","stCollected"]];
+function orderFor(dateISO){return S.orders.find(o=>o.for_delivery_on===dateISO)||null;}
+function statusStrip(t){
+ const o=orderFor(iso(t));
+ if(!o) return "";
+ const idx=ORD_STEPS.findIndex(x=>x[0]===o.status);
+ return `<div class="card"><div class="ch"><div>
+  <div class="cn">${esc(T().submitted)}</div>
+  <div class="mut">${esc(dayName(t.getDay()))} ${t.getDate()}/${t.getMonth()+1}</div></div></div>
+  <div class="sec">
+  ${ORD_STEPS.map(([k,lb],i)=>`<div class="row">
+   <span class="rt" style="display:flex;align-items:center;gap:9px">
+   <span style="width:22px;height:22px;border-radius:50%;flex:0 0 22px;display:flex;
+    align-items:center;justify-content:center;font-size:12px;
+    background:${i<=idx?"var(--a)":"var(--wash)"};color:${i<=idx?"#fff":"var(--ink3)"}">${i<=idx?"✓":i+1}</span>
+   ${esc(T()[lb])}</span>
+   ${i===idx+1?`<button class="sm" data-adv="${k}">${esc(T()["mark"+k.charAt(0).toUpperCase()+k.slice(1)]||T().submit)}</button>`:""}
+   </div>`).join("")}
+  </div></div>`;
+}
+function bindStatus(){
+ document.querySelectorAll("[data-adv]").forEach(b=>b.onclick=async()=>{
+  const t=orderTarget(); const o=orderFor(iso(t)); if(!o) return;
+  const k=b.dataset.adv;
+  const patch={status:k};
+  if(k==="packed") patch.packed_at=new Date().toISOString();
+  if(k==="collected") patch.collected_at=new Date().toISOString();
+  o.status=k; Object.assign(o,patch); renderOrder();
+  if(!DEMO) await write({kind:"update",table:"purchase_orders",values:patch,match:{id:o.id}});
+ });
+}
+async function submitOrder(dateISO,list){
+ const btn=$("sub"); btn.disabled=true; btn.textContent="…";
+ if(orderFor(dateISO)){renderOrder();return;}
+ const rows=[];
+ list.forEach(s=>S.prices.filter(p=>p.store_id===s.id).forEach(p=>{
+  const q=oVal(s.id,p.product_id); if(!q) return;
+  rows.push({product_id:p.product_id,store_id:s.id,
+   qty_plain:s.price_tag_required?0:q,qty_price_tagged:s.price_tag_required?q:0,
+   unit_cost:S.costs[p.product_id]||0});}));
+ if(DEMO){S.orders.unshift({id:"demo",for_delivery_on:dateISO,status:"sent"});renderOrder();return;}
+ const {data:po,error}=await db.from("purchase_orders")
+  .insert({supplier_id:S.supplierId,ordered_on:S.today,for_delivery_on:dateISO,
+           sent_at:new Date().toISOString(),status:"sent"}).select("id").single();
+ if(error){btn.disabled=false;btn.textContent=T().submit;return fail(error.message);}
+ if(rows.length) await db.from("purchase_order_lines")
+  .insert(rows.map(r=>({...r,purchase_order_id:po.id})));
+ S.orders.unshift({id:po.id,for_delivery_on:dateISO,status:"sent"});
+ renderOrder();
 }
 
 /* ============ 2. DELIVER ============ */
@@ -922,6 +827,10 @@ function renderDeliver(){
   r.qty=Math.max(0,r.qty+ +v);renderDeliver();});
  $("pane").querySelectorAll("[data-pay]").forEach(x=>x.onchange=()=>{R[+x.dataset.pay].paid=x.value;});
  $("pane").querySelectorAll("[data-sv]").forEach(b=>b.onclick=()=>saveStop(+b.dataset.sv,b));
+ $("pane").querySelectorAll("[data-hist]").forEach(b=>b.onclick=()=>{
+  S.histStore=b.dataset.hist;renderAll();});
+ $("pane").querySelectorAll("[data-dock]").forEach(b=>b.onclick=()=>{
+  S.dockTarget=+b.dataset.dock;$("fp").value="";$("fp").click();});
 }
 
 function stopCard(st,i){
@@ -952,6 +861,12 @@ function stopCard(st,i){
   <span class="stp"><button data-so="${i}:${j}:-1" aria-label="−">−</button>
   <span class="v">${o.qty}</span>
   <button data-so="${i}:${j}:1" aria-label="+">+</button></span></div>`).join("")}</div>
+ <div class="sec"><div class="g2">
+ <button class="sm" data-hist="${s.id}" style="width:100%;min-height:44px">${esc(T().showStore)}</button>
+ <button class="sm" data-dock="${i}" style="width:100%;min-height:44px">
+  ${st.docket?"✓ "+esc(T().docket):esc(T().addDocket)}</button></div>
+ ${st.docket?`<img src="${st.docket}" alt="" style="width:100%;border-radius:10px;margin-top:8px">`:""}
+ </div>
  <button class="btn acc" data-sv="${i}">${esc(T().save)}</button></div>`;
 }
 
@@ -987,7 +902,8 @@ async function saveStop(i,btn){
  const rows=st.out.filter(o=>o.qty>0);
  if(rows.length){
   const {data:del,error:de}=await db.from("deliveries")
-   .insert({store_id:st.store.id,delivered_on:S.today,completed_at:now}).select("id").single();
+   .insert({store_id:st.store.id,delivered_on:S.today,completed_at:now,
+            recorded_by:S.user?.id||null,docket_photo:st.docket||null}).select("id").single();
   if(de){undo();return fail(de.message);}
   const {data:nl,error:le}=await db.from("delivery_lines").insert(rows.map(o=>({
    delivery_id:del.id,product_id:o.pid,supplier_id:S.supplierId,
@@ -1166,6 +1082,48 @@ function renderStats(){
  <td class="num">${money(m.rev-m.cost)}</td></tr>`;}).join("")}</table></div></div>`;
 }
 
+/* ============ STORE HISTORY — the screen you show the shop ============ */
+function renderHistory(){
+ const s=S.stores.find(x=>x.id===S.histStore);
+ if(!s){S.histStore=null;return renderAll();}
+ const rows={};
+ S.lines.filter(l=>l.deliveries.store_id===s.id).forEach(l=>{
+  const d=l.deliveries.delivered_on;
+  rows[d]=rows[d]||{d,items:[],amount:0,settled:true,photo:null};
+  const sold=l.qty_back==null?null:(l.qty_out-l.qty_back);
+  rows[d].items.push({pid:l.product_id,out:l.qty_out,back:l.qty_back,sold});
+  if(sold!=null) rows[d].amount+=sold*Number(l.unit_price);
+  if(l.settled_at==null) rows[d].settled=false;});
+ const list=Object.values(rows).sort((a,b)=>b.d.localeCompare(a.d));
+ const paid=S.payments.filter(p=>p.store_id===s.id).reduce((a,p)=>a+Number(p.amount),0);
+ const billed=list.filter(r=>r.settled).reduce((a,r)=>a+r.amount,0);
+
+ $("hero").innerHTML=`<div class="hero"><div>
+  <div class="h1" style="font-size:calc(var(--fs)*1.35)">${esc(s.name)}</div>
+  <div class="h2">${esc(s.suburb||"")}</div></div>
+  <div><div class="dnum">${list.length}</div><div class="dmon">${esc(T().deliver).toUpperCase()}</div></div></div>`;
+
+ $("pane").innerHTML=`
+ <div class="g2 kpi" style="margin-bottom:11px">
+ <div><div class="kk">${esc(T().revenue)}</div><div class="kv">${money(billed)}</div></div>
+ <div><div class="kk">${esc(T().owed)}</div><div class="kv">${money(billed-paid)}</div></div></div>
+ ${list.length?list.map(r=>{
+  const dt=new Date(r.d+"T12:00:00"), k=DAY[dt.getDay()];
+  return `<div class="card"><div class="ch" style="align-items:center;gap:11px">
+  <div class="dchip" style="background:${k.w};color:${k.i}">
+   <b>${dt.getDate()}</b><span>${monName(dt.getMonth()).toUpperCase()}</span></div>
+  <div style="flex:1;min-width:0">
+   ${r.items.map(i=>`<div style="font-size:calc(var(--fs)*.95)">${esc(pname(i.pid))}
+    <span class="mut">${i.out}${i.sold!=null?" → "+i.sold:""}</span></div>`).join("")}
+  </div>
+  <div style="text-align:right">
+   <div style="font-weight:600" class="num">${r.settled?money(r.amount):"—"}</div>
+   ${r.photo?'<div class="mut">📄</div>':""}</div></div></div>`;}).join("")
+  :`<div class="empty">${esc(T().noHistory)}</div>`}
+ <button class="btn ghost" id="hb" style="margin-top:10px">${esc(T().back)}</button>`;
+ $("hb").onclick=()=>{S.histStore=null;renderAll();};
+}
+
 /* ============ 5. SETUP ============ */
 function renderSetup(){
  $("pane").innerHTML=`
@@ -1208,6 +1166,7 @@ function setupStores(){
   return `<div class="card ${op?"on":""}"><div class="ch" data-so2="${s.id}">
   <div style="flex:1;min-width:0"><div class="cn">${esc(s.name)}</div>
   <div class="mut">${esc(s.suburb||"")} · ${S.prices.filter(p=>p.store_id===s.id).length} ${esc(T().products)}</div>
+  <button class="sm" data-hist2="${s.id}" style="margin-top:5px">${esc(T().history)}</button>
   <div style="display:flex;gap:3px;margin-top:4px;align-items:center">
   ${(s.delivery_days||[]).map(d=>`<span style="width:15px;height:15px;border-radius:4px;background:${DAY[d].a};
    color:${d===1?"#8A7A00":"#fff"};font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:600">${DAY[d].en[0]}</span>`).join("")}
@@ -1248,6 +1207,8 @@ function setupProducts(){
  <div class="mut">${esc(T().cost)}</div></div></div></div>`).join("");
 }
 function bindSetup(){
+ $("pane").querySelectorAll("[data-hist2]").forEach(b=>b.onclick=ev=>{
+  ev.stopPropagation();S.histStore=b.dataset.hist2;renderAll();});
  $("pane").querySelectorAll("[data-so2]").forEach(e=>e.onclick=()=>{
   S.sOpen=S.sOpen===e.dataset.so2?null:e.dataset.so2;renderSetup();});
  $("pane").querySelectorAll("[data-dd]").forEach(b=>b.onclick=async()=>{
@@ -1315,6 +1276,14 @@ function drawMap(pts){
   el.innerHTML='<div class="empty">Map error: '+esc(err.message)+'</div>';
  }
 }
+
+document.getElementById("fp").onchange=function(){
+ const f=this.files[0]; if(!f||S.dockTarget==null) return;
+ const r=new FileReader();
+ r.onload=()=>{const st=S.stops&&S.stops[S.dockTarget];
+  if(st){st.docket=r.result;} S.dockTarget=null; renderDeliver();};
+ r.readAsDataURL(f);
+};
 
 if("serviceWorker" in navigator && location.protocol==="https:")
  navigator.serviceWorker.register("sw.js").catch(()=>{});
