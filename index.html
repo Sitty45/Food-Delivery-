@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#12211b">
-<title>Dessert run</title>
+<title>Dessert run · ส่งขนม</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,247 +15,233 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ส่งขนม">
 <style>
+
 :root{
-  --ink:#12211b; --ink2:#5c6b63; --ink3:#8c9a92;
-  --paper:#fff; --wash:#f1f4f1; --line:#dbe2dd; --line2:#b9c4bd;
-  --cold:#14618F; --coldw:#e8f4fc;
-  --good:#2E7D32; --goodw:#eaf7ea;
-  --bad:#8e2020; --badw:#fdecec;
-  --a:#12211b; --aw:#eef0ee;      /* day accent, set at runtime */
-  --fs:16px; --lh:1.55;
-  --tap:52px;
+  --ink:#101c17;--ink2:#5f6f67;--ink3:#93a09a;
+  --paper:#ffffff;--wash:#f6f8f6;--line:#e8ede9;--line2:#c8d2cc;
+  --cold:#14618F;--coldw:#eaf4fc;
+  --good:#2E7D32;--goodw:#edf7ee;
+  --bad:#8e2020;--badw:#fdeeee;
+  --warn:#9A5B06;--warnw:#fdf3e6;
+  --a:#101c17;--aw:#eef1ef;
+  --gold:#E0A020;
+  --fs:16px;--lh:1.55;
+  --r:16px;--rs:12px;
+  --sh:0 1px 2px rgba(16,28,23,.05), 0 1px 1px rgba(16,28,23,.03);
+  --sh2:0 4px 14px rgba(16,28,23,.09);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{font-family:"Anuphan",system-ui,sans-serif;background:var(--wash);color:var(--ink);
-  font-size:var(--fs);line-height:var(--lh);-webkit-text-size-adjust:100%}
-.wrap{max-width:540px;margin:0 auto;padding:12px 13px calc(88px + env(safe-area-inset-bottom))}
-button,input,textarea,select{font-family:inherit;color:var(--ink)}
-button{cursor:pointer}
+  font-size:var(--fs);line-height:var(--lh);-webkit-text-size-adjust:100%;
+  -webkit-font-smoothing:antialiased}
+button,input,textarea{font-family:inherit;color:var(--ink)}
+button{cursor:pointer;border:0;background:none}
+.wrap{max-width:540px;margin:0 auto;padding:14px 15px calc(92px + env(safe-area-inset-bottom))}
+.wrap.bare{padding-bottom:28px}
 .num{font-variant-numeric:tabular-nums}
-.mut{font-size:calc(var(--fs)*.78);color:var(--ink3)}
+.mut{font-size:calc(var(--fs)*.79);color:var(--ink3)}
 .hide{display:none}
 
-/* hero */
-.hero{background:var(--aw);border:1px solid var(--a);border-radius:16px;padding:15px;
-  margin-bottom:11px;display:flex;justify-content:space-between;align-items:flex-start;gap:11px}
-.h1{font-size:calc(var(--fs)*1.65);font-weight:600;color:var(--a);line-height:1.25}
-.h2{font-size:calc(var(--fs)*.85);color:var(--a);opacity:.85;margin-top:2px}
-.dnum{font-size:calc(var(--fs)*1.6);font-weight:600;color:var(--a);line-height:1;text-align:right}
-.dmon{font-size:calc(var(--fs)*.7);color:var(--a);opacity:.8;text-align:right;letter-spacing:.04em}
-.dnext{font-size:calc(var(--fs)*.65);color:var(--a);opacity:.62;text-align:right;margin-top:4px}
+.hero{background:var(--aw);border-radius:var(--r);padding:16px 17px;margin-bottom:14px;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.h1{font-size:calc(var(--fs)*1.55);font-weight:600;color:var(--a);line-height:1.26;letter-spacing:-.01em}
+.h2{font-size:calc(var(--fs)*.82);color:var(--a);opacity:.7;margin-top:1px}
+.dnum{font-size:calc(var(--fs)*1.55);font-weight:600;color:var(--a);line-height:1;text-align:right}
+.dmon{font-size:calc(var(--fs)*.66);color:var(--a);opacity:.6;text-align:right;letter-spacing:.06em;margin-top:3px}
 
-/* cards */
-.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;
-  margin-bottom:10px;overflow:hidden}
-.card.on{border-color:var(--a);border-width:2px}
-.ch{display:flex;justify-content:space-between;align-items:flex-start;gap:9px;padding:12px 13px}
-.cn{font-size:calc(var(--fs)*1.02);font-weight:500}
-.sec{border-top:1px solid var(--line);padding:9px 13px}
-.sec.cold{background:var(--coldw)}
-.sl{font-size:calc(var(--fs)*.78);font-weight:500;color:var(--ink2);margin-bottom:3px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:9px;padding:6px 0}
-.rt{font-size:calc(var(--fs)*.95);min-width:0}
-.pill{font-size:calc(var(--fs)*.7);padding:3px 9px;border-radius:99px;white-space:nowrap;
-  background:var(--aw);color:var(--a)}
-.pill.cold{background:var(--coldw);color:var(--cold)}
-.pill.good{background:var(--goodw);color:var(--good)}
-.pill.grey{background:var(--wash);color:var(--ink3)}
+.task{background:var(--a);border-radius:var(--r);padding:19px 17px;color:#fff;margin-bottom:12px;
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;box-shadow:var(--sh2)}
+.task:active{transform:scale(.995)}
+.task.q{background:var(--paper);color:var(--ink);box-shadow:var(--sh);cursor:default}
+.task i{font-size:29px;flex:0 0 auto;opacity:.95}
+.tt{font-size:calc(var(--fs)*1.08);font-weight:600;line-height:1.35;display:block;letter-spacing:-.01em}
+.ts{font-size:calc(var(--fs)*.82);opacity:.78;line-height:1.5;display:block;margin-top:1px}
+.done{background:var(--aw);border-radius:var(--r);padding:17px;text-align:center;color:var(--a);margin-bottom:12px}
+.alert{border-radius:var(--rs);padding:11px 13px;margin-bottom:10px;font-size:calc(var(--fs)*.82);
+  display:flex;gap:9px;align-items:center;line-height:1.5}
+.alert.w{background:var(--warnw);color:var(--warn)}
+.alert.e{background:var(--badw);color:var(--bad)}
 
-/* stepper */
-.stp{display:flex;align-items:center;gap:5px;flex:0 0 auto}
-.stp button{width:46px;height:46px;padding:0;font-size:21px;border-radius:11px;
-  border:1px solid var(--line);background:var(--paper)}
-.stp button:active{background:var(--wash)}
-.stp .v{font-size:calc(var(--fs)*1.15);font-weight:600;min-width:36px;text-align:center;
+.card{background:var(--paper);border-radius:var(--r);padding:14px 15px;margin-bottom:9px;box-shadow:var(--sh)}
+.card.on{box-shadow:0 0 0 2px var(--a), var(--sh2)}
+.card.flat{padding:0;overflow:hidden}
+.lbl{font-size:calc(var(--fs)*.73);font-weight:600;color:var(--ink3);margin:18px 0 8px 3px;
+  display:flex;justify-content:space-between;align-items:baseline;letter-spacing:.03em;text-transform:uppercase}
+.lbl .mut{text-transform:none;letter-spacing:0;font-weight:400}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0}
+.rt{font-size:calc(var(--fs)*.94);min-width:0}
+.rv{font-size:calc(var(--fs)*.96);font-weight:600;font-variant-numeric:tabular-nums}
+.sec{border-top:1px solid var(--line);padding:11px 0 2px;margin-top:9px}
+.cn{font-size:calc(var(--fs)*1.02);font-weight:600;letter-spacing:-.01em}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.k{background:var(--paper);border-radius:var(--rs);padding:13px 14px;box-shadow:var(--sh)}
+.kk{font-size:calc(var(--fs)*.74);color:var(--ink3)}
+.kv{font-size:calc(var(--fs)*1.24);font-weight:600;font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em;margin-top:2px}
+
+.stp{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.stp button{width:44px;height:44px;border-radius:13px;background:var(--wash);
+  font-size:20px;padding:0;color:var(--ink2)}
+.stp button:active{background:var(--aw);color:var(--a)}
+.stp .v{font-size:calc(var(--fs)*1.12);font-weight:600;min-width:34px;text-align:center;
   font-variant-numeric:tabular-nums}
 
-/* buttons */
-.btn{width:100%;min-height:var(--tap);border-radius:12px;border:1px solid var(--ink);
-  background:var(--ink);color:#fff;font-size:var(--fs);font-weight:500;padding:0 15px}
-.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
-.btn.acc{background:var(--a);border-color:var(--a)}
-.btn.good{background:var(--good);border-color:var(--good)}
-.btn[disabled]{opacity:.38}
-.card .btn{border-radius:0;border-left:0;border-right:0;border-bottom:0;min-height:50px}
-.sm{min-height:38px;font-size:calc(var(--fs)*.82);padding:0 12px;border-radius:9px;
-  border:1px solid var(--line);background:var(--paper);width:auto}
+.btn{width:100%;min-height:52px;border-radius:14px;background:var(--ink);color:#fff;
+  font-size:var(--fs);font-weight:500;padding:0 15px;margin-top:9px;box-shadow:var(--sh)}
+.btn:active{transform:scale(.995)}
+.btn.acc{background:var(--a)}
+.btn.g{background:var(--paper);color:var(--ink)}
+.btn.good{background:var(--good)}
+.btn[disabled]{opacity:.35;box-shadow:none}
+.sm{min-height:40px;font-size:calc(var(--fs)*.82);padding:0 13px;border-radius:11px;
+  background:var(--wash);color:var(--ink2);width:auto;margin:0}
 
-.note{border-radius:10px;padding:8px 11px;margin-top:5px;font-size:calc(var(--fs)*.86);
-  font-weight:500;display:flex;justify-content:space-between;gap:8px}
-.note.acc{background:var(--aw);color:var(--a)}
-.note.warn{background:#fdf0e0;color:#9A5B06}
-
-/* inputs */
-input[type=number],input[type=text],input[type=email],textarea{
-  width:100%;min-height:46px;border:1px solid var(--line);border-radius:10px;padding:9px 11px;
-  font-size:calc(var(--fs)*1.02);background:var(--paper);font-variant-numeric:tabular-nums}
+input{width:100%;min-height:48px;border:1px solid var(--line);border-radius:12px;padding:10px 13px;
+  font-size:calc(var(--fs)*1.0);background:var(--wash);font-variant-numeric:tabular-nums}
 input[type=number]{text-align:right}
-textarea{min-height:62px;resize:vertical;text-align:left}
-input:focus,textarea:focus{outline:2px solid var(--a);outline-offset:-1px}
-.lbl{font-size:calc(var(--fs)*.72);color:var(--ink3);display:block;margin-bottom:3px}
+input:focus{outline:none;background:var(--paper);border-color:var(--a);box-shadow:0 0 0 3px var(--aw)}
+.flbl{font-size:calc(var(--fs)*.7);color:var(--ink3);display:block;margin-bottom:4px}
 
-/* grids */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-.kpi div{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:11px}
-.kk{font-size:calc(var(--fs)*.75);color:var(--ink2)}
-.kv{font-size:calc(var(--fs)*1.3);font-weight:600;font-variant-numeric:tabular-nums}
+.days{flex:0 0 46px;height:46px;border-radius:13px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;line-height:1}
+.days b{font-size:calc(var(--fs)*1.08);font-weight:600;font-variant-numeric:tabular-nums}
+.days span{font-size:calc(var(--fs)*.5);letter-spacing:.07em;opacity:.7;margin-top:2px}
+.fr{display:flex;align-items:center;gap:12px}
+.sbar{flex:0 0 76px;height:6px;border-radius:99px;background:var(--wash);overflow:hidden}
+.sbar i{display:block;height:100%;border-radius:99px;background:var(--good)}
 
-/* sub switch */
-.sub{display:grid;gap:6px;margin-bottom:11px}
-.sub.n2{grid-template-columns:1fr 1fr}
-.sub button{min-height:44px;font-size:calc(var(--fs)*.88);border-radius:10px;
-  border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
-.sub button[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:500}
-.sub .ct{font-size:calc(var(--fs)*.68);opacity:.75;display:block}
-
-/* bottom nav */
-.nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom);z-index:900}
-.nav-in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
-.nav button{background:none;border:0;padding:9px 2px 10px;font-size:calc(var(--fs)*.66);
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:900}
+.nav-in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+.nav button{padding:10px 2px 11px;font-size:calc(var(--fs)*.67);
   color:var(--ink3);display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.25}
-.nav button i{font-size:20px}
-.nav button[aria-selected="true"]{color:var(--ink);font-weight:500}
+.nav button i{font-size:21px}
+.nav button[aria-selected="true"]{color:var(--a);font-weight:600}
+
+.brand{text-align:center;padding:22px 0 22px}
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.door{min-height:158px;border-radius:18px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;padding:14px 9px;box-shadow:var(--sh)}
+.door.d1{background:var(--aw);color:var(--a);box-shadow:var(--sh2)}
+.door.d2{background:var(--paper)}
+.door:active{transform:scale(.985)}
+.door i{font-size:36px;opacity:.9}
+.dots{display:flex;justify-content:center;gap:15px;margin:22px 0 10px}
+.dot{width:15px;height:15px;border-radius:50%;background:var(--line2);transition:transform .12s}
+.dot.on{background:var(--a);transform:scale(1.12)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.pad button{min-height:66px;border-radius:18px;background:var(--paper);box-shadow:var(--sh);
+  font-size:26px;font-weight:500;font-variant-numeric:tabular-nums}
+.pad button:active{background:var(--aw);color:var(--a);transform:scale(.97)}
+.pad button.blank{background:transparent;box-shadow:none}
+.pad button.act{font-size:calc(var(--fs)*.85);color:var(--ink3);background:transparent;box-shadow:none}
+.pmsg{text-align:center;font-size:calc(var(--fs)*.85);min-height:26px;line-height:1.6;color:var(--bad)}
 
 table{width:100%;border-collapse:collapse;font-size:calc(var(--fs)*.85)}
-th,td{padding:7px 3px;text-align:right;border-bottom:1px solid var(--line)}
+th,td{padding:8px 3px;text-align:right;border-bottom:1px solid var(--line)}
 th:first-child,td:first-child{text-align:left}
-th{font-size:calc(var(--fs)*.72);color:var(--ink2);font-weight:500}
-
-.msg{padding:11px 13px;border-radius:11px;font-size:calc(var(--fs)*.85);margin:10px 0}
+th{font-size:calc(var(--fs)*.72);color:var(--ink3);font-weight:500}
+.msg{padding:12px 14px;border-radius:var(--rs);font-size:calc(var(--fs)*.85);margin:10px 0}
 .msg.err{background:var(--badw);color:var(--bad)}
-.empty{text-align:center;color:var(--ink2);padding:40px 18px}
-.ordertxt{font-size:calc(var(--fs)*1.15);line-height:2;white-space:pre-wrap;word-break:break-word;
+.empty{text-align:center;color:var(--ink3);padding:44px 18px}
+.ordertxt{font-size:calc(var(--fs)*1.12);line-height:2.05;white-space:pre-wrap;word-break:break-word;
   font-variant-numeric:tabular-nums}
-.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
-.chip{background:var(--wash);border-radius:99px;padding:3px 10px;font-size:calc(var(--fs)*.75);color:var(--ink2)}
-.chipbtn{min-width:40px;min-height:38px;border-radius:9px;border:1px solid var(--line);
-  background:var(--paper);font-size:calc(var(--fs)*.78);color:var(--ink2);padding:0 7px}
-.cb{flex:0 0 30px;height:30px;border-radius:8px;border:2px solid var(--line2);background:var(--paper);
-  display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
-.cb[data-on="1"]{background:var(--ink);border-color:var(--ink)}
-.cb[data-dis="1"]{opacity:.3}
-.dchip{flex:0 0 44px;height:44px;border-radius:10px;display:flex;flex-direction:column;
+.chip{background:var(--wash);border-radius:99px;padding:4px 11px;font-size:calc(var(--fs)*.74);color:var(--ink2)}
+.cb{flex:0 0 28px;height:28px;border-radius:9px;background:var(--wash);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;
+  box-shadow:inset 0 0 0 2px var(--line2)}
+.cb[data-on="1"]{background:var(--ink);box-shadow:none}
+.dchip{flex:0 0 46px;height:46px;border-radius:13px;display:flex;flex-direction:column;
   align-items:center;justify-content:center;line-height:1}
-.dchip b{font-size:calc(var(--fs)*1.05);font-weight:600;font-variant-numeric:tabular-nums}
-.dchip span{font-size:calc(var(--fs)*.58);letter-spacing:.05em;opacity:.85}
-#map{height:210px;border-radius:12px;border:1px solid var(--line);margin-bottom:10px}
-.sig{width:100%;height:130px;border:1px dashed var(--line2);border-radius:10px;
-  background:var(--wash);touch-action:none;display:block;margin-top:7px}
-.tuck{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;
-  background:var(--paper);border:1px solid var(--line);border-radius:11px;margin-bottom:7px;
-  font-size:calc(var(--fs)*.9)}
-.clock{font-size:calc(var(--fs)*1.5);font-weight:600;color:var(--a);font-variant-numeric:tabular-nums;
-  line-height:1;text-align:right}
+#map{height:200px;border-radius:var(--r);margin-bottom:11px;box-shadow:var(--sh)}
+.sig{width:100%;height:128px;border:1px dashed var(--line2);border-radius:var(--rs);
+  background:var(--wash);touch-action:none;display:block;margin-top:8px}
+.tuck{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;
+  background:var(--paper);border-radius:var(--rs);margin-bottom:8px;
+  font-size:calc(var(--fs)*.92);box-shadow:var(--sh)}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div id="hero"></div>
-  <div id="pane"></div>
-  <div id="err"></div>
-</div>
+<div class="wrap" id="wrap"><div id="app"></div><div id="err"></div></div>
 <input type="file" accept="image/*" capture="environment" id="fp" style="display:none">
-<nav class="nav"><div class="nav-in" id="nav"></div></nav>
+<nav class="nav hide" id="nav"><div class="nav-in" id="navin"></div></nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-/* ============ config ============ */
 const SB_URL="https://kpbstebvmubhwcxhqypd.supabase.co";
 const SB_KEY="sb_publishable_bPbp4EsJSuxc2GZLnIoWgw_SMX3LVht";
-const db=supabase.createClient(SB_URL,SB_KEY,{auth:{
-  persistSession:true, autoRefreshToken:true, detectSessionInUrl:true,
-  lock:async(_n,_t,fn)=>await fn()}});   // lock override: navigator.locks fails in some webviews
+const db=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,
+  detectSessionInUrl:true,lock:async(_n,_t,fn)=>await fn()}});
+const DEMO=/[?&]demo=1/.test(location.search);
+const LOGIN={driver:"driver@dessert-run.app",owner:"owner@dessert-run.app"};
+const DRIVER_PW="run-2026-delivery";
 
-/* ============ day palette (Thai) ============ */
 const DAY=[
- {en:"Sunday",   th:"อาทิตย์",   a:"#E8382F",i:"#A32420",w:"#fdeceb"},
- {en:"Monday",   th:"จันทร์",    a:"#F2E23C",i:"#8A7A00",w:"#fbf8dd"},
- {en:"Tuesday",  th:"อังคาร",    a:"#F5A9C4",i:"#A63E62",w:"#fdeef4"},
- {en:"Wednesday",th:"พุธ",       a:"#5CC15C",i:"#2E7D32",w:"#eaf7ea"},
- {en:"Thursday", th:"พฤหัสบดี",  a:"#F08A2A",i:"#9A5B06",w:"#fdf0e0"},
- {en:"Friday",   th:"ศุกร์",     a:"#3AA5E0",i:"#14618F",w:"#e8f4fc"},
- {en:"Saturday", th:"เสาร์",     a:"#B667C4",i:"#7B3E87",w:"#f7ecf9"}];
+ {en:"Sunday",th:"อาทิตย์",a:"#E8382F",i:"#A32420",w:"#fdeceb"},
+ {en:"Monday",th:"จันทร์",a:"#F2E23C",i:"#8A7A00",w:"#fbf8dd"},
+ {en:"Tuesday",th:"อังคาร",a:"#F5A9C4",i:"#A63E62",w:"#fdeef4"},
+ {en:"Wednesday",th:"พุธ",a:"#5CC15C",i:"#2E7D32",w:"#eaf7ea"},
+ {en:"Thursday",th:"พฤหัสบดี",a:"#F08A2A",i:"#9A5B06",w:"#fdf0e0"},
+ {en:"Friday",th:"ศุกร์",a:"#3AA5E0",i:"#14618F",w:"#e8f4fc"},
+ {en:"Saturday",th:"เสาร์",a:"#B667C4",i:"#7B3E87",w:"#f7ecf9"}];
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const MON_TH=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
 
-/* ============ i18n ============ */
 const I={
- en:{order:"Order",deliver:"Deliver",batches:"Batches",stats:"Stats",setup:"Setup",
-  today:d=>"It's "+d+"!",orderFor:d=>"Order for "+d,noOrder:"No order due today",
-  noRound:"No round today",runsOn:"Deliveries run on your scheduled days",
-  msgMum:"Message to mum",boxes:"boxes",cost:"cost",copy:"Copy message",copied:"Copied",
-  adjust:"Adjust before sending",countBack:"Count back",dropNew:"Drop new",
-  stillOut:"Still out · no returns",of:"of",sold:"Sold",due:"due",save:"Save stop",saved:"Saved",
-  payRec:"Payment received",startRun:"Load up & start run",finishRun:"Finish run",
-  stopsLeft:n=>n+" stops left",done:"Done",upNext:"Up next",runDone:"Run complete",
-  totalTime:"Total time",perStop:"Per stop",collected:"Collected",boxesOut:"Boxes out",
-  reopen:"tap to reopen",elapsed:"ELAPSED",owed:"Owed to mum",open:"Batches open",
-  toPay:"to pay",cleared:"cleared",pending:"count-back pending",forced:"force-closed",
-  selectAll:"Select all",clearAll:"Clear all",payMum:"Pay mum",sign:"Mum signs here",
-  signClear:"Sign & clear",billCleared:"Bill cleared",forceClose:"Force-close at",
-  partial:"A store hasn't been counted back yet, so this total may rise.",
-  desserts:"Desserts",frozen:"Frozen & dry",stillSelling:"still selling",soldOut:"sold out · to pay",
-  daysOut:"days out",wastage:"Wastage",revenue:"Revenue",margin:"Margin",byMonth:"By month",
-  noData:"No completed deliveries yet.",stores:"Stores",products:"Products",
-  addStore:"+ Add store",addProduct:"+ New product",deliveryDays:"Delivery days",
-  weeksOfMonth:"Weeks of month",everyWeek:"none means every week",terms:"Terms",
-  priceTag:"Price tag",ret:"Return",firm:"Firm",yes:"Yes",no:"No",
-  youSell:"You sell",defQty:"Default qty",shelfPrice:"Shelf price on tag",
-  costFromMum:"Cost from mum",comesBack:"Comes back?",inStores:n=>"in "+n+" store"+(n===1?"":"s"),
-  noReturns:"no returns",addProd:"+ Add product",search:"Search products",cancel:"Cancel",
-  lang:"Language",size:"Text size",route:"Route",loadUp:"Load up",
-  perDrop:"per drop",each:"each",remove:"Remove",collect:"Collect",
-  submit:"Mark submitted",submitted:"Submitted",
-  stSent:"Sent to mum",stCooking:"Cooking",stPacked:"Packed",stCollected:"Collected",
-  markCooking:"Mum started",markPacked:"Packed",markCollected:"Picked up",
-  history:"History",showStore:"Show the shop",docket:"Docket photo",
-  addDocket:"Add docket photo",noHistory:"No deliveries yet",back:"Back"},
- th:{order:"สั่งของ",deliver:"ส่งของ",batches:"รอบส่ง",stats:"สถิติ",setup:"ตั้งค่า",
-  today:d=>"วันนี้วัน"+d+"!",orderFor:d=>"สั่งของสำหรับวัน"+d,noOrder:"วันนี้ไม่ต้องสั่งของ",
-  noRound:"วันนี้ไม่มีรอบส่ง",runsOn:"ส่งของตามวันที่ตั้งไว้",
-  msgMum:"ข้อความถึงแม่",boxes:"กล่อง",cost:"ต้นทุน",copy:"คัดลอกข้อความ",copied:"คัดลอกแล้ว",
-  adjust:"แก้จำนวนก่อนส่ง",countBack:"นับของที่เหลือ",dropNew:"วางของใหม่",
-  stillOut:"ยังอยู่ที่ร้าน · ไม่มีคืน",of:"จาก",sold:"ขายได้",due:"ต้องเก็บ",
-  save:"บันทึกร้านนี้",saved:"บันทึกแล้ว",payRec:"รับเงินมา",
-  startRun:"โหลดของ เริ่มรอบส่ง",finishRun:"จบรอบส่ง",
-  stopsLeft:n=>"เหลืออีก "+n+" ร้าน",done:"เสร็จแล้ว",upNext:"ร้านต่อไป",runDone:"ส่งครบทุกร้านแล้ว",
-  totalTime:"เวลาทั้งหมด",perStop:"เฉลี่ยต่อร้าน",collected:"เก็บเงินได้",boxesOut:"กล่องที่ส่ง",
-  reopen:"แตะเพื่อแก้",elapsed:"เวลาที่ใช้",owed:"ค้างแม่",open:"รอบที่ยังไม่จ่าย",
-  toPay:"ต้องจ่าย",cleared:"เคลียร์แล้ว",pending:"รอนับของคืน",forced:"ปิดรอบเอง",
-  selectAll:"เลือกทั้งหมด",clearAll:"ยกเลิกทั้งหมด",payMum:"จ่ายเงินแม่",sign:"ให้แม่เซ็นตรงนี้",
-  signClear:"เซ็นและเคลียร์",billCleared:"เคลียร์บิลแล้ว",forceClose:"ปิดรอบที่",
-  partial:"ยังมีร้านที่ยังไม่ได้นับของคืน ยอดอาจเพิ่มขึ้น",
-  desserts:"ขนม",frozen:"ของแช่แข็งและของแห้ง",stillSelling:"ยังขายอยู่",soldOut:"ขายหมด · ต้องจ่าย",
-  daysOut:"วันแล้ว",wastage:"ของเหลือ",revenue:"รายรับ",margin:"กำไร",byMonth:"แยกตามเดือน",
-  noData:"ยังไม่มีข้อมูลการส่ง",stores:"ร้านค้า",products:"สินค้า",
-  addStore:"+ เพิ่มร้าน",addProduct:"+ เพิ่มสินค้า",deliveryDays:"วันที่ส่ง",
-  weeksOfMonth:"สัปดาห์ที่",everyWeek:"ไม่เลือก = ทุกสัปดาห์",terms:"รูปแบบ",
-  priceTag:"ติดราคา",ret:"ฝากขาย",firm:"ขายขาด",yes:"ใช่",no:"ไม่",
-  youSell:"ราคาขาย",defQty:"จำนวนปกติ",shelfPrice:"ราคาบนป้าย",
-  costFromMum:"ต้นทุนจากแม่",comesBack:"คืนได้ไหม?",inStores:n=>"ใน "+n+" ร้าน",
-  noReturns:"ไม่มีของคืน",addProd:"+ เพิ่มสินค้า",search:"ค้นหาสินค้า",cancel:"ยกเลิก",
-  lang:"ภาษา",size:"ขนาดตัวอักษร",route:"เส้นทาง",loadUp:"โหลดของ",
-  perDrop:"ต่อรอบ",each:"ต่อกล่อง",remove:"ลบ",collect:"เก็บเงิน",
-  submit:"ส่งออเดอร์แล้ว",submitted:"ส่งแล้ว",
-  stSent:"ส่งให้แม่แล้ว",stCooking:"กำลังทำ",stPacked:"แพ็คเสร็จ",stCollected:"รับของแล้ว",
-  markCooking:"แม่เริ่มทำ",markPacked:"แพ็คเสร็จ",markCollected:"รับของแล้ว",
-  history:"ประวัติ",showStore:"โชว์ให้ร้านดู",docket:"รูปใบส่งของ",
-  addDocket:"ถ่ายรูปใบส่งของ",noHistory:"ยังไม่มีประวัติ",back:"ย้อนกลับ"}};
+ en:{today:"Today",money:"Money",setup:"Setup",
+  itsDay:d=>"It's "+d+"!",orderDay:"Order day",runDay:"Delivery day",quietDay:"Quiet day",
+  sendOrder:"Send the order",forDay:d=>"For "+d,orderSent:"Order sent",
+  roundOf:d=>d+" round",stopsLoad:(n,b)=>n+" stops · "+b+" boxes to load",
+  roundDone:"Round done",nothingDue:"Nothing due today",nextOrder:d=>"Next: order "+d,
+  frozenShelf:"Frozen on shelves",daysUsual:"days · usual",usually:n=>"usually "+n,
+  moneyLbl:"Money",shopsOwe:"Shops owe you",outCons:"Out on consignment",
+  mumOwed:"Mum is owed",marginMonth:"Margin this month",marginToDate:"Margin to date",
+  sellThrough:"Sell-through",lastDrops:"last 6 drops",firm:"firm",
+  copy:"Copy message",copied:"Copied",markSent:"Mark sent to mum",back:"Back",
+  countBack:"Count back",dropNew:"Drop new",of:"of",sold:"Sold",due:"due",
+  saveStop:"Save & next stop",allSaved:"All stops saved",collected:"collected",
+  batches:"Batches to pay mum",payMum:"Pay mum",sign:"Mum signs here",signClear:"Sign & clear",
+  pending:"count-back pending",cleared:"cleared",stores:"Stores",products:"Products",
+  drivers:"Drivers",language:"Language",textSize:"Text size",signOut:"Sign out",
+  addDriver:"Add driver",name:"Name",nameTh:"Thai name",pin:"4-digit PIN",
+  save:"Save",remove:"Remove",history:"History",showShop:"Show the shop",
+  docket:"Docket photo",noHistory:"No deliveries yet",
+  whoDriving:"Enter your PIN",ownerPin:"Owner PIN",wrongPin:"Not recognised",
+  delivery:"Delivery",reseller:"Reseller",pin4:"4 digits",pin6:"6 digits",
+  orderNotCollected:"Order never marked collected.",noStores:"No stores set up yet."},
+ th:{today:"วันนี้",money:"เงิน",setup:"ตั้งค่า",
+  itsDay:d=>"วันนี้วัน"+d+"!",orderDay:"วันสั่งของ",runDay:"วันส่งของ",quietDay:"วันว่าง",
+  sendOrder:"ส่งออเดอร์",forDay:d=>"สำหรับวัน"+d,orderSent:"ส่งออเดอร์แล้ว",
+  roundOf:d=>"รอบวัน"+d,stopsLoad:(n,b)=>n+" ร้าน · โหลด "+b+" กล่อง",
+  roundDone:"ส่งครบแล้ว",nothingDue:"วันนี้ไม่มีงาน",nextOrder:d=>"ถัดไป: สั่งของวัน"+d,
+  frozenShelf:"ของแช่แข็งที่ร้าน",daysUsual:"วัน · ปกติ",usually:n=>"ปกติ "+n,
+  moneyLbl:"เงิน",shopsOwe:"ร้านค้างจ่าย",outCons:"ของฝากขายอยู่",
+  mumOwed:"ค้างแม่",marginMonth:"กำไรเดือนนี้",marginToDate:"กำไรรวม",
+  sellThrough:"อัตราขายได้",lastDrops:"6 รอบล่าสุด",firm:"ขายขาด",
+  copy:"คัดลอกข้อความ",copied:"คัดลอกแล้ว",markSent:"ส่งให้แม่แล้ว",back:"ย้อนกลับ",
+  countBack:"นับของที่เหลือ",dropNew:"วางของใหม่",of:"จาก",sold:"ขายได้",due:"ต้องเก็บ",
+  saveStop:"บันทึก ไปร้านต่อไป",allSaved:"บันทึกครบทุกร้าน",collected:"เก็บได้",
+  batches:"รอบที่ต้องจ่ายแม่",payMum:"จ่ายเงินแม่",sign:"ให้แม่เซ็นตรงนี้",signClear:"เซ็นและเคลียร์",
+  pending:"รอนับของคืน",cleared:"เคลียร์แล้ว",stores:"ร้านค้า",products:"สินค้า",
+  drivers:"คนขับ",language:"ภาษา",textSize:"ขนาดตัวอักษร",signOut:"ออกจากระบบ",
+  addDriver:"เพิ่มคนขับ",name:"ชื่อ",nameTh:"ชื่อไทย",pin:"รหัส 4 ตัว",
+  save:"บันทึก",remove:"ลบ",history:"ประวัติ",showShop:"โชว์ให้ร้านดู",
+  docket:"รูปใบส่งของ",noHistory:"ยังไม่มีประวัติ",
+  whoDriving:"ใส่รหัสของคุณ",ownerPin:"รหัสเจ้าของ",wrongPin:"รหัสไม่ถูกต้อง",
+  delivery:"ส่งของ",reseller:"เจ้าของ",pin4:"รหัส 4 ตัว",pin6:"รหัส 6 ตัว",
+  orderNotCollected:"ยังไม่ได้กดรับของ",noStores:"ยังไม่มีร้านค้า"}};
 
-/* ============ state ============ */
-const S={tab:"order",lang:localStorage?.getItem?.("dr_lang")||"en",fz:+(localStorage?.getItem?.("dr_fz")||1),
- today:null,dow:null,week:null,stores:[],prices:[],prods:{},costs:{},supplierId:null,
- lines:[],payments:[],supPay:[],runs:[],orderQty:{},orderStep:1,
- stops:null,run:{started:null,finished:null,last:0,tick:null},
- bPane:"des",bSel:new Set(),bOpen:null,bDrawn:false,forced:new Set(),
- sPane:"stores",sOpen:null,picking:null,pq:"",map:null,mapLayer:null,
- user:null,role:"owner",name:"",
- orders:[],curOrder:null,histStore:null,
- dv:{phase:"brief",si:0,pi:0,loaded:{},stops:null}};
+const S={view:"entry",pane:"doors",pin:"",pmsg:"",
+ tab:"today",screen:"home",lang:localStorage.getItem("dr_lang")||"en",fz:+(localStorage.getItem("dr_fz")||1),
+ role:null,driver:null,user:null,
+ today:null,dow:null,week:null,
+ stores:[],prices:[],prods:{},costs:{},supplierId:null,lines:[],payments:[],supPay:[],orders:[],drivers:[],
+ orderQty:{},copied:false,stops:null,histStore:null,
+ bSel:new Set(),bDrawn:false,dockTarget:null,map:null};
 
 const $=i=>document.getElementById(i);
 const T=()=>I[S.lang];
@@ -266,223 +252,12 @@ const weekOf=d=>Math.ceil(d.getDate()/7);
 const dayName=k=>S.lang==="th"?DAY[k].th:DAY[k].en;
 const monName=m=>S.lang==="th"?MON_TH[m]:MON[m];
 const pname=id=>{const p=S.prods[id];return p?(S.lang==="th"?(p.name_th||p.name):(p.name||p.name_th)):"—";};
-const fmtT=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
-const fmtM=s=>s<60?s+"s":Math.round(s/60)+"m";
 const fail=m=>{$("err").innerHTML='<div class="msg err">'+esc(m)+'</div>';};
-
-/* ============ offline write queue ============ */
-/* Writes are attempted immediately. If the network is down they are parked in
-   localStorage and replayed when the connection returns, so a save inside a
-   shop basement never looks like a failure. */
-const QKEY="dr_queue";
-const qRead=()=>{try{return JSON.parse(localStorage.getItem(QKEY)||"[]");}catch(e){return[];}};
-const qWrite=a=>{try{localStorage.setItem(QKEY,JSON.stringify(a));}catch(e){}};
-const qCount=()=>qRead().length;
-
-async function runOp(op){
- const t=db.from(op.table);
- if(op.kind==="insert") return await t.insert(op.rows);
- if(op.kind==="update") {
-  let b=t.update(op.values);
-  Object.entries(op.match).forEach(([k,v])=>{b=b.eq(k,v);});
-  return await b;
- }
- return {error:{message:"unknown op"}};
-}
-async function write(op){
- if(DEMO) return {error:null,queued:false};
- if(!navigator.onLine){const a=qRead();a.push(op);qWrite(a);banner();return{error:null,queued:true};}
- const r=await runOp(op);
- if(r.error && /fetch|network|Failed/i.test(r.error.message||"")){
-  const a=qRead();a.push(op);qWrite(a);banner();return{error:null,queued:true};}
- return r;
-}
-async function flushQueue(){
- if(DEMO) return;
- let a=qRead(); if(!a.length) return;
- const keep=[];
- for(const op of a){
-  try{const r=await runOp(op); if(r.error) keep.push(op);}catch(e){keep.push(op);}
- }
- qWrite(keep); banner();
- if(!keep.length && a.length) load();
-}
-function banner(){
- let b=document.getElementById("qb");
- const n=qCount();
- if(!n){if(b)b.remove();return;}
- if(!b){b=document.createElement("div");b.id="qb";
-  b.style.cssText="position:fixed;left:0;right:0;top:0;z-index:1200;background:#9A5B06;color:#fff;"+
-   "font-size:12px;text-align:center;padding:5px";
-  document.body.appendChild(b);}
- b.textContent=(S.lang==="th"?"รอส่งข้อมูล ":"Waiting to sync ")+n;
-}
-window.addEventListener("online",flushQueue);
-
-/* ============ demo mode ============ */
-/* ?demo=1 loads invented data and never touches Supabase, so the file
-   works opened straight from disk with no network. */
-const DEMO=/[?&]demo=1/.test(location.search);
-const DRIVER=/[?&]driver=1/.test(location.search);
-
-function demoData(){
- const uid=n=>"d"+n;
- const P=[
-  {id:uid(1),name:"Lod chong",name_th:"ลอดช่อง",returnable:true},
-  {id:uid(2),name:"Tubtim krob",name_th:"ทับทิมกรอบ",returnable:true},
-  {id:uid(3),name:"Pork crackling",name_th:"แค็บหมู",returnable:false},
-  {id:uid(4),name:"Mackerel",name_th:"ปลาทู",returnable:false}];
- const ST=[
-  {id:uid(11),name:"Hong Phuoc Asian Grocery",suburb:"Marrickville",
-   address:"297 Illawarra Rd",terms:"consignment",price_tag_required:false,
-   delivery_days:[0,4],weeks_of_month:[],route_position:1,
-   latitude:-33.911833,longitude:151.155459,
-   parking_note:"Loading zone out front, 15 min.",contact_note:null},
-  {id:uid(12),name:"Kung Fu Grocery",suburb:"Marrickville",
-   address:"305 Illawarra Rd",terms:"consignment",price_tag_required:false,
-   delivery_days:[0,4],weeks_of_month:[],route_position:2,
-   latitude:-33.911961,longitude:151.155332,
-   parking_note:"Same block — walk from Hong Phuoc.",contact_note:null},
-  {id:uid(13),name:"Panda Asia Market",suburb:"Kogarah",
-   address:"84 Railway Pde",terms:"consignment",price_tag_required:true,
-   delivery_days:[0,4],weeks_of_month:[],route_position:3,
-   latitude:-33.963562,longitude:151.132742,
-   parking_note:"Street parking on Railway Pde.",contact_note:null},
-  {id:uid(14),name:"Sumbaijai Thai Esan",suburb:"Kogarah",
-   address:"49 Railway Pde",terms:"firm",price_tag_required:false,
-   delivery_days:[4],weeks_of_month:[],route_position:4,
-   latitude:-33.963964,longitude:151.132275,
-   parking_note:"Opens 11:30 — don't arrive early.",contact_note:null},
-  {id:uid(15),name:"New Yen Yen Supermarket",suburb:"Hurstville",
-   address:"127 Forest Rd",terms:"firm",price_tag_required:false,
-   delivery_days:[0],weeks_of_month:[1],route_position:5,
-   latitude:-33.967689,longitude:151.107268,
-   parking_note:"Free underground parking, 2 hours. Back entrance is closer.",contact_note:null}];
- const SP=[
-  [uid(11),uid(1),6,7.5,8],[uid(11),uid(2),6,7.5,8],
-  [uid(12),uid(1),6,7.5,12],[uid(12),uid(2),6,7.5,12],
-  [uid(13),uid(1),6,8.5,4],[uid(13),uid(2),6,8.5,4],[uid(13),uid(3),8,null,10],
-  [uid(14),uid(1),6,null,6],
-  [uid(15),uid(4),14,null,10]
- ].map(([s,p,sell,ret,q])=>({store_id:s,product_id:p,sell_price:sell,retail_price:ret,default_qty:q}));
- const COST={[uid(1)]:2,[uid(2)]:2,[uid(3)]:3,[uid(4)]:10};
-
- // Build a few weeks of plausible history ending before today
- const lines=[]; let n=0;
- const base=new Date(); base.setHours(12,0,0,0);
- for(let back=28;back>=4;back--){
-  const d=new Date(base); d.setDate(d.getDate()-back);
-  const dow=d.getDay(); if(dow!==0&&dow!==4) continue;
-  const day=iso(d);
-  ST.filter(s=>s.delivery_days.includes(dow)&&
-    (!s.weeks_of_month.length||s.weeks_of_month.includes(weekOf(d)))).forEach(s=>{
-   SP.filter(x=>x.store_id===s.id).forEach(x=>{
-    const pr=P.find(p=>p.id===x.product_id);
-    const out=x.default_qty;
-    const ret=pr.returnable?Math.max(0,Math.round(out*(0.08+Math.random()*0.16))):null;
-    lines.push({id:"L"+(++n),product_id:x.product_id,qty_out:out,qty_back:ret,
-     unit_price:x.sell_price,unit_cost:COST[x.product_id],
-     settled_at:new Date(d.getTime()+3*864e5).toISOString(),
-     deliveries:{id:"DL"+n,store_id:s.id,delivered_on:day}});});});
- }
- // One batch still open — last delivery day, not yet counted back
- const lastD=new Date(base); lastD.setDate(lastD.getDate()-3);
- const ldow=lastD.getDay();
- ST.filter(s=>s.delivery_days.includes(ldow)).forEach(s=>{
-  SP.filter(x=>x.store_id===s.id).forEach(x=>{
-   lines.push({id:"L"+(++n),product_id:x.product_id,qty_out:x.default_qty,qty_back:null,
-    unit_price:x.sell_price,unit_cost:COST[x.product_id],settled_at:null,
-    deliveries:{id:"DL"+n,store_id:s.id,delivered_on:iso(lastD)}});});});
-
- const pays=[...new Set(lines.filter(l=>l.settled_at).map(l=>l.deliveries.store_id))]
-  .map(sid=>({store_id:sid,amount:Math.round(120+Math.random()*90),paid_on:iso(base)}));
-
- return {P,ST,SP,COST,lines,pays};
-}
-
-/* ============ load ============ */
-async function load(){
- const now=new Date(); S.dow=now.getDay(); S.today=iso(now); S.week=weekOf(now);
- applyType();
-
- if(!DEMO){
-  const {data:{session}}=await db.auth.getSession();
-  if(!session) return renderAuth();
-  S.user=session.user;
-  const {data:pf}=await db.from("profiles").select("role,display_name,lang").eq("id",session.user.id).maybeSingle();
-  S.role=pf?.role||"driver";
-  S.name=pf?.display_name||session.user.email;
-  if(pf?.role==="driver"){S.lang=pf.lang||"th";applyType();}
-  else if(pf?.lang && !localStorage.getItem("dr_lang")){S.lang=pf.lang;applyType();}
-  flushQueue();
- } else { S.role="owner"; S.name="Demo"; }
- if(DRIVER) S.role="driver";
-
- if(DEMO){
-  const D=demoData();
-  S.supplierId="demo-supplier";
-  D.P.forEach(p=>S.prods[p.id]=p);
-  S.stores=D.ST; S.prices=D.SP; S.costs=D.COST;
-  S.lines=D.lines; S.payments=D.pays; S.supPay=[]; S.runs=[];
-  document.title="Dessert run — demo";
-  if(S.role==="driver") return renderDriver();
-  renderAll();
-  const b=document.createElement("div");
-  b.textContent="DEMO";
-  b.style.cssText="position:fixed;top:6px;left:6px;z-index:1000;background:#12211b;color:#fff;"+
-   "font-size:10px;letter-spacing:.08em;padding:2px 7px;border-radius:99px;opacity:.75";
-  document.body.appendChild(b);
-  return;
- }
-
- const {data:sup}=await db.from("suppliers").select("id,name").eq("active",true).limit(1);
- S.supplierId=sup?.[0]?.id||null;
-
- const {data:pr}=await db.from("products").select("id,name,name_th,returnable,photo_1").eq("active",true);
- (pr||[]).forEach(p=>S.prods[p.id]=p);
-
- const {data:st,error}=await db.from("stores")
-  .select("id,name,suburb,address,terms,price_tag_required,delivery_days,weeks_of_month,route_position,latitude,longitude,parking_note,contact_note")
-  .eq("active",true).order("route_position",{ascending:true,nullsFirst:false});
- if(error) return fail(error.message);
- S.stores=st||[];
- const ids=S.stores.map(x=>x.id);
- if(!ids.length){renderAll();return;}
-
- const {data:sp}=await db.from("store_products")
-  .select("store_id,product_id,sell_price,retail_price,default_qty").in("store_id",ids);
- S.prices=sp||[];
-
- const {data:cs}=await db.from("supplier_products")
-  .select("product_id,unit_cost").eq("supplier_id",S.supplierId);
- (cs||[]).forEach(c=>S.costs[c.product_id]=Number(c.unit_cost));
-
- const {data:dl}=await db.from("delivery_lines")
-  .select("id,product_id,qty_out,qty_back,unit_price,unit_cost,settled_at,deliveries!inner(id,store_id,delivered_on)")
-  .in("deliveries.store_id",ids);
- S.lines=dl||[];
-
- const {data:pay}=await db.from("store_payments").select("store_id,amount,paid_on").in("store_id",ids);
- S.payments=pay||[];
- const {data:spy}=await db.from("supplier_payments")
-  .select("amount,paid_on,covers_dates").eq("supplier_id",S.supplierId);
- S.supPay=spy||[];
- const {data:po}=await db.from("purchase_orders")
-  .select("id,for_delivery_on,status,sent_at,packed_at,collected_at")
-  .order("for_delivery_on",{ascending:false}).limit(8);
- S.orders=po||[];
-
- const {data:rn}=await db.from("runs").select("id,run_date,started_at,finished_at").order("run_date",{ascending:false}).limit(10);
- S.runs=rn||[];
-
- const nv=document.querySelector(".nav"); if(nv) nv.style.display=S.role==="driver"?"none":"";
- if(S.role==="driver") return renderDriver();
- renderAll();
-}
+const isRet=pid=>S.prods[pid]?.returnable!==false;
 
 function applyType(){
- const base=[15,16.5,18.5][S.fz]||16.5;
- document.documentElement.style.setProperty("--fs",(S.lang==="th"?base+1:base)+"px");
+ const b=[15,16.5,18.5][S.fz]||16.5;
+ document.documentElement.style.setProperty("--fs",(S.lang==="th"?b+1:b)+"px");
  document.documentElement.style.setProperty("--lh",S.lang==="th"?1.78:1.55);
 }
 function setDay(k){
@@ -492,151 +267,298 @@ function setDay(k){
  document.querySelector('meta[name=theme-color]').setAttribute("content",d.i);
 }
 
-/* ============ helpers ============ */
-const spOf=(sid,pid)=>S.prices.find(p=>p.store_id===sid&&p.product_id===pid);
-const openLines=sid=>S.lines.filter(l=>l.settled_at==null&&l.deliveries.store_id===sid);
-const isRet=pid=>S.prods[pid]?.returnable!==false;
+/* ================= ENTRY ================= */
+function entry(){
+ S.view="entry";
+ $("nav").classList.add("hide");
+ $("wrap").classList.add("bare");
+ const d=new Date(); setDay(d.getDay()); applyType();
+ if(S.pane==="doors") return doors(d);
+ return padScreen();
+}
+function doors(d){
+ $("app").innerHTML=`
+ <div class="brand">
+  <svg width="96" height="74" viewBox="0 0 92 70" role="img" aria-label="ส่งขนม"
+   style="display:block;margin:0 auto 14px">
+   <text x="46" y="33" text-anchor="middle" font-size="29" font-family="Anuphan,sans-serif" letter-spacing="-1">
+    <tspan font-weight="200" fill="#101c17">ส่ง</tspan><tspan font-weight="700" fill="#E0A020">ข</tspan></text>
+   <rect x="17" y="40" width="58" height="5" rx="2.5" fill="#101c17"/>
+   <path d="M20 45 h52 a26 26 0 0 1 -52 0 z" fill="#101c17"/></svg>
+  <div style="font-size:calc(var(--fs)*1.75);line-height:1.45;letter-spacing:-.5px">
+   <span style="font-weight:200;opacity:.72">ส่ง</span><span style="font-weight:700;color:var(--gold)">ขนม</span></div>
+  <div class="mut" style="margin-top:2px">${esc(dayName(d.getDay()))} ${d.getDate()} ${esc(monName(d.getMonth()))}</div></div>
+ <div class="doors">
+ <button class="door d1" data-pane="d4"><i class="ti ti-truck-delivery" aria-hidden="true"></i>
+  <span style="font-size:calc(var(--fs)*1.35);font-weight:600">ส่งของ</span>
+  <span style="font-size:calc(var(--fs)*.82);opacity:.85">Delivery</span>
+  <span style="font-size:calc(var(--fs)*.74);opacity:.7">${esc(T().pin4)}</span></button>
+ <button class="door d2" data-pane="o6"><i class="ti ti-lock" style="color:var(--ink2)" aria-hidden="true"></i>
+  <span style="font-size:calc(var(--fs)*1.15);font-weight:600">เจ้าของ</span>
+  <span style="font-size:calc(var(--fs)*.82);color:var(--ink2)">Reseller</span>
+  <span style="font-size:calc(var(--fs)*.74);color:var(--ink3)">${esc(T().pin6)}</span></button></div>
+ <button class="btn g" id="dm" style="margin-top:16px">ลองใช้ · Try the demo</button>`;
+ $("app").querySelectorAll("[data-pane]").forEach(b=>b.onclick=()=>{
+  S.pane=b.dataset.pane;S.pin="";S.pmsg="";entry();});
+ $("dm").onclick=()=>{location.search="?demo=1";};
+}
+function padScreen(){
+ const len=S.pane==="d4"?4:6;
+ $("app").innerHTML=`
+ <div style="text-align:center;padding:14px 0 6px">
+  <div style="font-size:calc(var(--fs)*1.25);font-weight:600">${esc(S.pane==="d4"?T().whoDriving:T().ownerPin)}</div>
+  <div class="mut">${esc(S.pane==="d4"?T().delivery:T().reseller)}</div></div>
+ <div class="dots">${Array.from({length:len},(_,i)=>
+  `<span class="dot ${i<S.pin.length?"on":""}"></span>`).join("")}</div>
+ <div class="pmsg">${esc(S.pmsg)}</div>
+ <div class="pad">
+ ${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join("")}
+ <button class="blank"></button><button data-k="0">0</button>
+ <button class="act" data-k="del">${S.lang==="th"?"ลบ":"del"}</button></div>
+ <button class="btn g" id="bk">${esc(T().back)}</button>`;
+ $("app").querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>tapKey(b.dataset.k,len));
+ $("bk").onclick=()=>{S.pane="doors";S.pin="";S.pmsg="";entry();};
+}
+async function tapKey(k,len){
+ if(k==="del"){S.pin=S.pin.slice(0,-1);S.pmsg="";return padScreen();}
+ if(S.pin.length<len) S.pin+=k;
+ padScreen();
+ if(S.pin.length<len) return;
+ const pin=S.pin;
+ S.pmsg="…"; padScreen();
+ if(S.pane==="o6") return tryOwner(pin);
+ return tryDriver(pin);
+}
+async function tryOwner(pin){
+ if(DEMO){S.role="owner";S.pin="";return boot();}
+ const {error}=await db.auth.signInWithPassword({email:LOGIN.owner,password:pin});
+ if(error){S.pin="";S.pmsg=T().wrongPin;return padScreen();}
+ S.pin=""; boot();
+}
+async function tryDriver(pin){
+ if(DEMO){S.role="driver";S.driver={name:"Demo",name_th:"เดโม"};S.pin="";return boot();}
+ const {error}=await db.auth.signInWithPassword({email:LOGIN.driver,password:DRIVER_PW});
+ if(error){S.pin="";S.pmsg=T().wrongPin;return padScreen();}
+ const {data}=await db.rpc("driver_by_pin",{p:pin});
+ const row=Array.isArray(data)?data[0]:data;
+ if(!row){await db.auth.signOut();S.pin="";S.pmsg=T().wrongPin;return padScreen();}
+ S.driver=row; S.role="driver"; S.pin=""; boot();
+}
+
+/* ================= BOOT ================= */
+async function boot(){
+ S.view="app"; $("wrap").classList.remove("bare");
+ const now=new Date(); S.dow=now.getDay(); S.today=iso(now); S.week=weekOf(now);
+ applyType();
+ $("app").innerHTML=`<div class="empty">…</div>`;
+ if(DEMO){ seedDemo(); return afterLoad(); }
+ const {data:{session}}=await db.auth.getSession();
+ if(!session) return entry();
+ S.user=session.user;
+ if(!S.role){
+  const {data:pf}=await db.from("profiles").select("role,display_name,lang").eq("id",session.user.id).maybeSingle();
+  S.role=pf?.role||"driver";
+ }
+ if(S.role==="driver"&&!S.driver){await db.auth.signOut();return entry();}
+ await loadData();
+ afterLoad();
+}
+async function loadData(){
+ const {data:sup}=await db.from("suppliers").select("id").eq("active",true).limit(1);
+ S.supplierId=sup?.[0]?.id||null;
+ const {data:pr}=await db.from("products").select("id,name,name_th,returnable").eq("active",true);
+ (pr||[]).forEach(p=>S.prods[p.id]=p);
+ const {data:st,error}=await db.from("stores")
+  .select("id,name,suburb,address,terms,price_tag_required,delivery_days,weeks_of_month,route_position,latitude,longitude,parking_note,is_kitchen")
+  .eq("active",true).eq("is_kitchen",false).order("route_position",{ascending:true,nullsFirst:false});
+ if(error) return fail(error.message);
+ S.stores=st||[];
+ const ids=S.stores.map(x=>x.id); if(!ids.length) return;
+ const {data:sp}=await db.from("store_products")
+  .select("store_id,product_id,sell_price,retail_price,default_qty").in("store_id",ids);
+ S.prices=sp||[];
+ if(S.role==="owner"){
+  const {data:cs}=await db.from("supplier_products").select("product_id,unit_cost").eq("supplier_id",S.supplierId);
+  (cs||[]).forEach(c=>S.costs[c.product_id]=Number(c.unit_cost));
+  const {data:spy}=await db.from("supplier_payments").select("amount,paid_on,covers_dates").eq("supplier_id",S.supplierId);
+  S.supPay=spy||[];
+  const {data:po}=await db.from("purchase_orders")
+   .select("id,for_delivery_on,status").order("for_delivery_on",{ascending:false}).limit(8);
+  S.orders=po||[];
+  const {data:dv}=await db.from("drivers").select("id,name,name_th,pin,active").order("name");
+  S.drivers=dv||[];
+ }
+ const {data:dl}=await db.from("delivery_lines")
+  .select("id,product_id,qty_out,qty_back,unit_price,unit_cost,settled_at,deliveries!inner(id,store_id,delivered_on)")
+  .in("deliveries.store_id",ids);
+ S.lines=dl||[];
+ const {data:pay}=await db.from("store_payments").select("store_id,amount,paid_on").in("store_id",ids);
+ S.payments=pay||[];
+}
+function afterLoad(){
+ if(S.role==="driver"){ S.tab="today"; }
+ $("nav").classList.remove("hide");
+ render();
+}
+
+/* ================= SHELL ================= */
+const TABS=[["today","home"],["money","cash"],["setup","settings"]];
+function renderNav(){
+ const tabs=S.role==="driver"?[["today","home"]]:TABS;
+ $("navin").style.gridTemplateColumns="repeat("+tabs.length+",1fr)";
+ $("navin").innerHTML=tabs.map(([k,ic])=>`<button role="tab" data-tab="${k}"
+  aria-selected="${S.tab===k}"><i class="ti ti-${ic}" aria-hidden="true"></i>${esc(T()[k])}</button>`).join("");
+ $("navin").querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{
+  S.tab=b.dataset.tab;S.screen="home";S.histStore=null;render();});
+}
+function render(){
+ setDay(S.dow); renderNav();
+ if(S.histStore) return storeHistory();
+ if(S.tab==="money") return moneyTab();
+ if(S.tab==="setup") return setupTab();
+ if(S.screen==="order") return orderScreen();
+ if(S.screen==="run") return runScreen();
+ todayTab();
+}
+const hero=(t,s,extra)=>{
+ const d=new Date(S.today+"T12:00:00");
+ return `<div class="hero"><div><div class="h1">${esc(t)}</div><div class="h2">${esc(s)}</div></div>
+ <div><div class="dnum">${d.getDate()}</div><div class="dmon">${esc(monName(d.getMonth())).toUpperCase()}</div>
+ ${extra||""}</div></div>`;};
+
+/* ---- schedule helpers ---- */
 function dueOn(dow,week){
  return S.stores.filter(s=>(s.delivery_days||[]).includes(dow)&&
   (!(s.weeks_of_month||[]).length||s.weeks_of_month.includes(week)));
 }
-function nextDelivery(){
- for(let i=0;i<8;i++){
+function nextDeliveryFrom(offset){
+ for(let i=offset;i<9;i++){
   const d=new Date(); d.setDate(d.getDate()+i);
   if(dueOn(d.getDay(),weekOf(d)).length) return d;
  }
  return null;
 }
-function orderTarget(){
- for(let i=1;i<8;i++){
-  const d=new Date(); d.setDate(d.getDate()+i);
-  if(dueOn(d.getDay(),weekOf(d)).length) return d;
+const orderTarget=()=>{
+ const t=nextDeliveryFrom(1);
+ if(!t) return null;
+ return Math.round((t-new Date(S.today+"T00:00:00"))/864e5)===1?t:null;
+};
+const runToday=()=>dueOn(S.dow,S.week);
+const orderFor=dISO=>S.orders.find(o=>o.for_delivery_on===dISO)||null;
+
+/* ================= TODAY ================= */
+function todayTab(){
+ const tgt=orderTarget(), stops=runToday();
+ const isOrder=!!tgt, isRun=stops.length>0;
+ const quiet=!isOrder&&!isRun;
+ let task="", alert="";
+
+ if(isOrder){
+  const sent=orderFor(iso(tgt));
+  let boxes=0,cost=0;
+  dueOn(tgt.getDay(),weekOf(tgt)).forEach(s=>S.prices.filter(p=>p.store_id===s.id).forEach(p=>{
+   const q=oVal(s.id,p.product_id);boxes+=q;cost+=q*(S.costs[p.product_id]||0);}));
+  task=sent?`<div class="done"><div style="font-size:calc(var(--fs)*1.05);font-weight:600">${esc(T().orderSent)} ✓</div>
+   <div class="mut" style="color:inherit;opacity:.85">${boxes} ${esc(T().forDay(dayName(tgt.getDay())))}</div></div>`
+   :`<button class="task" data-go="order"><i class="ti ti-message-2" aria-hidden="true"></i>
+   <span><span class="tt">${esc(T().sendOrder)}</span>
+   <span class="ts">${esc(T().forDay(dayName(tgt.getDay())))} · ${boxes} · ${money(cost)}</span></span></button>`;
+ } else if(isRun){
+  if(S.stops==null) S.stops=buildStops();
+  const left=S.stops.filter(x=>!x.done).length;
+  const boxes=S.stops.reduce((a,s)=>a+s.out.reduce((x,o)=>x+o.qty,0),0);
+  task=left===0?`<div class="done"><div style="font-size:calc(var(--fs)*1.05);font-weight:600">${esc(T().roundDone)} ✓</div>
+   <div class="mut" style="color:inherit;opacity:.85">${S.stops.length} · ${money(S.stops.reduce((a,s)=>a+dueFor(s),0))} ${esc(T().collected)}</div></div>`
+   :`<button class="task" data-go="run"><i class="ti ti-truck-delivery" aria-hidden="true"></i>
+   <span><span class="tt">${esc(T().roundOf(dayName(S.dow)))}</span>
+   <span class="ts">${esc(T().stopsLoad(left,boxes))}</span></span></button>`;
+  const ord=orderFor(S.today);
+  if(ord&&ord.status!=="collected")
+   alert=`<div class="alert w"><i class="ti ti-alert-triangle" style="font-size:17px" aria-hidden="true"></i>
+    <span>${esc(T().orderNotCollected)}</span></div>`;
+ } else {
+  const nx=nextDeliveryFrom(1);
+  const od=nx?new Date(nx.getTime()-864e5):null;
+  task=`<div class="task q"><i class="ti ti-coffee" aria-hidden="true"></i>
+   <span><span class="tt">${esc(T().nothingDue)}</span>
+   <span class="ts mut">${od?esc(T().nextOrder(dayName(od.getDay()))):""}</span></span></div>`;
  }
- return null;
+
+ $("app").innerHTML=hero(T().itsDay(dayName(S.dow)),
+   isOrder?T().orderDay:isRun?T().runDay:T().quietDay)
+ +alert+task
+ +(S.role==="owner"?frozenBlock(quiet)+moneyBlock(quiet)+(quiet?sellBlock():""):"");
+ $("app").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{S.screen=b.dataset.go;render();});
 }
-const isOrderDay=()=>{const t=orderTarget();
- if(!t) return false;
- return Math.round((t-new Date(S.today+"T00:00:00"))/864e5)===1;};
-
-/* ============ hero ============ */
-function renderHero(){
- setDay(S.dow);
- const d=new Date(S.today+"T12:00:00");
- const nd=nextDelivery();
- let sub="";
- if(S.tab==="order"){const t=orderTarget();
-  sub=isOrderDay()&&t?T().orderFor(dayName(t.getDay())):T().noOrder;}
- else if(S.tab==="deliver"){const n=dueOn(S.dow,S.week).length;
-  sub=n?T().stopsLeft(S.stops?S.stops.filter(x=>!x.done).length:n):T().noRound;}
- else sub=T()[S.tab]||"";
- $("hero").innerHTML=`<div class="hero">
-  <div><div class="h1">${esc(T().today(dayName(S.dow)))}</div><div class="h2">${esc(sub)}</div></div>
-  <div><div class="dnum">${d.getDate()}</div><div class="dmon">${monName(d.getMonth())}</div>
-  ${nd?`<div class="dnext">${esc(dayName(nd.getDay())+" "+nd.getDate())}</div>`:""}</div></div>`;
+function frozenBlock(full){
+ const open=S.lines.filter(l=>!isRet(l.product_id)&&l.settled_at==null);
+ if(!open.length) return "";
+ const rows=open.map(l=>{
+  const st=S.stores.find(s=>s.id===l.deliveries.store_id);
+  const days=Math.round((new Date(S.today)-new Date(l.deliveries.delivered_on))/864e5);
+  const avg=avgClear(l.deliveries.store_id,l.product_id);
+  return {name:st?st.name:"—",pid:l.product_id,qty:l.qty_out,days,avg,
+   val:l.qty_out*Number(l.unit_price)};})
+  .sort((a,b)=>b.days-a.days);
+ const show=full?rows:rows.slice(0,1);
+ return `<div class="lbl"><span>${esc(T().frozenShelf)}</span><span class="mut">${esc(T().daysUsual)}</span></div>`+
+ show.map(r=>{const slow=r.avg&&r.days>r.avg;
+  return `<div class="card"><div class="fr">
+  <div class="days" style="background:${slow?"var(--badw)":"var(--goodw)"};color:${slow?"var(--bad)":"var(--good)"}">
+   <b>${r.days}</b><span>${S.lang==="th"?"วัน":"DAYS"}</span></div>
+  <div style="flex:1;min-width:0"><div style="font-weight:500">${esc(r.name)}</div>
+  <div class="mut">${esc(pname(r.pid))} ×${r.qty}${r.avg?" · "+esc(T().usually(r.avg)):""}</div></div>
+  <div class="rv">${money(r.val)}</div></div></div>`;}).join("");
 }
-
-/* ============ nav ============ */
-const TABS=[["order","package"],["deliver","truck-delivery"],["batches","stack-2"],
- ["stats","chart-line"],["setup","settings"]];
-function renderNav(){
- $("nav").innerHTML=TABS.map(([k,ic])=>`<button role="tab" data-tab="${k}"
-  aria-selected="${S.tab===k}"><i class="ti ti-${ic}" aria-hidden="true"></i>${esc(T()[k])}</button>`).join("");
- $("nav").querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;renderAll();});
+function avgClear(sid,pid){
+ const done=S.lines.filter(l=>l.deliveries.store_id===sid&&l.product_id===pid&&l.settled_at);
+ if(!done.length) return null;
+ const tot=done.reduce((a,l)=>a+Math.round((new Date(l.settled_at)-new Date(l.deliveries.delivered_on))/864e5),0);
+ return Math.round(tot/done.length);
 }
-function renderAll(){
- if(S.histStore){renderNav();return renderHistory();}
- renderHero();renderNav();
- ({order:renderOrder,deliver:renderDeliver,batches:renderBatches,
-   stats:renderStats,setup:renderSetup})[S.tab]();}
-
-/* ============ 0. ENTRY ============ */
-/* Two doors. Delivery is one tap with no typing — it signs in as the shared
-   driver account, whose credentials are public by design and whose RLS grants
-   read the round and record deliveries, nothing more. Reseller asks for a password. */
-const DRIVER_LOGIN={email:"driver@dessert-run.app",password:"run-2026-delivery"};
-
-function renderAuth(pane){
- setDay(new Date().getDay());
- const nav=document.querySelector(".nav"); if(nav) nav.style.display="none";
- const d=new Date();
- $("hero").innerHTML="";
- if(pane==="reseller") return renderResellerLogin();
- $("pane").innerHTML=`
- <div style="text-align:center;padding:18px 0 20px">
-  <img src="icon-192.png" alt="" style="width:74px;height:74px;border-radius:18px">
-  <div style="font-size:calc(var(--fs)*1.5);font-weight:600;margin-top:11px;line-height:1.4">ส่งขนม</div>
-  <div style="font-size:calc(var(--fs)*.95);color:var(--ink2)">${esc(dayName(d.getDay()))} ${d.getDate()} ${esc(monName(d.getMonth()))}</div></div>
-
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
- <button id="doorD" style="min-height:168px;border-radius:16px;border:2px solid var(--a);
-  background:var(--aw);color:var(--a);font-family:inherit;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:6px;padding:16px 8px;text-align:center">
-  <i class="ti ti-truck-delivery" style="font-size:44px" aria-hidden="true"></i>
-  <span style="font-size:calc(var(--fs)*1.6);font-weight:600;line-height:1.3">ส่งของ</span>
-  <span style="font-size:calc(var(--fs)*.9);opacity:.9;line-height:1.4">Delivery</span>
-  <span style="font-size:calc(var(--fs)*.75);opacity:.72;line-height:1.4">ไปส่งขนมวันนี้</span>
- </button>
- <button id="doorR" style="min-height:168px;border-radius:16px;border:1px solid var(--line);
-  background:var(--paper);font-family:inherit;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:6px;padding:16px 8px;text-align:center">
-  <i class="ti ti-lock" style="font-size:40px;color:var(--ink2)" aria-hidden="true"></i>
-  <span style="font-size:calc(var(--fs)*1.35);font-weight:600;line-height:1.3">เจ้าของ</span>
-  <span style="font-size:calc(var(--fs)*.9);color:var(--ink2);line-height:1.4">Reseller</span>
-  <span style="font-size:calc(var(--fs)*.75);color:var(--ink3);line-height:1.4">ออเดอร์ · เงิน</span>
- </button>
- </div>
-
- <div id="ae"></div>
- <div style="text-align:center;margin-top:18px;font-size:calc(var(--fs)*.85);color:var(--ink2);line-height:1.7">
-  กดปุ่มสีเพื่อเริ่มส่งของ ไม่ต้องใส่รหัส<br>
-  <span style="font-size:calc(var(--fs)*.78);color:var(--ink3)">Delivery needs no password</span></div>
- <button class="btn ghost" id="dm" style="margin-top:16px">ลองใช้ · Try the demo</button>`;
-
- $("doorD").onclick=async()=>{
-  $("doorD").style.opacity=".6";
-  const {error}=await db.auth.signInWithPassword(DRIVER_LOGIN);
-  if(error){$("doorD").style.opacity="1";
-   $("ae").innerHTML='<div class="msg err">'+esc(error.message)+'</div>';return;}
-  load();
- };
- $("doorR").onclick=()=>renderAuth("reseller");
- $("dm").onclick=()=>{location.search="?demo=1";};
+function balances(){
+ const settled=S.lines.filter(l=>l.settled_at!=null);
+ const rev=settled.reduce((a,l)=>a+(l.qty_back==null?l.qty_out:l.qty_out-l.qty_back)*Number(l.unit_price),0);
+ const cost=settled.reduce((a,l)=>a+(l.qty_back==null?l.qty_out:l.qty_out-l.qty_back)*Number(l.unit_cost),0);
+ const paid=S.payments.reduce((a,p)=>a+Number(p.amount),0);
+ const mumPaid=S.supPay.reduce((a,p)=>a+Number(p.amount),0);
+ const flight=S.lines.filter(l=>l.settled_at==null&&isRet(l.product_id))
+  .reduce((a,l)=>a+l.qty_out*Number(l.unit_price),0);
+ const mth=settled.filter(l=>l.deliveries.delivered_on.slice(0,7)===S.today.slice(0,7));
+ const mRev=mth.reduce((a,l)=>a+(l.qty_out-(l.qty_back||0))*Number(l.unit_price),0);
+ const mCost=mth.reduce((a,l)=>a+(l.qty_out-(l.qty_back||0))*Number(l.unit_cost),0);
+ return {owed:rev-paid,flight,mum:cost-mumPaid,margin:rev-cost,monthMargin:mRev-mCost};
+}
+function moneyBlock(full){
+ const b=balances();
+ return `<div class="lbl">${esc(T().moneyLbl)}</div><div class="g2">
+ <div class="k"><div class="kk">${esc(T().shopsOwe)}</div><div class="kv">${money(b.owed)}</div></div>
+ <div class="k"><div class="kk">${esc(T().outCons)}</div><div class="kv">${money(b.flight)}</div></div>
+ ${full?`<div class="k"><div class="kk">${esc(T().mumOwed)}</div><div class="kv">${money(b.mum)}</div></div>
+ <div class="k"><div class="kk">${esc(T().marginMonth)}</div><div class="kv">${money(b.monthMargin)}</div></div>`:""}
+ </div>`;
+}
+function sellBlock(){
+ const rows=S.stores.filter(s=>s.terms==="consignment").map(s=>{
+  const ls=S.lines.filter(l=>l.deliveries.store_id===s.id&&l.settled_at&&isRet(l.product_id));
+  const out=ls.reduce((a,l)=>a+l.qty_out,0), back=ls.reduce((a,l)=>a+(l.qty_back||0),0);
+  return {n:s.name,pct:out?Math.round(100*(out-back)/out):null};})
+  .filter(r=>r.pct!=null).sort((a,b)=>b.pct-a.pct);
+ if(!rows.length) return "";
+ return `<div class="lbl"><span>${esc(T().sellThrough)}</span><span class="mut">${esc(T().lastDrops)}</span></div>
+ <div class="card">${rows.map(r=>`<div class="row" style="padding:5px 0">
+ <span class="rt" style="flex:1">${esc(r.n)}</span>
+ <span class="sbar"><i style="width:${r.pct}%"></i></span>
+ <span class="rv" style="flex:0 0 40px;text-align:right">${r.pct}%</span></div>`).join("")}</div>`;
 }
 
-function renderResellerLogin(){
- $("pane").innerHTML=`
- <div style="text-align:center;padding:22px 0 16px">
-  <i class="ti ti-lock" style="font-size:38px;color:var(--ink2)" aria-hidden="true"></i>
-  <div style="font-size:calc(var(--fs)*1.4);font-weight:600;margin-top:9px;line-height:1.4">เจ้าของ</div>
-  <div style="font-size:calc(var(--fs)*.9);color:var(--ink2)">Reseller sign in</div></div>
- <div class="card"><div class="sec" style="border:0">
-  <span class="lbl">อีเมล · Email</span>
-  <input type="email" id="em" inputmode="email" autocomplete="username" style="text-align:left">
-  <span class="lbl" style="margin-top:12px">รหัสผ่าน · Password</span>
-  <input type="password" id="pw" autocomplete="current-password" style="text-align:left">
-  <div id="ae"></div>
- </div><button class="btn" id="si" style="min-height:58px;font-size:calc(var(--fs)*1.05)">เข้าสู่ระบบ · Sign in</button></div>
- <button class="btn ghost" id="bk" style="margin-top:12px;min-height:52px">ย้อนกลับ · Back</button>`;
- $("si").onclick=async()=>{
-  const email=$("em").value.trim(), password=$("pw").value;
-  if(!email||!password){$("ae").innerHTML='<div class="msg err">ใส่อีเมลและรหัสผ่าน · Enter email and password</div>';return;}
-  $("si").disabled=true; $("si").textContent="…";
-  const {error}=await db.auth.signInWithPassword({email,password});
-  $("si").disabled=false; $("si").textContent="เข้าสู่ระบบ · Sign in";
-  if(error){$("ae").innerHTML='<div class="msg err">'+esc(error.message)+'</div>';return;}
-  load();
- };
- $("bk").onclick=()=>renderAuth();
-}
-
-/* ============ 1. ORDER ============ */
+/* ================= ORDER ================= */
 const oKey=(s,p)=>s+"|"+p;
 function oVal(s,p){const k=oKey(s,p);
  if(S.orderQty[k]!=null) return S.orderQty[k];
- const x=spOf(s,p); return x?.default_qty||0;}
-function renderOrder(){
- const t=orderTarget();
- if(!t){$("pane").innerHTML=`<div class="empty">${esc(T().noOrder)}</div>`;return;}
+ const x=S.prices.find(y=>y.store_id===s&&y.product_id===p); return x?.default_qty||0;}
+function orderScreen(){
+ const t=orderTarget(); if(!t){S.screen="home";return render();}
  const list=dueOn(t.getDay(),weekOf(t));
  const byP={};
  list.forEach(s=>S.prices.filter(p=>p.store_id===s.id).forEach(p=>{
@@ -653,387 +575,216 @@ function renderOrder(){
  list.forEach(s=>S.prices.filter(p=>p.store_id===s.id).forEach(p=>{
   const q=oVal(s.id,p.product_id);boxes+=q;cost+=q*(S.costs[p.product_id]||0);}));
 
- $("pane").innerHTML=`
- <div class="card"><div class="ch"><div>
-  <div class="cn">${esc(T().msgMum)}</div>
-  <div class="mut">${boxes} ${esc(T().boxes)} · ${money(cost)} ${esc(T().cost)}</div></div></div>
-  <div class="sec"><div class="ordertxt">${esc(msg)}</div>
-  <div class="chips">${L.map(l=>l.gs.map(g=>
-   `<span class="chip">${esc(g.st.join(" + "))} ${g.q}</span>`).join("")).join("")}</div></div>
-  <button class="btn acc" id="cp">${esc(S.orderStep>1?T().copied:T().copy)}</button>
-  <button class="btn" id="sub" ${S.orderStep<2?"disabled":""}>${esc(T().submit)}</button></div>
-  ${statusStrip(t)}
- <div class="sl" style="margin:14px 0 6px">${esc(T().adjust)}</div>
- ${list.map(s=>`<div class="card"><div class="ch"><div>
-  <div class="cn">${esc(s.name)}</div>
-  <div class="mut">${esc(s.suburb||"")}${s.price_tag_required?" · "+esc(T().priceTag):""}</div></div></div>
-  <div class="sec">${S.prices.filter(p=>p.store_id===s.id).map(p=>`
-   <div class="row"><span class="rt">${esc(pname(p.product_id))}</span>
+ $("app").innerHTML=hero(T().forDay(dayName(t.getDay())),boxes+" · "+money(cost))+
+ `<div class="card"><div class="ordertxt">${esc(msg)}</div>
+  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px">
+  ${L.map(l=>l.gs.map(g=>`<span class="chip">${esc(g.st.join(" + "))} ${g.q}</span>`).join("")).join("")}</div></div>
+ ${list.map(s=>`<div class="card">
+  <div style="font-weight:500;margin-bottom:4px">${esc(s.name)}
+  ${s.price_tag_required?'<span class="mut">· tag</span>':""}</div>
+  ${S.prices.filter(p=>p.store_id===s.id).map(p=>`<div class="row">
+   <span class="rt">${esc(pname(p.product_id))}</span>
    <span class="stp"><button data-oq="${s.id}|${p.product_id}|-1" aria-label="−">−</button>
    <span class="v">${oVal(s.id,p.product_id)}</span>
    <button data-oq="${s.id}|${p.product_id}|1" aria-label="+">+</button></span></div>`).join("")}
-  </div></div>`).join("")}`;
+  </div>`).join("")}
+ <button class="btn g" id="cp">${esc(S.copied?T().copied+" ✓":T().copy)}</button>
+ <button class="btn acc" id="sub" ${S.copied?"":"disabled"}>${esc(T().markSent)}</button>
+ <button class="btn g" id="bk">${esc(T().back)}</button>`;
 
- $("pane").querySelectorAll("[data-oq]").forEach(b=>b.onclick=()=>{
+ $("app").querySelectorAll("[data-oq]").forEach(b=>b.onclick=()=>{
   const [sid,pid,d]=b.dataset.oq.split("|");
-  S.orderQty[oKey(sid,pid)]=Math.max(0,oVal(sid,pid)+ +d);S.orderStep=1;renderOrder();});
- $("cp").onclick=async()=>{try{await navigator.clipboard.writeText(msg);}catch(e){}
-  S.orderStep=2;renderOrder();};
- if($("sub"))$("sub").onclick=()=>submitOrder(iso(t),list);
- bindStatus();
+  S.orderQty[oKey(sid,pid)]=Math.max(0,oVal(sid,pid)+ +d);S.copied=false;render();});
+ $("cp").onclick=async()=>{try{await navigator.clipboard.writeText(msg);}catch(e){} S.copied=true;render();};
+ $("bk").onclick=()=>{S.screen="home";render();};
+ $("sub").onclick=async()=>{
+  const btn=$("sub");btn.disabled=true;btn.textContent="…";
+  const dISO=iso(t);
+  if(!DEMO){
+   const {data:po,error}=await db.from("purchase_orders")
+    .insert({supplier_id:S.supplierId,ordered_on:S.today,for_delivery_on:dISO,
+             sent_at:new Date().toISOString(),status:"sent"}).select("id").single();
+   if(error){btn.disabled=false;btn.textContent=T().markSent;return fail(error.message);}
+   const rows=[];
+   list.forEach(s=>S.prices.filter(p=>p.store_id===s.id).forEach(p=>{
+    const q=oVal(s.id,p.product_id); if(!q) return;
+    rows.push({purchase_order_id:po.id,product_id:p.product_id,store_id:s.id,
+     qty_plain:s.price_tag_required?0:q,qty_price_tagged:s.price_tag_required?q:0,
+     unit_cost:S.costs[p.product_id]||0});}));
+   if(rows.length) await db.from("purchase_order_lines").insert(rows);
+   S.orders.unshift({id:po.id,for_delivery_on:dISO,status:"sent"});
+  } else S.orders.unshift({id:"demo",for_delivery_on:dISO,status:"sent"});
+  S.screen="home";S.copied=false;render();};
 }
 
-/* order status: sent -> cooking -> packed -> collected */
-const ORD_STEPS=[["sent","stSent"],["cooking","stCooking"],["packed","stPacked"],["collected","stCollected"]];
-function orderFor(dateISO){return S.orders.find(o=>o.for_delivery_on===dateISO)||null;}
-function statusStrip(t){
- const o=orderFor(iso(t));
- if(!o) return "";
- const idx=ORD_STEPS.findIndex(x=>x[0]===o.status);
- return `<div class="card"><div class="ch"><div>
-  <div class="cn">${esc(T().submitted)}</div>
-  <div class="mut">${esc(dayName(t.getDay()))} ${t.getDate()}/${t.getMonth()+1}</div></div></div>
-  <div class="sec">
-  ${ORD_STEPS.map(([k,lb],i)=>`<div class="row">
-   <span class="rt" style="display:flex;align-items:center;gap:9px">
-   <span style="width:22px;height:22px;border-radius:50%;flex:0 0 22px;display:flex;
-    align-items:center;justify-content:center;font-size:12px;
-    background:${i<=idx?"var(--a)":"var(--wash)"};color:${i<=idx?"#fff":"var(--ink3)"}">${i<=idx?"✓":i+1}</span>
-   ${esc(T()[lb])}</span>
-   ${i===idx+1?`<button class="sm" data-adv="${k}">${esc(T()["mark"+k.charAt(0).toUpperCase()+k.slice(1)]||T().submit)}</button>`:""}
-   </div>`).join("")}
-  </div></div>`;
-}
-function bindStatus(){
- document.querySelectorAll("[data-adv]").forEach(b=>b.onclick=async()=>{
-  const t=orderTarget(); const o=orderFor(iso(t)); if(!o) return;
-  const k=b.dataset.adv;
-  const patch={status:k};
-  if(k==="packed") patch.packed_at=new Date().toISOString();
-  if(k==="collected") patch.collected_at=new Date().toISOString();
-  o.status=k; Object.assign(o,patch); renderOrder();
-  if(!DEMO) await write({kind:"update",table:"purchase_orders",values:patch,match:{id:o.id}});
- });
-}
-async function submitOrder(dateISO,list){
- const btn=$("sub"); btn.disabled=true; btn.textContent="…";
- if(orderFor(dateISO)){renderOrder();return;}
- const rows=[];
- list.forEach(s=>S.prices.filter(p=>p.store_id===s.id).forEach(p=>{
-  const q=oVal(s.id,p.product_id); if(!q) return;
-  rows.push({product_id:p.product_id,store_id:s.id,
-   qty_plain:s.price_tag_required?0:q,qty_price_tagged:s.price_tag_required?q:0,
-   unit_cost:S.costs[p.product_id]||0});}));
- if(DEMO){S.orders.unshift({id:"demo",for_delivery_on:dateISO,status:"sent"});renderOrder();return;}
- const {data:po,error}=await db.from("purchase_orders")
-  .insert({supplier_id:S.supplierId,ordered_on:S.today,for_delivery_on:dateISO,
-           sent_at:new Date().toISOString(),status:"sent"}).select("id").single();
- if(error){btn.disabled=false;btn.textContent=T().submit;return fail(error.message);}
- if(rows.length) await db.from("purchase_order_lines")
-  .insert(rows.map(r=>({...r,purchase_order_id:po.id})));
- S.orders.unshift({id:po.id,for_delivery_on:dateISO,status:"sent"});
- renderOrder();
-}
-
-/* ============ 2. DELIVER ============ */
+/* ================= RUN ================= */
 function buildStops(){
- return dueOn(S.dow,S.week).map(s=>{
-  const op=openLines(s.id);
-  return {store:s,done:false,t:0,paid:null,
+ return runToday().map(s=>{
+  const op=S.lines.filter(l=>l.settled_at==null&&l.deliveries.store_id===s.id);
+  return {store:s,done:false,paid:null,docket:null,
    back:op.filter(l=>isRet(l.product_id)).map(l=>({id:l.id,pid:l.product_id,
      out:l.qty_out,price:Number(l.unit_price),qty:0})),
    cold:op.filter(l=>!isRet(l.product_id)).map(l=>({id:l.id,pid:l.product_id,
      out:l.qty_out,price:Number(l.unit_price),
      days:Math.round((new Date(S.today)-new Date(l.deliveries.delivered_on))/864e5)})),
    out:S.prices.filter(p=>p.store_id===s.id).map(p=>({pid:p.product_id,
-     price:Number(p.sell_price),cost:S.costs[p.product_id]||0,
-     retail:p.retail_price,qty:p.default_qty||0}))};});
+     price:Number(p.sell_price),cost:S.costs[p.product_id]||0,qty:p.default_qty||0}))};});
 }
 const dueFor=st=>st.back.reduce((a,b)=>a+(b.out-b.qty)*b.price,0);
-const elapsed=()=>S.run.started?Math.floor(((S.run.finished||Date.now())-S.run.started)/1000):0;
-
-function renderDeliver(){
+function runScreen(){
  if(S.stops==null) S.stops=buildStops();
- const R=S.stops;
- if(!R.length){$("pane").innerHTML=`<div class="empty"><div style="font-size:1.05em;font-weight:500">${esc(T().noRound)}</div>
-  <div class="mut" style="margin-top:5px">${esc(T().runsOn)}</div></div>`;return;}
-
- if(!S.run.started){
-  const boxes=R.reduce((a,s)=>a+s.out.reduce((x,o)=>x+o.qty,0),0);
-  const items={};
-  R.forEach(s=>s.out.forEach(o=>{if(o.qty)items[o.pid]=(items[o.pid]||0)+o.qty;}));
-  $("pane").innerHTML=`
-   <div id="map"></div>
-   <div class="g3 kpi" style="margin-bottom:11px">
-   <div><div class="kk">${esc(T().boxesOut)}</div><div class="kv">${boxes}</div></div>
-   <div><div class="kk">${esc(T().deliver)}</div><div class="kv">${R.length}</div></div>
-   <div><div class="kk">${esc(T().collect)}</div><div class="kv">${money(R.reduce((a,s)=>a+dueFor(s),0))}</div></div></div>
-   <div class="sl" style="margin-bottom:6px">${esc(T().loadUp)}</div>
-   <div class="card">${Object.keys(items).map(pid=>`<div class="row" style="padding:11px 13px;border-bottom:1px solid var(--line)">
-    <span class="rt">${esc(pname(pid))}</span><span class="v num" style="font-weight:600">${items[pid]}</span></div>`).join("")}</div>
-   ${R.map((s,i)=>`<div class="tuck"><span>${i+1}. ${esc(s.store.name)}</span>
-    <span class="mut">${esc(s.store.suburb||"")}</span></div>`).join("")}
-   <button class="btn acc" id="go" style="margin-top:12px;min-height:62px;font-size:1.1em">${esc(T().startRun)}</button>`;
-  drawMap(R.map(s=>s.store).filter(s=>s.latitude));
-  $("go").onclick=async()=>{
-   S.run.started=Date.now();S.run.last=0;
-   S.run.tick=setInterval(()=>{const c=document.querySelector(".clock");if(c)c.textContent=fmtT(elapsed());},1000);
-   if(!DEMO){try{await db.from("runs").insert({run_date:S.today});}catch(e){}}
-   renderDeliver();};
+ const R=S.stops, act=R.find(s=>!s.done), doneN=R.filter(s=>s.done).length;
+ if(!act){
+  $("app").innerHTML=hero(T().roundDone,R.length+" · "+money(R.reduce((a,s)=>a+dueFor(s),0)))+
+  `<div class="done"><div style="font-size:calc(var(--fs)*1.15);font-weight:600">${esc(T().allSaved)} ✓</div></div>
+   <button class="btn acc" id="bk">${esc(T().back)}</button>`;
+  $("bk").onclick=()=>{S.screen="home";render();};
   return;
  }
-
- if(S.run.finished){
-  const tot=elapsed();
-  $("pane").innerHTML=`
-   <div class="card"><div class="ch"><div><div class="cn">${esc(T().runDone)}</div>
-   <div class="mut">${R.length} · ${fmtM(tot)}</div></div></div>
-   <div class="sec"><div class="g2 kpi">
-   <div><div class="kk">${esc(T().totalTime)}</div><div class="kv">${fmtT(tot)}</div></div>
-   <div><div class="kk">${esc(T().perStop)}</div><div class="kv">${fmtM(Math.round(tot/R.length))}</div></div></div></div>
-   <div class="sec">${R.map(s=>`<div class="row"><span class="rt">${esc(s.store.name)}</span>
-    <span class="mut">${fmtM(s.t)}</span></div>`).join("")}</div></div>
-   <button class="btn ghost" id="rv">${esc(T().reopen)}</button>`;
-  $("rv").onclick=()=>{S.run.finished=null;renderDeliver();};
-  return;
- }
-
- const rem=R.filter(s=>!s.done), dn=R.filter(s=>s.done), act=rem[0];
- $("pane").innerHTML=`
-  <div class="card" style="margin-bottom:11px"><div class="ch">
-  <div><div class="cn">${esc(T().elapsed)}</div><div class="mut">${dn.length}/${R.length}</div></div>
-  <div class="clock">${fmtT(elapsed())}</div></div></div>
-  ${dn.length?`<div class="sl" style="margin-bottom:6px">${esc(T().done)}</div>`+
-   dn.map(s=>`<div class="tuck" data-un="${R.indexOf(s)}">
-   <span style="color:var(--good)">✓ ${esc(s.store.name)}</span>
-   <span class="mut">${fmtM(s.t)} · ${esc(T().reopen)}</span></div>`).join(""):""}
-  ${act?stopCard(act,R.indexOf(act)):""}
-  ${rem.length>1?`<div class="sl" style="margin:12px 0 6px">${esc(T().upNext)}</div>`+
-   rem.slice(1).map(s=>`<div class="tuck"><span>${esc(s.store.name)}</span>
-   <span class="mut">${esc(s.store.suburb||"")}</span></div>`).join(""):""}
-  ${!rem.length?`<button class="btn good" id="fin" style="min-height:60px">${esc(T().finishRun)}</button>`:""}`;
-
- if($("fin"))$("fin").onclick=async()=>{
-  S.run.finished=Date.now();clearInterval(S.run.tick);
-  if(!DEMO){try{await db.from("runs").update({finished_at:new Date().toISOString()}).eq("run_date",S.today);}catch(e){}}
-  renderDeliver();};
- $("pane").querySelectorAll("[data-un]").forEach(b=>b.onclick=()=>{
-  R[+b.dataset.un].done=false;renderDeliver();});
- $("pane").querySelectorAll("[data-sb]").forEach(b=>b.onclick=()=>{
-  const [i,j,v]=b.dataset.sb.split(":");const r=R[+i].back[+j];
-  r.qty=Math.max(0,Math.min(r.out,r.qty+ +v));R[+i].paid=null;renderDeliver();});
- $("pane").querySelectorAll("[data-so]").forEach(b=>b.onclick=()=>{
-  const [i,j,v]=b.dataset.so.split(":");const r=R[+i].out[+j];
-  r.qty=Math.max(0,r.qty+ +v);renderDeliver();});
- $("pane").querySelectorAll("[data-pay]").forEach(x=>x.onchange=()=>{R[+x.dataset.pay].paid=x.value;});
- $("pane").querySelectorAll("[data-sv]").forEach(b=>b.onclick=()=>saveStop(+b.dataset.sv,b));
- $("pane").querySelectorAll("[data-hist]").forEach(b=>b.onclick=()=>{
-  S.histStore=b.dataset.hist;renderAll();});
- $("pane").querySelectorAll("[data-dock]").forEach(b=>b.onclick=()=>{
-  S.dockTarget=+b.dataset.dock;$("fp").value="";$("fp").click();});
-}
-
-function stopCard(st,i){
- const s=st.store; let n=0; const sn=()=>++n;
- const soldQ=st.back.reduce((a,b)=>a+(b.out-b.qty),0);
- return `<div class="card on"><div class="ch">
- <div><div class="cn">${esc(s.name)}</div><div class="mut">${esc(s.suburb||"")}</div>
- ${s.parking_note?`<div class="mut">🅿 ${esc(s.parking_note)}</div>`:""}</div>
- <span class="pill ${s.terms==="firm"?"grey":""}">${esc(s.terms==="firm"?T().firm:T().ret)}</span></div>
- ${st.back.length?`<div class="sec"><div class="sl">${sn()} · ${esc(T().countBack)}</div>
- ${st.back.map((b,j)=>`<div class="row"><span class="rt">${esc(pname(b.pid))}
+ const i=R.indexOf(act), sold=act.back.reduce((a,b)=>a+(b.out-b.qty),0);
+ $("app").innerHTML=hero(act.store.name,(doneN+1)+" / "+R.length)+
+ R.filter(s=>s.done).map(s=>`<div class="tuck"><span style="color:var(--good)">✓ ${esc(s.store.name)}</span>
+  <span class="mut">${money(dueFor(s))}</span></div>`).join("")+
+ `<div class="card on">
+ ${act.store.parking_note?`<div class="mut" style="margin-bottom:6px">🅿 ${esc(act.store.parking_note)}</div>`:""}
+ ${act.back.length?`<div class="mut">1 · ${esc(T().countBack)}</div>
+ ${act.back.map((b,j)=>`<div class="row"><span class="rt">${esc(pname(b.pid))}
   <span class="mut">${esc(T().of)} ${b.out}</span></span>
-  <span class="stp"><button data-sb="${i}:${j}:-1" aria-label="−">−</button>
-  <span class="v">${b.qty}</span>
-  <button data-sb="${i}:${j}:1" aria-label="+">+</button></span></div>`).join("")}
- <div class="note acc"><span>${esc(T().sold)} ${soldQ}</span><span>${money(dueFor(st))} ${esc(T().due)}</span></div></div>`:""}
- ${st.cold.length?`<div class="sec cold"><div class="sl">${sn()} · ${esc(T().stillOut)}</div>
- ${st.cold.map(c=>`<div class="row"><span class="rt">${esc(pname(c.pid))}
-  <span class="mut">×${c.out} · ${c.days} ${esc(T().daysOut)}</span></span>
-  <span style="font-weight:500">${money(c.out*c.price)}</span></div>`).join("")}</div>`:""}
- ${st.back.length?`<div class="sec"><div class="sl">${sn()} · ${esc(T().payRec)}</div>
- <input type="number" inputmode="decimal" step="0.01" data-pay="${i}"
-  value="${st.paid==null?dueFor(st).toFixed(2):st.paid}"></div>`:""}
- <div class="sec"><div class="sl">${sn()} · ${esc(T().dropNew)}</div>
- ${st.out.map((o,j)=>`<div class="row"><span class="rt">${esc(pname(o.pid))}
-  ${!isRet(o.pid)?`<span class="mut">${esc(T().noReturns)}</span>`:""}
-  ${o.retail?`<span class="mut">${money(o.retail)}</span>`:""}</span>
-  <span class="stp"><button data-so="${i}:${j}:-1" aria-label="−">−</button>
-  <span class="v">${o.qty}</span>
-  <button data-so="${i}:${j}:1" aria-label="+">+</button></span></div>`).join("")}</div>
- <div class="sec"><div class="g2">
- <button class="sm" data-hist="${s.id}" style="width:100%;min-height:44px">${esc(T().showStore)}</button>
- <button class="sm" data-dock="${i}" style="width:100%;min-height:44px">
-  ${st.docket?"✓ "+esc(T().docket):esc(T().addDocket)}</button></div>
- ${st.docket?`<img src="${st.docket}" alt="" style="width:100%;border-radius:10px;margin-top:8px">`:""}
- </div>
- <button class="btn acc" data-sv="${i}">${esc(T().save)}</button></div>`;
-}
+  <span class="stp"><button data-b="${i}:${j}:-1" aria-label="−">−</button>
+  <span class="v">${b.qty}</span><button data-b="${i}:${j}:1" aria-label="+">+</button></span></div>`).join("")}
+ <div class="row" style="border-top:1px solid var(--line);margin-top:4px;padding-top:8px">
+ <span class="rt">${esc(T().sold)} ${sold}</span><span class="rv">${money(dueFor(act))} ${esc(T().due)}</span></div>`:""}
+ ${act.cold.length?`<div class="mut" style="margin-top:8px">${esc(T().frozenShelf)}</div>
+ ${act.cold.map(c=>`<div class="row"><span class="rt">${esc(pname(c.pid))}
+  <span class="mut">×${c.out} · ${c.days}</span></span><span class="rv">${money(c.out*c.price)}</span></div>`).join("")}`:""}
+ <div class="mut" style="margin-top:8px">${act.back.length?"2 · ":""}${esc(T().dropNew)}</div>
+ ${act.out.map((o,j)=>`<div class="row"><span class="rt">${esc(pname(o.pid))}</span>
+  <span class="stp"><button data-o="${i}:${j}:-1" aria-label="−">−</button>
+  <span class="v">${o.qty}</span><button data-o="${i}:${j}:1" aria-label="+">+</button></span></div>`).join("")}
+ <div class="g2" style="margin-top:10px">
+ <button class="sm" data-hist="${act.store.id}" style="width:100%;min-height:42px">${esc(T().showShop)}</button>
+ <button class="sm" data-dock="${i}" style="width:100%;min-height:42px">${act.docket?"✓ ":""}${esc(T().docket)}</button></div>
+ <button class="btn acc" data-sv="${i}">${esc(T().saveStop)}</button></div>
+ <button class="btn g" id="bk2">${esc(T().back)}</button>`;
 
+ $("app").querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{
+  const [a,j,v]=b.dataset.b.split(":");const r=R[+a].back[+j];
+  r.qty=Math.max(0,Math.min(r.out,r.qty+ +v));render();});
+ $("app").querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{
+  const [a,j,v]=b.dataset.o.split(":");const r=R[+a].out[+j];
+  r.qty=Math.max(0,r.qty+ +v);render();});
+ $("app").querySelectorAll("[data-hist]").forEach(b=>b.onclick=()=>{S.histStore=b.dataset.hist;render();});
+ $("app").querySelectorAll("[data-dock]").forEach(b=>b.onclick=()=>{
+  S.dockTarget=+b.dataset.dock;$("fp").value="";$("fp").click();});
+ $("app").querySelectorAll("[data-sv]").forEach(b=>b.onclick=()=>saveStop(+b.dataset.sv,b));
+ $("bk2").onclick=()=>{S.screen="home";render();};
+}
 async function saveStop(i,btn){
  const st=S.stops[i]; btn.disabled=true; btn.textContent="…";
- if(DEMO){
-  const now=new Date().toISOString();
-  st.back.forEach(b=>{const l=S.lines.find(x=>x.id===b.id);
-   if(l){l.qty_back=b.qty;l.settled_at=now;}});
-  const amt=st.paid==null?dueFor(st):parseFloat(st.paid);
-  if(amt>0) S.payments.push({store_id:st.store.id,amount:amt,paid_on:S.today});
-  st.out.filter(o=>o.qty>0).forEach((o,k)=>S.lines.push({id:"X"+Date.now()+k,
-   product_id:o.pid,qty_out:o.qty,qty_back:null,unit_price:o.price,unit_cost:o.cost,
-   settled_at:null,deliveries:{id:"XD",store_id:st.store.id,delivered_on:S.today}}));
-  const e=elapsed(); st.t=e-S.run.last; S.run.last=e; st.done=true;
-  renderHero(); renderDeliver(); return;
- }
- const undo=()=>{btn.disabled=false;btn.textContent=T().save;};
  const now=new Date().toISOString();
+ if(DEMO){
+  st.back.forEach(b=>{const l=S.lines.find(x=>x.id===b.id);if(l){l.qty_back=b.qty;l.settled_at=now;}});
+  st.done=true; return render();
+ }
  for(const b of st.back){
-  const {error}=await write({kind:"update",table:"delivery_lines",
-   values:{qty_back:b.qty,reason:b.qty>0?"unsold":null,settled_at:now},match:{id:b.id}});
-  if(error){undo();return fail(error.message);}
+  const {error}=await db.from("delivery_lines")
+   .update({qty_back:b.qty,reason:b.qty>0?"unsold":null,settled_at:now}).eq("id",b.id);
+  if(error){btn.disabled=false;return fail(error.message);}
   const l=S.lines.find(x=>x.id===b.id); if(l){l.qty_back=b.qty;l.settled_at=now;}
  }
- const amt=st.paid==null?dueFor(st):parseFloat(st.paid);
+ const amt=dueFor(st);
  if(amt>0){
-  const {error}=await write({kind:"insert",table:"store_payments",
-   rows:{store_id:st.store.id,amount:amt,paid_on:S.today,notes:"Collected on delivery"}});
-  if(error){undo();return fail(error.message);}
+  await db.from("store_payments").insert({store_id:st.store.id,amount:amt,paid_on:S.today,
+   notes:S.driver?("Collected by "+S.driver.name):"Collected on delivery"});
   S.payments.push({store_id:st.store.id,amount:amt,paid_on:S.today});
  }
  const rows=st.out.filter(o=>o.qty>0);
  if(rows.length){
   const {data:del,error:de}=await db.from("deliveries")
    .insert({store_id:st.store.id,delivered_on:S.today,completed_at:now,
-            recorded_by:S.user?.id||null,docket_photo:st.docket||null}).select("id").single();
-  if(de){undo();return fail(de.message);}
-  const {data:nl,error:le}=await db.from("delivery_lines").insert(rows.map(o=>({
+            recorded_by:S.user?.id||null,driver_ref:S.driver?.id||null,
+            docket_photo:st.docket||null}).select("id").single();
+  if(de){btn.disabled=false;return fail(de.message);}
+  const {data:nl}=await db.from("delivery_lines").insert(rows.map(o=>({
    delivery_id:del.id,product_id:o.pid,supplier_id:S.supplierId,
-   qty_out:o.qty,unit_price:o.price,unit_cost:o.cost}))).select("id,product_id,qty_out,qty_back,unit_price,unit_cost,settled_at");
-  if(le){undo();return fail(le.message);}
+   qty_out:o.qty,unit_price:o.price,unit_cost:o.cost})))
+   .select("id,product_id,qty_out,qty_back,unit_price,unit_cost,settled_at");
   (nl||[]).forEach(l=>S.lines.push({...l,deliveries:{id:del.id,store_id:st.store.id,delivered_on:S.today}}));
  }
- const e=elapsed(); st.t=e-S.run.last; S.run.last=e; st.done=true;
- renderHero(); renderDeliver();
+ st.done=true; render();
 }
+$("fp").onchange=function(){
+ const f=this.files[0]; if(!f||S.dockTarget==null) return;
+ const r=new FileReader();
+ r.onload=()=>{const st=S.stops&&S.stops[S.dockTarget];
+  if(st) st.docket=r.result; S.dockTarget=null; render();};
+ r.readAsDataURL(f);
+};
 
-/* ============ 3. BATCHES ============ */
+/* ================= MONEY ================= */
 function batchList(){
  const M={};
- S.lines.forEach(l=>{
-  const ret=isRet(l.product_id); if(!ret) return;
+ S.lines.filter(l=>isRet(l.product_id)).forEach(l=>{
   const d=l.deliveries.delivered_on;
   M[d]=M[d]||{d,stores:new Set(),out:0,back:0,cost:0,rev:0,counted:true};
   const m=M[d]; m.stores.add(l.deliveries.store_id); m.out+=l.qty_out;
-  if(l.settled_at==null){m.counted=false;}
+  if(l.settled_at==null) m.counted=false;
   const sold=l.qty_back==null?0:(l.qty_out-l.qty_back);
-  m.back+=l.qty_back||0; m.cost+=sold*Number(l.unit_cost); m.rev+=sold*Number(l.unit_price);
- });
- const clearedDates=new Set(S.supPay.flatMap(p=>p.covers_dates||[]));
+  m.back+=l.qty_back||0; m.cost+=sold*Number(l.unit_cost); m.rev+=sold*Number(l.unit_price);});
+ const cleared=new Set(S.supPay.flatMap(p=>p.covers_dates||[]));
  return Object.values(M).sort((a,b)=>b.d.localeCompare(a.d))
-  .map(m=>({...m,stores:m.stores.size,cleared:clearedDates.has(m.d),
-   forced:S.forced.has(m.d)}));
+  .map(m=>({...m,stores:m.stores.size,cleared:cleared.has(m.d)}));
 }
-function frozenList(){
- const clearedDates=new Set(S.supPay.flatMap(p=>p.covers_dates||[]));
- return S.lines.filter(l=>!isRet(l.product_id)).map(l=>({
-  id:l.id,d:l.deliveries.delivered_on,store:S.stores.find(s=>s.id===l.deliveries.store_id)?.name||"—",
-  pid:l.product_id,qty:l.qty_out,cost:l.qty_out*Number(l.unit_cost),rev:l.qty_out*Number(l.unit_price),
-  soldOut:l.settled_at!=null,cleared:clearedDates.has(l.deliveries.delivered_on),
-  days:Math.round((new Date(S.today)-new Date(l.deliveries.delivered_on))/864e5)}))
-  .sort((a,b)=>b.d.localeCompare(a.d));
-}
-function renderBatches(){
- const des=batchList(), frz=frozenList();
- const L=S.bPane==="des"?des:frz;
- const payable=x=>S.bPane==="des"?(!x.cleared&&(x.counted||x.forced)):(!x.cleared&&x.soldOut);
- const pay=L.filter(payable);
- const owedD=des.filter(x=>!x.cleared&&(x.counted||x.forced)).reduce((a,x)=>a+x.cost,0);
- const owedF=frz.filter(x=>!x.cleared&&x.soldOut).reduce((a,x)=>a+x.cost,0);
- const total=[...S.bSel].reduce((a,k)=>{const x=L.find(y=>(y.id||y.d)===k);return a+(x?x.cost:0);},0);
+function moneyTab(){
+ const b=balances(), L=batchList();
+ const payable=L.filter(x=>!x.cleared&&x.counted);
+ const total=[...S.bSel].reduce((a,d)=>{const x=L.find(y=>y.d===d);return a+(x?x.cost:0);},0);
+ $("app").innerHTML=hero(T().money,T().marginToDate+" "+money(b.margin))+
+ `<div class="g2">
+ <div class="k"><div class="kk">${esc(T().shopsOwe)}</div><div class="kv">${money(b.owed)}</div></div>
+ <div class="k"><div class="kk">${esc(T().outCons)}</div><div class="kv">${money(b.flight)}</div></div>
+ <div class="k"><div class="kk">${esc(T().mumOwed)}</div><div class="kv">${money(b.mum)}</div></div>
+ <div class="k"><div class="kk">${esc(T().marginMonth)}</div><div class="kv">${money(b.monthMargin)}</div></div></div>
+ <div class="lbl">${esc(T().batches)}</div>
+ ${L.length?L.map(x=>{
+  const dt=new Date(x.d+"T12:00:00"), k=DAY[dt.getDay()], sel=S.bSel.has(x.d);
+  return `<div class="card ${sel?"on":""}" style="${x.cleared?"opacity:.55":""}">
+  <div class="fr">
+  <div class="cb" data-bs="${x.d}" data-on="${sel?1:0}">${sel?"✓":""}</div>
+  <div class="dchip" style="background:${k.w};color:${k.i}">
+   <b style="font-weight:600">${dt.getDate()}</b><span style="font-size:9px">${esc(monName(dt.getMonth())).toUpperCase()}</span></div>
+  <div style="flex:1;min-width:0"><div style="font-weight:500">${esc(dayName(dt.getDay()))}</div>
+  <div class="mut">${x.stores} · ${x.out} → ${x.back}${x.cleared?" · "+esc(T().cleared):x.counted?"":" · "+esc(T().pending)}</div></div>
+  <div class="rv">${money(x.cost)}</div></div></div>`;}).join("")
+  :`<div class="empty">${esc(T().noHistory)}</div>`}
+ ${S.bSel.size?`<div class="card on">
+ <div class="row"><span class="rt" style="font-weight:600">${esc(T().payMum)}</span>
+ <span class="kv">${money(total)}</span></div>
+ <div class="mut">${esc(T().sign)}</div>
+ <canvas class="sig" id="sig"></canvas>
+ <button class="btn good" id="sok" ${S.bDrawn?"":"disabled"}>${esc(T().signClear)}</button>
+ <button class="btn g" id="scl">${esc(T().back)}</button></div>`:""}
+ <div class="lbl">${esc(T().stores)}</div>
+ ${S.stores.map(s=>`<div class="tuck" data-hist="${s.id}">
+  <span>${esc(s.name)}</span><span class="mut">${esc(T().history)} ›</span></div>`).join("")}`;
 
- $("pane").innerHTML=`
- <div class="sub n2">
- <button data-bp="des" aria-selected="${S.bPane==="des"}">${esc(T().desserts)}<span class="ct">${money(owedD)}</span></button>
- <button data-bp="frz" aria-selected="${S.bPane==="frz"}">${esc(T().frozen)}<span class="ct">${money(owedF)}</span></button></div>
- <div class="g2 kpi" style="margin-bottom:11px">
- <div><div class="kk">${esc(T().owed)}</div><div class="kv">${money(S.bPane==="des"?owedD:owedF)}</div></div>
- <div><div class="kk">${esc(T().open)}</div><div class="kv">${pay.length}</div></div></div>
- ${pay.length?`<div class="tuck"><span>${pay.length} ${esc(T().toPay)}</span>
-  <button class="sm" id="sa">${esc(S.bSel.size===pay.length?T().clearAll:T().selectAll)}</button></div>`:""}
- ${L.length?L.map(x=>S.bPane==="des"?bCardD(x,payable(x)):bCardF(x,payable(x))).join(""):
-   `<div class="empty">${esc(T().noData)}</div>`}
- ${S.bSel.size?`<div class="card on" style="margin-top:12px"><div class="ch">
-  <div class="cn">${esc(T().payMum)}</div>
-  <div class="kv">${money(total)}</div></div>
-  <div class="sec"><div class="sl">${esc(T().sign)}</div>
-  <canvas class="sig" id="sig"></canvas>
-  <div class="g2" style="margin-top:9px">
-  <button class="sm" id="sclr" style="width:100%;min-height:46px">${esc(T().cancel)}</button>
-  <button class="btn good" id="sok" ${S.bDrawn?"":"disabled"} style="min-height:46px">${esc(T().signClear)}</button>
-  </div></div></div>`:""}`;
-
- $("pane").querySelectorAll("[data-bp]").forEach(b=>b.onclick=()=>{
-  S.bPane=b.dataset.bp;S.bSel=new Set();S.bOpen=null;S.bDrawn=false;renderBatches();});
- if($("sa"))$("sa").onclick=()=>{
-  S.bSel=S.bSel.size===pay.length?new Set():new Set(pay.map(x=>x.id||x.d));S.bDrawn=false;renderBatches();};
- $("pane").querySelectorAll("[data-bcb]").forEach(e=>e.onclick=ev=>{
-  ev.stopPropagation();const k=e.dataset.bcb;const x=L.find(y=>(y.id||y.d)===k);
-  if(!payable(x))return; S.bSel.has(k)?S.bSel.delete(k):S.bSel.add(k);S.bDrawn=false;renderBatches();});
- $("pane").querySelectorAll("[data-bo]").forEach(e=>e.onclick=()=>{
-  S.bOpen=S.bOpen===e.dataset.bo?null:e.dataset.bo;renderBatches();});
- $("pane").querySelectorAll("[data-force]").forEach(e=>e.onclick=ev=>{
-  ev.stopPropagation();S.forced.add(e.dataset.force);renderBatches();});
- if($("sclr"))$("sclr").onclick=()=>{S.bSel=new Set();S.bDrawn=false;renderBatches();};
+ $("app").querySelectorAll("[data-bs]").forEach(e=>e.onclick=()=>{
+  const d=e.dataset.bs, x=L.find(y=>y.d===d);
+  if(!x||x.cleared||!x.counted) return;
+  S.bSel.has(d)?S.bSel.delete(d):S.bSel.add(d);S.bDrawn=false;render();});
+ $("app").querySelectorAll("[data-hist]").forEach(e=>e.onclick=()=>{S.histStore=e.dataset.hist;render();});
+ if($("scl"))$("scl").onclick=()=>{S.bSel=new Set();S.bDrawn=false;render();};
  if($("sok"))$("sok").onclick=async()=>{
-  const dates=[...S.bSel].map(k=>{const x=L.find(y=>(y.id||y.d)===k);return x.d;});
-  const c=$("sig");
-  if(DEMO){S.supPay.push({amount:total,paid_on:S.today,covers_dates:[...new Set(dates)]});
-   S.bSel=new Set();S.bDrawn=false;return renderBatches();}
-  const {error}=await db.from("supplier_payments").insert({
-   supplier_id:S.supplierId,amount:total,paid_on:S.today,
-   covers_dates:[...new Set(dates)],signed_at:new Date().toISOString(),
-   signature:c?c.toDataURL("image/png"):null,signed_by:"Mum"});
-  if(error) return fail(error.message);
-  S.supPay.push({amount:total,paid_on:S.today,covers_dates:[...new Set(dates)]});
-  S.bSel=new Set();S.bDrawn=false;renderBatches();};
- if($("sig"))sigPad($("sig"));
-}
-function bCardD(b,ok){
- const dt=new Date(b.d+"T12:00:00"), k=DAY[dt.getDay()], sel=S.bSel.has(b.d), op=S.bOpen===b.d;
- return `<div class="card ${sel?"on":""}" style="${b.cleared?"opacity:.55":""}">
- <div class="ch" style="align-items:center">
- <div class="cb" data-bcb="${b.d}" data-on="${sel?1:0}" data-dis="${ok?0:1}">${sel?"✓":""}</div>
- <div class="dchip" style="background:${k.w};color:${k.i}"><b>${dt.getDate()}</b><span>${monName(dt.getMonth()).toUpperCase()}</span></div>
- <div style="flex:1;min-width:0" data-bo="${b.d}">
- <div class="cn">${esc(dayName(dt.getDay()))}</div>
- <div class="mut">${b.stores} · ${b.out} → ${b.back}</div>
- <span class="pill ${b.cleared?"good":b.counted?"":"grey"}" style="margin-top:3px;display:inline-block">
- ${esc(b.cleared?T().cleared:b.counted?T().toPay:b.forced?T().forced:T().pending)}</span></div>
- <div style="text-align:right"><div style="font-weight:600" class="num">${money(b.cost)}</div></div></div>
- ${op?`<div class="sec">
- <div class="row"><span class="rt">${esc(T().boxesOut)}</span><span class="num">${b.out}</span></div>
- <div class="row"><span class="rt">${esc(T().wastage)}</span><span class="num">${b.back} · ${b.out?(100*b.back/b.out).toFixed(1):0}%</span></div>
- <div class="row"><span class="rt">${esc(T().revenue)}</span><span class="num">${money(b.rev)}</span></div>
- <div class="row" style="font-weight:600"><span class="rt">${esc(T().margin)}</span><span class="num">${money(b.rev-b.cost)}</span></div>
- ${!b.counted&&!b.forced&&!b.cleared?`<div class="note warn"><span>${esc(T().partial)}</span></div>
- <button class="sm" data-force="${b.d}" style="width:100%;margin-top:8px;min-height:42px">${esc(T().forceClose)} ${money(b.cost)}</button>`:""}
- </div>`:""}</div>`;
-}
-function bCardF(f,ok){
- const dt=new Date(f.d+"T12:00:00"), sel=S.bSel.has(f.id), op=S.bOpen===f.id;
- return `<div class="card ${sel?"on":""}" style="${f.cleared?"opacity:.55":""}">
- <div class="ch" style="align-items:center">
- <div class="cb" data-bcb="${f.id}" data-on="${sel?1:0}" data-dis="${ok?0:1}">${sel?"✓":""}</div>
- <div class="dchip" style="background:var(--coldw);color:var(--cold)"><b>${dt.getDate()}</b><span>${monName(dt.getMonth()).toUpperCase()}</span></div>
- <div style="flex:1;min-width:0" data-bo="${f.id}">
- <div class="cn">${esc(f.store)}</div>
- <div class="mut">${esc(pname(f.pid))} ×${f.qty} · ${f.days} ${esc(T().daysOut)}</div>
- <span class="pill ${f.cleared?"good":f.soldOut?"":"cold"}" style="margin-top:3px;display:inline-block">
- ${esc(f.cleared?T().cleared:f.soldOut?T().soldOut:T().stillSelling)}</span></div>
- <div style="text-align:right"><div style="font-weight:600" class="num">${money(f.cost)}</div></div></div>
- ${op?`<div class="sec">
- <div class="row"><span class="rt">${esc(T().revenue)}</span><span class="num">${money(f.rev)}</span></div>
- <div class="row" style="font-weight:600"><span class="rt">${esc(T().margin)}</span><span class="num">${money(f.rev-f.cost)}</span></div>
- </div>`:""}</div>`;
+  const dates=[...S.bSel], c=$("sig");
+  if(!DEMO){
+   const {error}=await db.from("supplier_payments").insert({
+    supplier_id:S.supplierId,amount:total,paid_on:S.today,covers_dates:dates,
+    signed_at:new Date().toISOString(),signature:c?c.toDataURL("image/png"):null,signed_by:"Mum"});
+   if(error) return fail(error.message);
+  }
+  S.supPay.push({amount:total,paid_on:S.today,covers_dates:dates});
+  S.bSel=new Set();S.bDrawn=false;render();};
+ if($("sig")) sigPad($("sig"));
 }
 function sigPad(cv){
  const r=cv.getBoundingClientRect(),dp=window.devicePixelRatio||1;
@@ -1053,242 +804,136 @@ function sigPad(cv){
  cv.addEventListener("touchend",()=>d=false);
 }
 
-/* ============ 4. STATS ============ */
-function renderStats(){
- const done=S.lines.filter(l=>l.settled_at!=null);
- if(!done.length){$("pane").innerHTML=`<div class="empty">${esc(T().noData)}</div>`;return;}
- const M={};
- done.forEach(l=>{
-  const k=l.deliveries.delivered_on.slice(0,7);
-  M[k]=M[k]||{days:new Set(),out:0,back:0,rev:0,cost:0};
-  const m=M[k]; m.days.add(l.deliveries.delivered_on);
-  const ret=l.qty_back||0, sold=l.qty_out-ret;
-  m.out+=l.qty_out; m.back+=ret;
-  m.rev+=sold*Number(l.unit_price); m.cost+=sold*Number(l.unit_cost);});
- const keys=Object.keys(M).sort().reverse();
- const tot=keys.reduce((a,k)=>{const m=M[k];a.out+=m.out;a.back+=m.back;a.rev+=m.rev;
-  a.cost+=m.cost;a.days+=m.days.size;return a;},{out:0,back:0,rev:0,cost:0,days:0});
- $("pane").innerHTML=`
- <div class="g2 kpi" style="margin-bottom:11px">
- <div><div class="kk">${esc(T().boxesOut)}</div><div class="kv">${tot.out}</div></div>
- <div><div class="kk">${esc(T().wastage)}</div><div class="kv">${tot.out?(100*tot.back/tot.out).toFixed(1):0}%</div></div>
- <div><div class="kk">${esc(T().revenue)}</div><div class="kv">${money(tot.rev)}</div></div>
- <div><div class="kk">${esc(T().margin)}</div><div class="kv">${money(tot.rev-tot.cost)}</div></div></div>
- <div class="card"><div class="ch"><div class="cn">${esc(T().byMonth)}</div></div>
- <div class="sec"><table><tr><th>${esc(T().byMonth)}</th><th>${esc(T().deliver)}</th>
- <th>${esc(T().boxesOut)}</th><th>${esc(T().wastage)}</th><th>${esc(T().margin)}</th></tr>
- ${keys.map(k=>{const m=M[k];return `<tr><td>${k}</td><td class="num">${m.days.size}</td>
- <td class="num">${m.out}</td><td class="num">${m.out?(100*m.back/m.out).toFixed(1):0}%</td>
- <td class="num">${money(m.rev-m.cost)}</td></tr>`;}).join("")}</table></div></div>`;
-}
-
-/* ============ STORE HISTORY — the screen you show the shop ============ */
-function renderHistory(){
+/* ================= STORE HISTORY ================= */
+function storeHistory(){
  const s=S.stores.find(x=>x.id===S.histStore);
- if(!s){S.histStore=null;return renderAll();}
+ if(!s){S.histStore=null;return render();}
  const rows={};
  S.lines.filter(l=>l.deliveries.store_id===s.id).forEach(l=>{
   const d=l.deliveries.delivered_on;
-  rows[d]=rows[d]||{d,items:[],amount:0,settled:true,photo:null};
+  rows[d]=rows[d]||{d,items:[],amount:0,settled:true};
   const sold=l.qty_back==null?null:(l.qty_out-l.qty_back);
-  rows[d].items.push({pid:l.product_id,out:l.qty_out,back:l.qty_back,sold});
+  rows[d].items.push({pid:l.product_id,out:l.qty_out,sold});
   if(sold!=null) rows[d].amount+=sold*Number(l.unit_price);
   if(l.settled_at==null) rows[d].settled=false;});
  const list=Object.values(rows).sort((a,b)=>b.d.localeCompare(a.d));
  const paid=S.payments.filter(p=>p.store_id===s.id).reduce((a,p)=>a+Number(p.amount),0);
  const billed=list.filter(r=>r.settled).reduce((a,r)=>a+r.amount,0);
-
- $("hero").innerHTML=`<div class="hero"><div>
-  <div class="h1" style="font-size:calc(var(--fs)*1.35)">${esc(s.name)}</div>
-  <div class="h2">${esc(s.suburb||"")}</div></div>
-  <div><div class="dnum">${list.length}</div><div class="dmon">${esc(T().deliver).toUpperCase()}</div></div></div>`;
-
- $("pane").innerHTML=`
- <div class="g2 kpi" style="margin-bottom:11px">
- <div><div class="kk">${esc(T().revenue)}</div><div class="kv">${money(billed)}</div></div>
- <div><div class="kk">${esc(T().owed)}</div><div class="kv">${money(billed-paid)}</div></div></div>
- ${list.length?list.map(r=>{
-  const dt=new Date(r.d+"T12:00:00"), k=DAY[dt.getDay()];
-  return `<div class="card"><div class="ch" style="align-items:center;gap:11px">
+ $("app").innerHTML=hero(s.name,s.suburb||"")+
+ `<div class="g2"><div class="k"><div class="kk">${esc(T().shopsOwe)}</div>
+  <div class="kv">${money(billed-paid)}</div></div>
+ <div class="k"><div class="kk">${esc(T().history)}</div><div class="kv">${list.length}</div></div></div>
+ ${list.length?list.map(r=>{const dt=new Date(r.d+"T12:00:00"),k=DAY[dt.getDay()];
+  return `<div class="card"><div class="fr">
   <div class="dchip" style="background:${k.w};color:${k.i}">
-   <b>${dt.getDate()}</b><span>${monName(dt.getMonth()).toUpperCase()}</span></div>
-  <div style="flex:1;min-width:0">
-   ${r.items.map(i=>`<div style="font-size:calc(var(--fs)*.95)">${esc(pname(i.pid))}
-    <span class="mut">${i.out}${i.sold!=null?" → "+i.sold:""}</span></div>`).join("")}
-  </div>
-  <div style="text-align:right">
-   <div style="font-weight:600" class="num">${r.settled?money(r.amount):"—"}</div>
-   ${r.photo?'<div class="mut">📄</div>':""}</div></div></div>`;}).join("")
+   <b style="font-weight:600">${dt.getDate()}</b><span style="font-size:9px">${esc(monName(dt.getMonth())).toUpperCase()}</span></div>
+  <div style="flex:1;min-width:0">${r.items.map(it=>`<div style="font-size:calc(var(--fs)*.92)">
+   ${esc(pname(it.pid))} <span class="mut">${it.out}${it.sold!=null?" → "+it.sold:""}</span></div>`).join("")}</div>
+  <div class="rv">${r.settled?money(r.amount):"—"}</div></div></div>`;}).join("")
   :`<div class="empty">${esc(T().noHistory)}</div>`}
- <button class="btn ghost" id="hb" style="margin-top:10px">${esc(T().back)}</button>`;
- $("hb").onclick=()=>{S.histStore=null;renderAll();};
+ <button class="btn g" id="hb">${esc(T().back)}</button>`;
+ $("hb").onclick=()=>{S.histStore=null;render();};
 }
 
-/* ============ 5. SETUP ============ */
-function renderSetup(){
- $("pane").innerHTML=`
- <div class="card" style="margin-bottom:12px"><div class="ch">
-  <div><div class="cn">${esc(S.name||"")}</div>
-  <div class="mut">${esc(S.role==="owner"?"Owner":"Driver")}${DEMO?" · demo":""}</div></div>
-  <button class="sm" id="out">Sign out</button></div>
-  <div class="sec"><div id="people" class="mut">…</div></div>
-  <button class="btn ghost" id="prev">Preview driver mode</button></div>
- <div class="card" style="margin-bottom:12px"><div class="sec" style="border:0">
- <div class="sl">${esc(T().lang)}</div>
- <div class="g2" style="margin-bottom:9px">
+/* ================= SETUP ================= */
+function setupTab(){
+ $("app").innerHTML=hero(T().setup,S.role==="owner"?"Owner":"Driver")+
+ `<div class="card"><div class="lbl" style="margin:0 0 6px">${esc(T().language)}</div>
+ <div class="g2">
  <button class="sm" data-lg="en" style="width:100%;min-height:44px;${S.lang==="en"?"background:var(--ink);color:#fff":""}">English</button>
  <button class="sm" data-lg="th" style="width:100%;min-height:44px;${S.lang==="th"?"background:var(--ink);color:#fff":""}">ไทย</button></div>
- <div class="sl">${esc(T().size)}</div>
- <div class="g3">${[0,1,2].map(i=>`<button class="sm" data-fz="${i}"
-  style="width:100%;min-height:44px;font-size:${13+i*2}px;${S.fz===i?"background:var(--ink);color:#fff":""}">A</button>`).join("")}</div>
- </div></div>
- <div class="sub n2">
- <button data-sp="stores" aria-selected="${S.sPane==="stores"}">${esc(T().stores)}<span class="ct">${S.stores.length}</span></button>
- <button data-sp="products" aria-selected="${S.sPane==="products"}">${esc(T().products)}<span class="ct">${Object.keys(S.prods).length}</span></button></div>
- ${S.sPane==="stores"?setupStores():setupProducts()}`;
-
+ <div class="lbl" style="margin:10px 0 6px">${esc(T().textSize)}</div>
+ <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
+ ${[0,1,2].map(i=>`<button class="sm" data-fz="${i}" style="width:100%;min-height:44px;
+  font-size:${13+i*2}px;${S.fz===i?"background:var(--ink);color:#fff":""}">A</button>`).join("")}</div></div>
+ ${S.role==="owner"?driversBlock():""}
+ <button class="btn g" id="out">${esc(T().signOut)}</button>`;
+ $("app").querySelectorAll("[data-lg]").forEach(b=>b.onclick=()=>{
+  S.lang=b.dataset.lg;localStorage.setItem("dr_lang",S.lang);applyType();render();});
+ $("app").querySelectorAll("[data-fz]").forEach(b=>b.onclick=()=>{
+  S.fz=+b.dataset.fz;localStorage.setItem("dr_fz",S.fz);applyType();render();});
  $("out").onclick=async()=>{if(!DEMO)await db.auth.signOut();location.href=location.pathname;};
- $("prev").onclick=()=>{location.search=(DEMO?"?demo=1&":"?")+"driver=1";};
- loadPeople();
- $("pane").querySelectorAll("[data-lg]").forEach(b=>b.onclick=()=>{
-  S.lang=b.dataset.lg;try{localStorage.setItem("dr_lang",S.lang);}catch(e){}
-  applyType();renderAll();});
- $("pane").querySelectorAll("[data-fz]").forEach(b=>b.onclick=()=>{
-  S.fz=+b.dataset.fz;try{localStorage.setItem("dr_fz",S.fz);}catch(e){}
-  applyType();renderAll();});
- $("pane").querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>{
-  S.sPane=b.dataset.sp;S.sOpen=null;renderSetup();});
- bindSetup();
+ bindDrivers();
 }
-function setupStores(){
- return S.stores.map((s,i)=>{
-  const op=S.sOpen===s.id;
-  return `<div class="card ${op?"on":""}"><div class="ch" data-so2="${s.id}">
-  <div style="flex:1;min-width:0"><div class="cn">${esc(s.name)}</div>
-  <div class="mut">${esc(s.suburb||"")} · ${S.prices.filter(p=>p.store_id===s.id).length} ${esc(T().products)}</div>
-  <button class="sm" data-hist2="${s.id}" style="margin-top:5px">${esc(T().history)}</button>
-  <div style="display:flex;gap:3px;margin-top:4px;align-items:center">
-  ${(s.delivery_days||[]).map(d=>`<span style="width:15px;height:15px;border-radius:4px;background:${DAY[d].a};
-   color:${d===1?"#8A7A00":"#fff"};font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:600">${DAY[d].en[0]}</span>`).join("")}
-  ${(s.weeks_of_month||[]).length?`<span class="mut" style="margin-left:4px">wk ${s.weeks_of_month.join(",")}</span>`:""}
-  </div></div></div>
-  ${op?`<div class="sec"><div class="sl">${esc(T().deliveryDays)}</div>
-  <div style="display:flex;gap:4px;flex-wrap:wrap">${DAY.map((d,k)=>`<button class="chipbtn" data-dd="${s.id}:${k}"
-   style="${(s.delivery_days||[]).includes(k)?`background:${d.a};border-color:${d.a};color:${k===1?"#8A7A00":"#fff"};font-weight:500`:""}">${esc(S.lang==="th"?d.th.slice(0,3):d.en.slice(0,3))}</button>`).join("")}</div>
-  <div class="sl" style="margin:10px 0 5px">${esc(T().weeksOfMonth)} <span style="font-weight:400">— ${esc(T().everyWeek)}</span></div>
-  <div style="display:flex;gap:4px">${[1,2,3,4,5].map(w=>`<button class="chipbtn" data-wk="${s.id}:${w}"
-   style="${(s.weeks_of_month||[]).includes(w)?"background:var(--ink);border-color:var(--ink);color:#fff":""}">${w}</button>`).join("")}</div>
-  </div>
-  <div class="sec">${S.prices.filter(p=>p.store_id===s.id).map(p=>`
-  <div style="background:var(--wash);border-radius:10px;padding:9px 10px;margin-bottom:6px">
-  <div style="font-weight:500;margin-bottom:6px">${esc(pname(p.product_id))}
-  ${!isRet(p.product_id)?`<span class="pill cold">${esc(T().noReturns)}</span>`:""}</div>
-  <div class="g3">
-  <div><span class="lbl">${esc(T().costFromMum)}</span>
-  <input type="number" value="${S.costs[p.product_id]||0}" disabled style="opacity:.55"></div>
-  <div><span class="lbl">${esc(T().youSell)}</span>
-  <input type="number" step="0.01" data-pp="${s.id}:${p.product_id}:sell_price" value="${p.sell_price}"></div>
-  <div><span class="lbl">${esc(T().defQty)}</span>
-  <input type="number" data-pp="${s.id}:${p.product_id}:default_qty" value="${p.default_qty||0}"></div></div>
-  ${s.price_tag_required?`<div style="margin-top:6px"><span class="lbl">${esc(T().shelfPrice)}</span>
-  <input type="number" step="0.01" data-pp="${s.id}:${p.product_id}:retail_price" value="${p.retail_price||0}"></div>`:""}
-  <div class="mut" style="text-align:right;color:var(--good);margin-top:5px">
-  ${money(p.sell_price-(S.costs[p.product_id]||0))} ${esc(T().each)} · ${money((p.sell_price-(S.costs[p.product_id]||0))*(p.default_qty||0))} ${esc(T().perDrop)}</div>
-  </div>`).join("")}</div>`:""}</div>`;}).join("");
+function driversBlock(){
+ return `<div class="lbl">${esc(T().drivers)}</div>
+ ${S.drivers.map((d,i)=>`<div class="card">
+ <div class="row"><span class="rt"><b style="font-weight:500">${esc(d.name_th||d.name)}</b>
+  <span class="mut">${esc(d.name)}</span></span>
+ <span class="rv num">${esc(d.pin)}</span></div>
+ <div class="row" style="padding-top:0"><span class="mut">${d.active?"":"inactive"}</span>
+ <button class="sm" data-drm="${d.id}">${esc(T().remove)}</button></div></div>`).join("")}
+ <div class="card">
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+ <div><span class="flbl">${esc(T().name)}</span><input id="dn" style="text-align:left"></div>
+ <div><span class="flbl">${esc(T().nameTh)}</span><input id="dnt" style="text-align:left"></div></div>
+ <div style="margin-top:7px"><span class="flbl">${esc(T().pin)}</span>
+ <input id="dp" type="number" inputmode="numeric" maxlength="4"></div>
+ <button class="btn acc" id="dadd">${esc(T().addDriver)}</button></div>`;
 }
-function setupProducts(){
- return Object.values(S.prods).map(p=>`<div class="card"><div class="ch">
- <div style="flex:0 0 42px;height:42px;border-radius:10px;overflow:hidden;
-  background:${p.returnable?"var(--goodw)":"var(--coldw)"};color:${p.returnable?"var(--good)":"var(--cold)"};
-  display:flex;align-items:center;justify-content:center;font-size:17px">${p.returnable?"↺":"❄"}</div>
- <div style="flex:1;min-width:0"><div class="cn">${esc(p.name_th||p.name)}</div>
- <div class="mut">${esc(p.name)} · ${esc(T().inStores(S.prices.filter(x=>x.product_id===p.id).length))}</div></div>
- <div style="text-align:right"><div style="font-weight:600" class="num">${money(S.costs[p.id]||0)}</div>
- <div class="mut">${esc(T().cost)}</div></div></div></div>`).join("");
-}
-function bindSetup(){
- $("pane").querySelectorAll("[data-hist2]").forEach(b=>b.onclick=ev=>{
-  ev.stopPropagation();S.histStore=b.dataset.hist2;renderAll();});
- $("pane").querySelectorAll("[data-so2]").forEach(e=>e.onclick=()=>{
-  S.sOpen=S.sOpen===e.dataset.so2?null:e.dataset.so2;renderSetup();});
- $("pane").querySelectorAll("[data-dd]").forEach(b=>b.onclick=async()=>{
-  const [id,k]=b.dataset.dd.split(":");const s=S.stores.find(x=>x.id===id);
-  const a=[...(s.delivery_days||[])];const n=+k;
-  a.includes(n)?a.splice(a.indexOf(n),1):a.push(n);a.sort();
-  s.delivery_days=a;S.stops=null;renderSetup();
-  if(!DEMO) await db.from("stores").update({delivery_days:a}).eq("id",id);});
- $("pane").querySelectorAll("[data-wk]").forEach(b=>b.onclick=async()=>{
-  const [id,w]=b.dataset.wk.split(":");const s=S.stores.find(x=>x.id===id);
-  const a=[...(s.weeks_of_month||[])];const n=+w;
-  a.includes(n)?a.splice(a.indexOf(n),1):a.push(n);a.sort();
-  s.weeks_of_month=a;S.stops=null;renderSetup();
-  if(!DEMO) await db.from("stores").update({weeks_of_month:a}).eq("id",id);});
- $("pane").querySelectorAll("[data-pp]").forEach(inp=>inp.onchange=async()=>{
-  const [sid,pid,f]=inp.dataset.pp.split(":");
-  const v=parseFloat(inp.value)||0;
-  const row=spOf(sid,pid); if(row) row[f]=v;
-  S.stops=null;
-  if(DEMO) return renderSetup();
-  const {error}=await db.from("store_products").update({[f]:v})
-   .eq("store_id",sid).eq("product_id",pid);
-  if(error) fail(error.message); else renderSetup();});
+function bindDrivers(){
+ $("app").querySelectorAll("[data-drm]").forEach(b=>b.onclick=async()=>{
+  const id=b.dataset.drm;
+  S.drivers=S.drivers.filter(d=>d.id!==id); render();
+  if(!DEMO) await db.from("drivers").delete().eq("id",id);});
+ const add=$("dadd");
+ if(add) add.onclick=async()=>{
+  const name=$("dn").value.trim(), nth=$("dnt").value.trim(), pin=$("dp").value.trim();
+  if(!name||!/^[0-9]{4}$/.test(pin)) return fail("Name and a 4-digit PIN are required.");
+  if(DEMO){S.drivers.push({id:"d"+Date.now(),name,name_th:nth,pin,active:true});return render();}
+  const {data,error}=await db.from("drivers")
+   .insert({name,name_th:nth||null,pin}).select("id,name,name_th,pin,active").single();
+  if(error) return fail(error.message);
+  S.drivers.push(data); render();};
 }
 
-async function loadPeople(){
- const el=$("people"); if(!el) return;
- if(DEMO||S.role!=="owner"){el.textContent="";return;}
- const {data,error}=await db.from("profiles").select("id,display_name,role").order("role");
- if(error||!data){el.textContent="";return;}
- el.innerHTML=data.map(p=>`<div class="row" style="padding:5px 0">
-  <span class="rt">${esc(p.display_name||p.id.slice(0,8))}</span>
-  <span class="pill ${p.role==="owner"?"":"grey"}">${esc(p.role)}</span></div>`).join("")+
-  `<div class="mut" style="margin-top:7px">Add people in the Supabase dashboard under Authentication → Users. New accounts start as drivers.</div>`;
-}
-
-/* ============ map ============ */
-function drawMap(pts){
- const el=document.getElementById("map");
- if(!el) return;
- if(typeof L==="undefined"){
-  el.innerHTML='<div class="empty">Map library did not load.</div>'; return;}
- // The container is recreated on every render, so always rebuild the map.
- if(S.map){try{S.map.remove();}catch(e){} S.map=null;}
- const P=pts.map(s=>({...s,lat:Number(s.latitude),lng:Number(s.longitude)}))
-            .filter(s=>isFinite(s.lat)&&isFinite(s.lng));
- if(!P.length){el.innerHTML='<div class="empty">No store coordinates set yet.</div>';return;}
- try{
-  S.map=L.map(el,{scrollWheelZoom:false,zoomControl:false,attributionControl:true});
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-   {maxZoom:19,attribution:"© OpenStreetMap"}).addTo(S.map);
-  const acc=DAY[S.dow].i;
-  if(P.length>1)
-   L.polyline(P.map(s=>[s.lat,s.lng]),{color:acc,weight:3,opacity:.75,dashArray:"6,5"}).addTo(S.map);
-  P.forEach((s,i)=>L.marker([s.lat,s.lng],{icon:L.divIcon({className:"",html:
-   '<div style="width:27px;height:27px;border-radius:50%;background:'+acc+';color:#fff;display:flex;'+
-   'align-items:center;justify-content:center;font:600 13px Anuphan,sans-serif;border:2px solid #fff;'+
-   'box-shadow:0 1px 3px rgba(0,0,0,.3)">'+(i+1)+'</div>',iconSize:[27,27],iconAnchor:[13,13]})})
-   .addTo(S.map).bindPopup("<b>"+esc(s.name)+"</b><br>"+esc(s.address||"")));
-  if(P.length>1) S.map.fitBounds(P.map(s=>[s.lat,s.lng]),{padding:[30,30]});
-  else S.map.setView([P[0].lat,P[0].lng],15);
-  requestAnimationFrame(()=>S.map&&S.map.invalidateSize());
-  setTimeout(()=>S.map&&S.map.invalidateSize(),300);
- }catch(err){
-  el.innerHTML='<div class="empty">Map error: '+esc(err.message)+'</div>';
+/* ================= DEMO ================= */
+function seedDemo(){
+ const P=[{id:"p1",name:"Lod chong",name_th:"ลอดช่อง",returnable:true},
+  {id:"p2",name:"Tubtim krob",name_th:"ทับทิมกรอบ",returnable:true},
+  {id:"p3",name:"Pork crackling",name_th:"แค็บหมู",returnable:false}];
+ P.forEach(p=>S.prods[p.id]=p);
+ S.costs={p1:2,p2:2,p3:3}; S.supplierId="s1";
+ S.stores=[
+  {id:"a",name:"Hong Phuoc",suburb:"Marrickville",terms:"consignment",price_tag_required:false,
+   delivery_days:[0,4],weeks_of_month:[],route_position:1,latitude:-33.911833,longitude:151.155459,
+   parking_note:"Loading zone out front."},
+  {id:"b",name:"Kung Fu",suburb:"Marrickville",terms:"consignment",price_tag_required:false,
+   delivery_days:[0,4],weeks_of_month:[],route_position:2,latitude:-33.911961,longitude:151.155332},
+  {id:"c",name:"Panda Asia",suburb:"Kogarah",terms:"consignment",price_tag_required:true,
+   delivery_days:[0,4],weeks_of_month:[],route_position:3,latitude:-33.963562,longitude:151.132742}];
+ S.prices=[["a","p1",6,7.5,8],["a","p2",6,7.5,8],["b","p1",6,7.5,12],["b","p2",6,7.5,12],
+  ["c","p1",6,8.5,4],["c","p2",6,8.5,4],["c","p3",8,null,10]]
+  .map(([s,p,sell,ret,q])=>({store_id:s,product_id:p,sell_price:sell,retail_price:ret,default_qty:q}));
+ S.drivers=[{id:"d1",name:"Dad",name_th:"พ่อ",pin:"1945",active:true},
+  {id:"d2",name:"Dew",name_th:"ดิว",pin:"4512",active:true}];
+ const base=new Date(); let n=0;
+ for(let back=28;back>=3;back--){
+  const d=new Date(base); d.setDate(d.getDate()-back);
+  if(![0,4].includes(d.getDay())) continue;
+  const day=iso(d);
+  S.stores.forEach(s=>S.prices.filter(x=>x.store_id===s.id).forEach(x=>{
+   const pr=S.prods[x.product_id], out=x.default_qty;
+   const open=back<=4;
+   const ret=pr.returnable?(open?null:Math.max(0,Math.round(out*(0.08+Math.random()*0.15)))):null;
+   S.lines.push({id:"L"+(++n),product_id:x.product_id,qty_out:out,qty_back:ret,
+    unit_price:x.sell_price,unit_cost:S.costs[x.product_id],
+    settled_at:open?null:new Date(d.getTime()+3*864e5).toISOString(),
+    deliveries:{id:"D"+n,store_id:s.id,delivered_on:day}});}));
  }
+ S.payments=S.stores.map(s=>({store_id:s.id,amount:120+Math.round(Math.random()*60),paid_on:iso(base)}));
+ S.supPay=[]; S.orders=[];
 }
-
-document.getElementById("fp").onchange=function(){
- const f=this.files[0]; if(!f||S.dockTarget==null) return;
- const r=new FileReader();
- r.onload=()=>{const st=S.stops&&S.stops[S.dockTarget];
-  if(st){st.docket=r.result;} S.dockTarget=null; renderDeliver();};
- r.readAsDataURL(f);
-};
 
 if("serviceWorker" in navigator && location.protocol==="https:")
  navigator.serviceWorker.register("sw.js").catch(()=>{});
 
-load().catch(e=>fail(e&&e.message?e.message:String(e)));
+(async()=>{
+ applyType();
+ if(DEMO){ S.pane="doors"; return entry(); }
+ const {data:{session}}=await db.auth.getSession();
+ if(session){ await boot(); } else entry();
+})().catch(e=>{fail(e&&e.message?e.message:String(e));});
 </script>
 </body>
 </html>
