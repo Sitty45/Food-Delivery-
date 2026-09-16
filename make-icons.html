@@ -43,6 +43,8 @@ canvas{display:block}
 .pair button[data-on="1"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 a.dl{display:block;text-align:center;background:var(--ink);color:#fff;border-radius:12px;
  min-height:50px;line-height:50px;text-decoration:none;font-weight:500;margin-bottom:8px;font-size:15px}
+button.dl{width:100%;border:0;font-family:inherit;cursor:pointer}
+#sres{font-size:12.5px;color:var(--mut);text-align:center;min-height:22px;margin-bottom:6px}
 .note{font-size:12.5px;color:var(--mut);background:#fff;border-radius:12px;padding:12px 14px;
  box-shadow:0 1px 2px rgba(16,28,23,.06);margin-top:6px}
 </style>
@@ -96,12 +98,14 @@ a.dl{display:block;text-align:center;background:var(--ink);color:#fff;border-rad
  <input type="range" id="c" min="0" max="50" value="22">
 </div>
 
-<a class="dl" id="d512" download="icon-512.png">Save icon-512.png</a>
-<a class="dl" id="d192" download="icon-192.png">Save icon-192.png</a>
-<a class="dl" id="dmask" download="icon-maskable-512.png">Save icon-maskable-512.png</a>
-<a class="dl" id="dapple" download="apple-touch-icon.png">Save apple-touch-icon.png</a>
+<button class="dl" id="s512">Save icon-512.png</button>
+<button class="dl" id="s192">Save icon-192.png</button>
+<button class="dl" id="smask">Save icon-maskable-512.png</button>
+<button class="dl" id="sapple">Save apple-touch-icon.png</button>
+<div id="sres"></div>
 
-<div class="note">Open this page in <b>Safari</b> for the buttons to work — in an in-app
+<div class="note">Each button opens the share sheet — choose <b>Save to Files</b> and the name
+stays lowercase, which is what GitHub needs. Open this page in <b>Safari</b> for it to work — in an in-app
 preview they can only save HTML. The four files land in Files with the right names; upload them
 to the repo, replacing the old ones.</div>
 
@@ -191,13 +195,42 @@ function refresh(){
  el("vBg").textContent=BG; el("vInk").textContent=INK; el("vAcc").textContent=ACC;
  draw(el("big"),168,opts());draw(el("mid"),84,opts());draw(el("sml"),54,opts());
  const t=document.createElement("canvas");
- draw(t,512,opts());el("d512").href=t.toDataURL("image/png");
- draw(t,192,opts());el("d192").href=t.toDataURL("image/png");
- draw(t,512,opts({maskable:true,square:true}));el("dmask").href=t.toDataURL("image/png");
- draw(t,180,opts());el("dapple").href=t.toDataURL("image/png");
  draw(t,512,opts());
  const img=el("out512"); if(img) img.src=t.toDataURL("image/png");
 }
+
+/* Saving on iPhone: the share sheet keeps the exact filename, including the
+   lowercase .png that GitHub needs. Falls back to a blob download elsewhere. */
+function blobFor(size,extra){
+ return new Promise(res=>{
+  const t=document.createElement("canvas");
+  draw(t,size,opts(extra));
+  t.toBlob(b=>res(b),"image/png");
+ });
+}
+async function save(name,size,extra){
+ el("sres").textContent="…";
+ try{
+  const blob=await blobFor(size,extra);
+  const file=new File([blob],name,{type:"image/png"});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+   await navigator.share({files:[file]});
+   el("sres").textContent="Choose Save to Files · "+name;
+   return;
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},4000);
+  el("sres").textContent="Saved "+name;
+ }catch(e){
+  el("sres").textContent=(e&&e.name==="AbortError")?"Cancelled":("Could not save: "+(e&&e.message||e));
+ }
+}
+el("s512").onclick=()=>save("icon-512.png",512);
+el("s192").onclick=()=>save("icon-192.png",192);
+el("smask").onclick=()=>save("icon-maskable-512.png",512,{maskable:true,square:true});
+el("sapple").onclick=()=>save("apple-touch-icon.png",180);
 function swatches(host,list,get,set){
  el(host).innerHTML=list.map(h=>`<button data-c="${h}" style="background:${h}"
   data-on="${get()===h?1:0}" aria-label="${h}"></button>`).join("");
