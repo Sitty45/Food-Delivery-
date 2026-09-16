@@ -11,7 +11,7 @@
 body{font-family:"Anuphan",system-ui,sans-serif;background:var(--bg);color:var(--ink);
  margin:0 auto;padding:16px 15px 40px;max-width:540px;line-height:1.6}
 h1{font-size:20px;font-weight:600;margin:0 0 3px}
-.sub{font-size:13.5px;color:var(--mut);margin:0 0 16px}
+.sub{font-size:13.5px;color:var(--mut);margin:0 0 14px}
 .card{background:#fff;border-radius:15px;padding:14px;margin-bottom:12px;
  box-shadow:0 1px 2px rgba(16,28,23,.06)}
 .lbl{font-size:11.5px;color:var(--faint);letter-spacing:.04em;text-transform:uppercase;
@@ -19,6 +19,11 @@ h1{font-size:20px;font-weight:600;margin:0 0 3px}
 .lbl:first-child{margin-top:0}
 .val{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink);text-transform:none;letter-spacing:0}
 input[type=range]{width:100%;accent-color:var(--ink)}
+.seg{display:grid;gap:6px}
+.seg.n2{grid-template-columns:1fr 1fr}.seg.n3{grid-template-columns:repeat(3,1fr)}
+.seg button{min-height:42px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
+ font-size:12.5px;cursor:pointer;font-family:inherit;padding:2px 4px;line-height:1.35}
+.seg button[data-on="1"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .fonts{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 .fonts button{min-height:52px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
  font-size:17px;padding:4px 6px;line-height:1.3;cursor:pointer}
@@ -26,7 +31,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
 .fonts button[data-on="1"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .fonts button[data-on="1"] small{color:rgba(255,255,255,.6)}
 .sw{display:flex;flex-wrap:wrap;gap:7px}
-.sw button{width:38px;height:38px;border-radius:10px;border:2px solid transparent;
+.sw button{width:36px;height:36px;border-radius:10px;border:2px solid transparent;
  cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.09)}
 .sw button[data-on="1"]{border-color:var(--ink)}
 .hex{display:flex;gap:7px;align-items:center;margin-top:8px}
@@ -37,13 +42,9 @@ input[type=range]{width:100%;accent-color:var(--ink)}
  box-shadow:0 1px 2px rgba(16,28,23,.06)}
 canvas{display:block}
 .cap{font-size:10.5px;color:var(--faint);text-align:center;margin-top:6px}
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
-.pair button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
- font-size:12.5px;cursor:pointer;font-family:inherit}
-.pair button[data-on="1"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-a.dl{display:block;text-align:center;background:var(--ink);color:#fff;border-radius:12px;
- min-height:50px;line-height:50px;text-decoration:none;font-weight:500;margin-bottom:8px;font-size:15px}
-button.dl{width:100%;border:0;font-family:inherit;cursor:pointer}
+button.dl{width:100%;border:0;font-family:inherit;cursor:pointer;display:block;text-align:center;
+ background:var(--ink);color:#fff;border-radius:12px;min-height:50px;font-weight:500;
+ margin-bottom:8px;font-size:15px}
 #sres{font-size:12.5px;color:var(--mut);text-align:center;min-height:22px;margin-bottom:6px}
 .note{font-size:12.5px;color:var(--mut);background:#fff;border-radius:12px;padding:12px 14px;
  box-shadow:0 1px 2px rgba(16,28,23,.06);margin-top:6px}
@@ -65,8 +66,52 @@ button.dl{width:100%;border:0;font-family:inherit;cursor:pointer}
 </div>
 
 <div class="card">
+ <div class="lbl">Wheels</div>
+ <div class="seg n3" id="wheelMode">
+  <button data-wm="none">None</button>
+  <button data-wm="void" data-on="1">Cut out<small style="display:block;font-size:9.5px;opacity:.7">negative space</small></button>
+  <button data-wm="solid">Filled</button>
+ </div>
+ <div class="lbl">Wheel size <span class="val" id="vWs">13%</span></div>
+ <input type="range" id="ws" min="6" max="22" value="13">
+ <div class="lbl">Wheel spread <span class="val" id="vWx">52%</span></div>
+ <input type="range" id="wx" min="20" max="80" value="52">
+ <div class="lbl">Wheel drop <span class="val" id="vWy">6%</span></div>
+ <input type="range" id="wy" min="-10" max="30" value="6">
+ <div class="lbl">Hub size <span class="val" id="vHub">0%</span></div>
+ <input type="range" id="hub" min="0" max="80" value="0">
+ <div class="lbl">Hub colour <span class="val" id="vHubC">#E0A020</span></div>
+ <div class="sw" id="swHub"></div>
+ <div class="hex"><input id="hxHub" value="#E0A020" spellcheck="false"></div>
+ <div class="lbl">Tyre colour <span class="val" id="vTyre">match bowl</span></div>
+ <div class="seg n2" id="tyreMode">
+  <button data-tm="ink" data-on="1">Match bowl</button>
+  <button data-tm="own">Own colour</button>
+ </div>
+ <div class="sw" id="swTyre" style="margin-top:8px"></div>
+ <div class="hex"><input id="hxTyre" value="#101c17" spellcheck="false"></div>
+</div>
+
+<div class="card">
+ <div class="lbl">ข ink</div>
+ <div class="seg n3" id="accMode">
+  <button data-am="solid" data-on="1">Solid</button>
+  <button data-am="grad">Gradient</button>
+  <button data-am="days">Day colours</button>
+ </div>
+ <div class="lbl">Bowl ink</div>
+ <div class="seg n3" id="inkMode">
+  <button data-im="solid" data-on="1">Solid</button>
+  <button data-im="grad">Gradient</button>
+  <button data-im="days">Day colours</button>
+ </div>
+ <div class="lbl">Gradient angle <span class="val" id="vAng">45°</span></div>
+ <input type="range" id="ang" min="0" max="360" value="45">
+</div>
+
+<div class="card">
  <div class="lbl">Palette</div>
- <div class="pair" id="palettes"></div>
+ <div class="seg n2" id="palettes"></div>
 
  <div class="lbl">Background <span class="val" id="vBg">#ffffff</span></div>
  <div class="sw" id="swBg"></div>
@@ -76,9 +121,17 @@ button.dl{width:100%;border:0;font-family:inherit;cursor:pointer}
  <div class="sw" id="swInk"></div>
  <div class="hex"><input id="hxInk" value="#101c17" spellcheck="false"></div>
 
+ <div class="lbl">Bowl gradient end <span class="val" id="vInk2">#1B7A4C</span></div>
+ <div class="sw" id="swInk2"></div>
+ <div class="hex"><input id="hxInk2" value="#1B7A4C" spellcheck="false"></div>
+
  <div class="lbl">ข accent <span class="val" id="vAcc">#E0A020</span></div>
  <div class="sw" id="swAcc"></div>
  <div class="hex"><input id="hxAcc" value="#E0A020" spellcheck="false"></div>
+
+ <div class="lbl">ข gradient end <span class="val" id="vAcc2">#E8382F</span></div>
+ <div class="sw" id="swAcc2"></div>
+ <div class="hex"><input id="hxAcc2" value="#E8382F" spellcheck="false"></div>
 </div>
 
 <div class="card">
@@ -104,17 +157,12 @@ button.dl{width:100%;border:0;font-family:inherit;cursor:pointer}
 <button class="dl" id="sapple">Save apple-touch-icon.png</button>
 <div id="sres"></div>
 
-<div class="note">Each button opens the share sheet — choose <b>Save to Files</b> and the name
-stays lowercase, which is what GitHub needs. Open this page in <b>Safari</b> for it to work — in an in-app
-preview they can only save HTML. The four files land in Files with the right names; upload them
-to the repo, replacing the old ones.</div>
+<div class="note">Each button opens the share sheet — choose <b>Save to Files</b> so the name stays
+lowercase, which is what GitHub needs. Open this page in <b>Safari</b> for it to work.</div>
 
 <div class="card" style="margin-top:12px">
  <div class="lbl">Fallback · long-press to save</div>
- <p style="font-size:12.5px;color:var(--mut);margin:0 0 10px">If the buttons above don't save,
- long-press this image and choose Save to Photos. You'll have to rename it to
- <code>icon-512.png</code> after uploading.</p>
- <img id="out512" alt="icon at 512px" style="width:100%;max-width:260px;display:block;margin:0 auto;border-radius:12px">
+ <img id="out512" alt="icon at 512px" style="width:100%;max-width:240px;display:block;margin:0 auto;border-radius:12px">
 </div>
 
 <script>
@@ -124,6 +172,7 @@ const FONTS=[
  ["IBM Plex Sans Thai","loopless"],["Kanit","loopless · strong"],
  ["Prompt","loopless · light"],["Mitr","loopless · rounded"],
  ["Bai Jamjuree","loopless · compact"],["Pridi","looped · serif"]];
+const DAYCOLS=["#E8382F","#F2E23C","#F5A9C4","#5CC15C","#F08A2A","#3AA5E0","#B667C4"];
 const BGS=["#ffffff","#F6F8F6","#F5EFE3","#101c17","#1B3A2B","#2B2118","#E0A020","#E8382F"];
 const INKS=["#101c17","#1B7A4C","#FFFFFF","#F1F4F1","#2B2118","#14618F","#7B3E87","#A32420"];
 const ACCS=["#E0A020","#C9962B","#F08A2A","#E8382F","#1B7A4C","#F5A9C4","#14618F","#101c17"];
@@ -133,9 +182,22 @@ const PALETTES=[
  ["Cream + green",{bg:"#F5EFE3",ink:"#1B7A4C",acc:"#E8382F"}],
  ["Amber + green",{bg:"#E0A020",ink:"#101c17",acc:"#F1F4F1"}]];
 
-let font="Anuphan", BG="#ffffff", INK="#101c17", ACC="#E0A020";
+let font="Anuphan",BG="#ffffff",INK="#101c17",INK2="#1B7A4C",ACC="#E0A020",ACC2="#E8382F";
+let wheelMode="void", accMode="solid", inkMode="solid";
+let HUB="#E0A020", TYRE="#101c17", tyreMode="ink";
 const el=i=>document.getElementById(i);
-const ok=h=>/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(h.trim());
+const okHex=h=>/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(h.trim());
+
+function paint(c,mode,a,b,ang,x0,y0,x1,y1){
+ if(mode==="solid") return a;
+ const rad=ang*Math.PI/180;
+ const cx=(x0+x1)/2, cy=(y0+y1)/2, len=Math.max(x1-x0,y1-y0);
+ const gx=Math.cos(rad)*len/2, gy=Math.sin(rad)*len/2;
+ const g=c.createLinearGradient(cx-gx,cy-gy,cx+gx,cy+gy);
+ if(mode==="days"){ DAYCOLS.forEach((col,i)=>g.addColorStop(i/(DAYCOLS.length-1),col)); }
+ else { g.addColorStop(0,a); g.addColorStop(1,b); }
+ return g;
+}
 
 function draw(cv,size,o){
  cv.width=size;cv.height=size;
@@ -145,68 +207,134 @@ function draw(cv,size,o){
  c.fillStyle=o.bg;
  if(o.square){c.fillRect(0,0,size,size);}
  else{
-  c.beginPath();
-  c.moveTo(rad,0);c.arcTo(size,0,size,size,rad);c.arcTo(size,size,0,size,rad);
+  c.beginPath();c.moveTo(rad,0);c.arcTo(size,0,size,size,rad);c.arcTo(size,size,0,size,rad);
   c.arcTo(0,size,0,0,rad);c.arcTo(0,0,size,0,rad);c.closePath();c.fill();
  }
  const pad=o.maskable?size*0.30:size*(1-o.wpc/100)/2;
  const bw=size-pad*2, br=bw/2;
  const rim=size*(o.rim/100), gap=size*(o.gpc/100), fs=size*(o.tpc/100);
+
  c.textBaseline="alphabetic";
  c.font=`${o.fw} ${fs}px "${o.font}", sans-serif`;
  const wa=c.measureText("ส่ง").width;
  c.font=`${o.bw2} ${fs}px "${o.font}", sans-serif`;
  const wb=c.measureText("ข").width;
- c.font=`${o.bw2} ${fs}px "${o.font}", sans-serif`;
  const m=c.measureText("ส่งข");
  const asc=m.actualBoundingBoxAscent||fs*.75, desc=m.actualBoundingBoxDescent||0;
- const th=asc+desc, total=th+gap+rim+br;
- const top=(size-total)/2-size*0.01, cx=size/2, tx=cx-(wa+wb)/2, base=top+asc;
- c.fillStyle=o.ink;
+ const th=asc+desc;
+
+ const wr=size*(o.wsz/100);
+ const wheelsOn=o.wheel!=="none";
+ const wdrop=size*(o.wdy/100);
+ const total=th+gap+rim+br+(wheelsOn?Math.max(0,wdrop+wr-br*0.25):0);
+ const top=(size-total)/2-size*0.01;
+ const cx=size/2, tx=cx-(wa+wb)/2, base=top+asc;
+
+ // ส่ง
+ c.fillStyle=paint(c,o.inkMode,o.ink,o.ink2,o.ang,tx,top,tx+wa,top+th);
  c.font=`${o.fw} ${fs}px "${o.font}", sans-serif`;
  c.fillText("ส่ง",tx,base);
- c.fillStyle=o.acc;
+ // ข
+ c.fillStyle=paint(c,o.accMode,o.acc,o.acc2,o.ang,tx+wa,top,tx+wa+wb,top+th);
  c.font=`${o.bw2} ${fs}px "${o.font}", sans-serif`;
  c.fillText("ข",tx+wa,base);
- const ry=top+th+gap;
- c.fillStyle=o.ink;
+
+ // bowl
+ const ry=top+th+gap, rb=ry+rim;
+ c.fillStyle=paint(c,o.inkMode,o.ink,o.ink2,o.ang,cx-br,ry,cx+br,rb+br);
  if(rim>0.6){
   const rr=Math.min(rim/2,bw/2);
-  c.beginPath();
-  c.moveTo(cx-bw/2+rr,ry);c.arcTo(cx+bw/2,ry,cx+bw/2,ry+rim,rr);
-  c.arcTo(cx+bw/2,ry+rim,cx-bw/2,ry+rim,rr);c.arcTo(cx-bw/2,ry+rim,cx-bw/2,ry,rr);
+  c.beginPath();c.moveTo(cx-bw/2+rr,ry);c.arcTo(cx+bw/2,ry,cx+bw/2,rb,rr);
+  c.arcTo(cx+bw/2,rb,cx-bw/2,rb,rr);c.arcTo(cx-bw/2,rb,cx-bw/2,ry,rr);
   c.arcTo(cx-bw/2,ry,cx+bw/2,ry,rr);c.closePath();c.fill();
  }
- c.beginPath();c.arc(cx,ry+rim,br,0,Math.PI);c.closePath();c.fill();
+ c.beginPath();c.arc(cx,rb,br,0,Math.PI);c.closePath();c.fill();
+
+ // wheels
+ if(wheelsOn){
+  const wcx=bw*(o.wdx/100)/2;
+  const wcy=rb+br*0.62+wdrop;
+  [-1,1].forEach(sn=>{
+   const x=cx+sn*wcx, y=wcy;
+   // tyre: the outer disc. "void" punches it back to the background.
+   const tyre = o.wheel==="void" ? o.bg
+     : (o.tyreMode==="own" ? o.tyre
+        : paint(c,o.inkMode,o.ink,o.ink2,o.ang,x-wr,y-wr,x+wr,y+wr));
+   c.fillStyle=tyre;
+   c.beginPath();c.arc(x,y,wr,0,Math.PI*2);c.closePath();c.fill();
+   if(o.hub>0){
+    c.fillStyle=o.hub2;
+    c.beginPath();c.arc(x,y,wr*(o.hub/100),0,Math.PI*2);c.closePath();c.fill();
+   }
+  });
+ }
 }
-const opts=x=>Object.assign({bg:BG,ink:INK,acc:ACC,font,
- wpc:+el("w").value,tpc:+el("t").value,gpc:+el("g").value,
- rim:+el("r").value/10,fw:+el("f").value,bw2:+el("b").value,
- corner:+el("c").value},x||{});
+const opts=x=>Object.assign({bg:BG,ink:INK,ink2:INK2,acc:ACC,acc2:ACC2,font,
+ inkMode,accMode,ang:+el("ang").value,
+ wheel:wheelMode,wsz:+el("ws").value,wdx:+el("wx").value,wdy:+el("wy").value,
+ hub:+el("hub").value,hub2:HUB,tyre:TYRE,tyreMode,
+ wpc:+el("w").value,tpc:+el("t").value,gpc:+el("g").value,rim:+el("r").value/10,
+ fw:+el("f").value,bw2:+el("b").value,corner:+el("c").value},x||{});
 
 function refresh(){
- el("vW").textContent=el("w").value+"%";
- el("vT").textContent=el("t").value+"%";
- el("vG").textContent=el("g").value+"%";
- el("vR").textContent=(el("r").value/10).toFixed(1)+"%";
- el("vF").textContent=el("f").value;
- el("vB").textContent=el("b").value;
- el("vC").textContent=el("c").value+"%";
- el("vBg").textContent=BG; el("vInk").textContent=INK; el("vAcc").textContent=ACC;
+ el("vW").textContent=el("w").value+"%";el("vT").textContent=el("t").value+"%";
+ el("vG").textContent=el("g").value+"%";el("vR").textContent=(el("r").value/10).toFixed(1)+"%";
+ el("vF").textContent=el("f").value;el("vB").textContent=el("b").value;
+ el("vC").textContent=el("c").value+"%";el("vAng").textContent=el("ang").value+"°";
+ el("vWs").textContent=el("ws").value+"%";el("vWx").textContent=el("wx").value+"%";
+ el("vWy").textContent=el("wy").value+"%";el("vHub").textContent=el("hub").value+"%";
+ el("vHubC").textContent=HUB; el("vTyre").textContent=tyreMode==="ink"?"match bowl":TYRE;
+ el("vBg").textContent=BG;el("vInk").textContent=INK;el("vInk2").textContent=INK2;
+ el("vAcc").textContent=ACC;el("vAcc2").textContent=ACC2;
  draw(el("big"),168,opts());draw(el("mid"),84,opts());draw(el("sml"),54,opts());
- const t=document.createElement("canvas");
- draw(t,512,opts());
+ const t=document.createElement("canvas");draw(t,512,opts());
  const img=el("out512"); if(img) img.src=t.toDataURL("image/png");
 }
+function swatches(host,list,get,set){
+ el(host).innerHTML=list.map(h=>`<button data-c="${h}" style="background:${h}"
+  data-on="${get()===h?1:0}" aria-label="${h}"></button>`).join("");
+ el(host).querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{set(b.dataset.c);repaint();});
+}
+function repaint(){
+ el("hxBg").value=BG;el("hxInk").value=INK;el("hxInk2").value=INK2;
+ el("hxAcc").value=ACC;el("hxAcc2").value=ACC2;
+ swatches("swBg",BGS,()=>BG,v=>BG=v);
+ swatches("swInk",INKS,()=>INK,v=>INK=v);
+ swatches("swInk2",ACCS.concat(INKS),()=>INK2,v=>INK2=v);
+ swatches("swAcc",ACCS,()=>ACC,v=>ACC=v);
+ swatches("swAcc2",ACCS.concat(BGS),()=>ACC2,v=>ACC2=v);
+ swatches("swHub",ACCS.concat(BGS),()=>HUB,v=>HUB=v);
+ swatches("swTyre",INKS.concat(ACCS),()=>TYRE,v=>TYRE=v);
+ el("hxHub").value=HUB; el("hxTyre").value=TYRE;
+ refresh();
+}
+el("fonts").innerHTML=FONTS.map(([f,d])=>`<button data-f="${f}" data-on="${f===font?1:0}"
+ style="font-family:'${f}',sans-serif">ส่งข<small>${f} · ${d}</small></button>`).join("");
+el("fonts").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{
+ font=b.dataset.f;
+ el("fonts").querySelectorAll("[data-f]").forEach(x=>x.dataset.on=x===b?"1":"0");refresh();});
+el("palettes").innerHTML=PALETTES.map(([n],i)=>`<button data-p="${i}">${n}</button>`).join("");
+el("palettes").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
+ const p=PALETTES[+b.dataset.p][1];BG=p.bg;INK=p.ink;ACC=p.acc;repaint();});
+function segBind(host,attr,set){
+ el(host).querySelectorAll("["+attr+"]").forEach(b=>b.onclick=()=>{
+  set(b.getAttribute(attr));
+  el(host).querySelectorAll("["+attr+"]").forEach(x=>x.dataset.on=x===b?"1":"0");refresh();});
+}
+segBind("wheelMode","data-wm",v=>wheelMode=v);
+segBind("accMode","data-am",v=>accMode=v);
+segBind("inkMode","data-im",v=>inkMode=v);
+segBind("tyreMode","data-tm",v=>tyreMode=v);
+["w","t","g","r","f","b","c","ang","ws","wx","wy","hub"].forEach(i=>
+ el(i).addEventListener("input",refresh));
+[["hxBg",v=>BG=v],["hxInk",v=>INK=v],["hxInk2",v=>INK2=v],
+ ["hxAcc",v=>ACC=v],["hxAcc2",v=>ACC2=v],
+ ["hxHub",v=>HUB=v],["hxTyre",v=>TYRE=v]].forEach(([id,set])=>{
+ el(id).addEventListener("input",()=>{const v=el(id).value.trim();if(okHex(v)){set(v);repaint();}});});
 
-/* Saving on iPhone: the share sheet keeps the exact filename, including the
-   lowercase .png that GitHub needs. Falls back to a blob download elsewhere. */
 function blobFor(size,extra){
- return new Promise(res=>{
-  const t=document.createElement("canvas");
-  draw(t,size,opts(extra));
-  t.toBlob(b=>res(b),"image/png");
- });
+ return new Promise(res=>{const t=document.createElement("canvas");
+  draw(t,size,opts(extra));t.toBlob(b=>res(b),"image/png");});
 }
 async function save(name,size,extra){
  el("sres").textContent="…";
@@ -215,12 +343,11 @@ async function save(name,size,extra){
   const file=new File([blob],name,{type:"image/png"});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
    await navigator.share({files:[file]});
-   el("sres").textContent="Choose Save to Files · "+name;
-   return;
+   el("sres").textContent="Choose Save to Files · "+name;return;
   }
   const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;a.download=name;document.body.appendChild(a);a.click();
+  const a=document.createElement("a");a.href=url;a.download=name;
+  document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},4000);
   el("sres").textContent="Saved "+name;
  }catch(e){
@@ -231,34 +358,8 @@ el("s512").onclick=()=>save("icon-512.png",512);
 el("s192").onclick=()=>save("icon-192.png",192);
 el("smask").onclick=()=>save("icon-maskable-512.png",512,{maskable:true,square:true});
 el("sapple").onclick=()=>save("apple-touch-icon.png",180);
-function swatches(host,list,get,set){
- el(host).innerHTML=list.map(h=>`<button data-c="${h}" style="background:${h}"
-  data-on="${get()===h?1:0}" aria-label="${h}"></button>`).join("");
- el(host).querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{set(b.dataset.c);paint();});
-}
-function paint(){
- el("hxBg").value=BG; el("hxInk").value=INK; el("hxAcc").value=ACC;
- swatches("swBg",BGS,()=>BG,v=>BG=v);
- swatches("swInk",INKS,()=>INK,v=>INK=v);
- swatches("swAcc",ACCS,()=>ACC,v=>ACC=v);
- el("palettes").querySelectorAll("[data-p]").forEach(b=>{
-  const p=PALETTES[+b.dataset.p][1];
-  b.dataset.on=(p.bg===BG&&p.ink===INK&&p.acc===ACC)?1:0;});
- refresh();
-}
-el("fonts").innerHTML=FONTS.map(([f,d])=>`<button data-f="${f}" data-on="${f===font?1:0}"
- style="font-family:'${f}',sans-serif">ส่งข<small>${f} · ${d}</small></button>`).join("");
-el("fonts").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{
- font=b.dataset.f;
- el("fonts").querySelectorAll("[data-f]").forEach(x=>x.dataset.on=x===b?"1":"0");
- refresh();});
-el("palettes").innerHTML=PALETTES.map(([n],i)=>`<button data-p="${i}">${n}</button>`).join("");
-el("palettes").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
- const p=PALETTES[+b.dataset.p][1];BG=p.bg;INK=p.ink;ACC=p.acc;paint();});
-["w","t","g","r","f","b","c"].forEach(i=>el(i).addEventListener("input",refresh));
-[["hxBg",v=>BG=v],["hxInk",v=>INK=v],["hxAcc",v=>ACC=v]].forEach(([id,set])=>{
- el(id).addEventListener("input",()=>{const v=el(id).value.trim();if(ok(v)){set(v);paint();}});});
-paint();
+
+repaint();
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(refresh);
 setTimeout(refresh,800);
 </script>
