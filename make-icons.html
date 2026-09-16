@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Make icons · ส่งขนม</title>
-<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@200;300;400;500;600;700&family=Sarabun:wght@200;300;400;500;600;700&family=Noto+Sans+Thai+Looped:wght@200;300;400;500;600;700&family=Niramit:wght@200;300;400;500;600;700&family=Kanit:wght@200;300;400;500;600;700&family=Prompt:wght@200;300;400;500;600;700&family=Mitr:wght@200;300;400;500;600&family=IBM+Plex+Sans+Thai:wght@200;300;400;500;600;700&family=Bai+Jamjuree:wght@200;300;400;500;600;700&family=Pridi:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@200;300;400;500;600;700&family=Sarabun:wght@200;300;400;500;600;700&family=Noto+Sans+Thai+Looped:wght@200;300;400;500;600;700&family=Noto+Sans+Thai:wght@100;200;300;400;500;600;700&family=Noto+Serif+Thai:wght@200;300;400;500;600;700&family=Niramit:wght@200;300;400;500;600;700&family=Kanit:wght@100;200;300;400;500;600;700&family=Prompt:wght@100;200;300;400;500;600;700&family=Mitr:wght@200;300;400;500;600&family=IBM+Plex+Sans+Thai:wght@200;300;400;500;600;700&family=Bai+Jamjuree:wght@200;300;400;500;600;700&family=Pridi:wght@200;300;400;500;600;700&family=Chakra+Petch:wght@300;400;500;600;700&family=K2D:wght@200;300;400;500;600;700&family=Krub:wght@200;300;400;500;600;700&family=Athiti:wght@200;300;400;500;600;700&family=Fahkwang:wght@200;300;400;500;600;700&family=Kodchasan:wght@200;300;400;500;600;700&family=Maitree:wght@200;300;400;500;600;700&family=Taviraj:wght@200;300;400;500;600;700&family=Trirong:wght@200;300;400;500;600;700&family=KoHo:wght@200;300;400;500;600;700&family=Mali:wght@200;300;400;500;600;700&family=Charm:wght@400;700&family=Charmonman:wght@400;700&family=Srisakdi:wght@400;700&family=Thasadith:wght@400;700&family=Sriracha&family=Itim&family=Chonburi&family=Pattaya&family=Preahvihear&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#101c17;--mut:#5f6f67;--faint:#93a09a;--line:#e8ede9;--bg:#f6f8f6}
 *{box-sizing:border-box}
@@ -66,11 +66,46 @@ button.dl{width:100%;border:0;font-family:inherit;cursor:pointer;display:block;t
 </div>
 
 <div class="card">
+ <div class="lbl">Bowl shape</div>
+ <div class="seg n3" id="bowlShape">
+  <button data-bs2="half" data-on="1">Half<small style="display:block;font-size:9px;opacity:.7">semicircle</small></button>
+  <button data-bs2="round"> U<small style="display:block;font-size:9px;opacity:.7">deep round</small></button>
+  <button data-bs2="taper">Taper<small style="display:block;font-size:9px;opacity:.7">straight sides</small></button>
+ </div>
+ <div class="seg n3" style="margin-top:6px">
+  <button data-bs2="box">Box<small style="display:block;font-size:9px;opacity:.7">crate</small></button>
+  <button data-bs2="basket">Basket<small style="display:block;font-size:9px;opacity:.7">flared</small></button>
+  <button data-bs2="plate">Plate<small style="display:block;font-size:9px;opacity:.7">shallow</small></button>
+ </div>
+ <div class="seg n3" style="margin-top:6px">
+  <button data-bs2="cup">Cup<small style="display:block;font-size:9px;opacity:.7">tall taper</small></button>
+  <button data-bs2="pot">Pot<small style="display:block;font-size:9px;opacity:.7">belly</small></button>
+  <button data-bs2="tray">Tray<small style="display:block;font-size:9px;opacity:.7">flat box</small></button>
+ </div>
+ <div class="seg n3" style="margin-top:6px">
+  <button data-bs2="van">Van<small style="display:block;font-size:9px;opacity:.7">with cab</small></button>
+  <button data-bs2="bag">Bag<small style="display:block;font-size:9px;opacity:.7">soft base</small></button>
+  <button data-bs2="wok">Wok<small style="display:block;font-size:9px;opacity:.7">wide shallow</small></button>
+ </div>
+ <div class="lbl">Bowl depth <span class="val" id="vDep">100%</span></div>
+ <input type="range" id="dep" min="40" max="150" value="100">
+
  <div class="lbl">Wheels</div>
  <div class="seg n3" id="wheelMode">
   <button data-wm="none">None</button>
   <button data-wm="void" data-on="1">Cut out<small style="display:block;font-size:9.5px;opacity:.7">negative space</small></button>
   <button data-wm="solid">Filled</button>
+ </div>
+ <div class="lbl">Wheel shape</div>
+ <div class="seg n3" id="wheelShape">
+  <button data-wsh="circle" data-on="1">Circle</button>
+  <button data-wsh="ring">Ring</button>
+  <button data-wsh="square">Rounded</button>
+ </div>
+ <div class="seg n3" style="margin-top:6px">
+  <button data-wsh="spoke">Spokes</button>
+  <button data-wsh="hex">Hex</button>
+  <button data-wsh="pill">Pill</button>
  </div>
  <div class="lbl">Wheel size <span class="val" id="vWs">13%</span></div>
  <input type="range" id="ws" min="6" max="22" value="13">
@@ -113,9 +148,22 @@ button.dl{width:100%;border:0;font-family:inherit;cursor:pointer;display:block;t
  <div class="lbl">Palette</div>
  <div class="seg n2" id="palettes"></div>
 
+ <div class="lbl">Background style</div>
+ <div class="seg n3" id="bgMode">
+  <button data-bm="solid" data-on="1">Solid</button>
+  <button data-bm="grad">Gradient</button>
+  <button data-bm="glass">Glass</button>
+ </div>
+ <div class="lbl">Background angle <span class="val" id="vBAng">135°</span></div>
+ <input type="range" id="bang" min="0" max="360" value="135">
+
  <div class="lbl">Background <span class="val" id="vBg">#ffffff</span></div>
  <div class="sw" id="swBg"></div>
  <div class="hex"><input id="hxBg" value="#ffffff" spellcheck="false"></div>
+
+ <div class="lbl">Background end <span class="val" id="vBg2">#E8EDE9</span></div>
+ <div class="sw" id="swBg2"></div>
+ <div class="hex"><input id="hxBg2" value="#E8EDE9" spellcheck="false"></div>
 
  <div class="lbl">Bowl &amp; ส่ง <span class="val" id="vInk">#101c17</span></div>
  <div class="sw" id="swInk"></div>
@@ -147,6 +195,8 @@ button.dl{width:100%;border:0;font-family:inherit;cursor:pointer;display:block;t
  <input type="range" id="f" min="200" max="600" step="100" value="200">
  <div class="lbl">ข weight <span class="val" id="vB">700</span></div>
  <input type="range" id="b" min="400" max="700" step="100" value="700">
+ <div class="lbl">Frost <span class="val" id="vFr">62%</span></div>
+ <input type="range" id="fr" min="0" max="95" value="62">
  <div class="lbl">Corner <span class="val" id="vC">22%</span></div>
  <input type="range" id="c" min="0" max="50" value="22">
 </div>
@@ -168,23 +218,50 @@ lowercase, which is what GitHub needs. Open this page in <b>Safari</b> for it to
 <script>
 const FONTS=[
  ["Anuphan","loopless"],["Sarabun","looped · gov standard"],
- ["Noto Sans Thai Looped","looped · open"],["Niramit","looped · narrow"],
- ["IBM Plex Sans Thai","loopless"],["Kanit","loopless · strong"],
- ["Prompt","loopless · light"],["Mitr","loopless · rounded"],
- ["Bai Jamjuree","loopless · compact"],["Pridi","looped · serif"]];
+ ["Noto Sans Thai Looped","looped · open"],["Noto Sans Thai","loopless · neutral"],
+ ["Niramit","looped · narrow"],["IBM Plex Sans Thai","loopless"],
+ ["Kanit","loopless · strong"],["Prompt","loopless · light"],
+ ["Mitr","loopless · rounded"],["Bai Jamjuree","loopless · compact"],
+ ["Chakra Petch","loopless · technical"],["K2D","loopless · wide"],
+ ["Krub","loopless · neutral"],["Athiti","loopless · condensed"],
+ ["Fahkwang","loopless · display"],["Kodchasan","loopless · soft"],
+ ["KoHo","loopless · humanist"],["Thasadith","loopless · clean"],
+ ["Pridi","looped · serif"],["Maitree","looped · serif"],
+ ["Taviraj","looped · high contrast"],["Trirong","looped · serif display"],
+ ["Noto Serif Thai","looped · serif"],["Srisakdi","looped · decorative"],
+ ["Charm","looped · handwritten"],["Charmonman","script · formal"],
+ ["Mali","handwritten · soft"],["Sriracha","casual brush"],
+ ["Itim","casual rounded"],["Chonburi","display · slab"],
+ ["Pattaya","display · condensed"],["Preahvihear","display · bold"]];
+
 const DAYCOLS=["#E8382F","#F2E23C","#F5A9C4","#5CC15C","#F08A2A","#3AA5E0","#B667C4"];
-const BGS=["#ffffff","#F6F8F6","#F5EFE3","#101c17","#1B3A2B","#2B2118","#E0A020","#E8382F"];
+const BGS=["#ffffff","#FAF7F0","#F6F8F6","#F5EFE3","#E7DCC6","#EDE6D9",
+ "#101c17","#1F2421","#16213E","#0E2A22","#1B3A2B","#2B2118","#4A1F33","#134E4A",
+ "#1B7A4C","#7BA05B","#A8B5A0","#0B6E8F","#1594B8","#C8663C","#E4A67A","#FF9A3C",
+ "#E0A020","#FFC93C","#E8382F","#E94560","#F7D9D9","#EFB8C8","#B8E62E","#D64545"];
 const INKS=["#101c17","#1B7A4C","#FFFFFF","#F1F4F1","#2B2118","#14618F","#7B3E87","#A32420"];
 const ACCS=["#E0A020","#C9962B","#F08A2A","#E8382F","#1B7A4C","#F5A9C4","#14618F","#101c17"];
 const PALETTES=[
- ["White + amber",{bg:"#ffffff",ink:"#101c17",acc:"#E0A020"}],
- ["Green + amber",{bg:"#101c17",ink:"#F1F4F1",acc:"#E0A020"}],
- ["Cream + green",{bg:"#F5EFE3",ink:"#1B7A4C",acc:"#E8382F"}],
- ["Amber + green",{bg:"#E0A020",ink:"#101c17",acc:"#F1F4F1"}]];
+ ["White + amber",{bg:"#ffffff",bg2:"#E8EDE9",ink:"#101c17",acc:"#E0A020"}],
+ ["Forest + amber",{bg:"#101c17",bg2:"#1B3A2B",ink:"#F1F4F1",acc:"#E0A020"}],
+ ["Cream + green",{bg:"#F5EFE3",bg2:"#E7DCC6",ink:"#1B7A4C",acc:"#E8382F"}],
+ ["Amber + ink",{bg:"#E0A020",bg2:"#C9962B",ink:"#101c17",acc:"#F1F4F1"}],
+ ["Terracotta + sand",{bg:"#C8663C",bg2:"#E4A67A",ink:"#2B1B13",acc:"#F5EFE3"}],
+ ["Midnight + coral",{bg:"#16213E",bg2:"#0F3460",ink:"#F1F4F1",acc:"#E94560"}],
+ ["Sage + clay",{bg:"#A8B5A0",bg2:"#CBD3C4",ink:"#2F3A2C",acc:"#C05621"}],
+ ["Charcoal + lime",{bg:"#1F2421",bg2:"#2E3A33",ink:"#F1F4F1",acc:"#B8E62E"}],
+ ["Blush + plum",{bg:"#F7D9D9",bg2:"#EFB8C8",ink:"#4A1F33",acc:"#8E3B62"}],
+ ["Ocean + sun",{bg:"#0B6E8F",bg2:"#1594B8",ink:"#F1F4F1",acc:"#FFC93C"}],
+ ["Mango + teal",{bg:"#FF9A3C",bg2:"#FFC15E",ink:"#134E4A",acc:"#0F766E"}],
+ ["Matcha + cream",{bg:"#7BA05B",bg2:"#A7C282",ink:"#2C3A1E",acc:"#FFF8E7"}],
+ ["Pandan night",{bg:"#0E2A22",bg2:"#1B7A4C",ink:"#F1F4F1",acc:"#F5A9C4"}],
+ ["Paper + ink",{bg:"#FAF7F0",bg2:"#EDE6D9",ink:"#1A1A1A",acc:"#D64545"}]];
 
 let font="Anuphan",BG="#ffffff",INK="#101c17",INK2="#1B7A4C",ACC="#E0A020",ACC2="#E8382F";
 let wheelMode="void", accMode="solid", inkMode="solid";
 let HUB="#E0A020", TYRE="#101c17", tyreMode="ink";
+let BG2="#E8EDE9", bgMode="solid";
+let bowlShape="half", wheelShape="circle";
 const el=i=>document.getElementById(i);
 const okHex=h=>/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(h.trim());
 
@@ -199,17 +276,117 @@ function paint(c,mode,a,b,ang,x0,y0,x1,y1){
  return g;
 }
 
+function bowlPath(c,cx,top,br,bw,shape,dep){
+ const h=br*dep, l=cx-bw/2, r=cx+bw/2;
+ c.beginPath();
+ if(shape==="half"){
+  c.moveTo(l,top); c.bezierCurveTo(l,top+h*1.33, r,top+h*1.33, r,top);
+ } else if(shape==="round"){
+  c.moveTo(l,top); c.bezierCurveTo(l,top+h*1.9, r,top+h*1.9, r,top);
+ } else if(shape==="taper"){
+  const i2=bw*0.20;
+  c.moveTo(l,top); c.lineTo(l+i2,top+h); c.lineTo(r-i2,top+h); c.lineTo(r,top);
+ } else if(shape==="box"){
+  const rr=Math.min(bw*0.10,h*0.4);
+  c.moveTo(l,top); c.lineTo(l,top+h-rr); c.quadraticCurveTo(l,top+h,l+rr,top+h);
+  c.lineTo(r-rr,top+h); c.quadraticCurveTo(r,top+h,r,top+h-rr); c.lineTo(r,top);
+ } else if(shape==="basket"){
+  const i2=bw*0.13;
+  c.moveTo(l,top);
+  c.bezierCurveTo(l+i2*0.2,top+h*0.85, l+i2,top+h, cx,top+h);
+  c.bezierCurveTo(r-i2,top+h, r-i2*0.2,top+h*0.85, r,top);
+ } else if(shape==="plate"){
+  c.moveTo(l,top); c.bezierCurveTo(l+bw*0.10,top+h*0.85, r-bw*0.10,top+h*0.85, r,top);
+ } else if(shape==="cup"){
+  const i2=bw*0.26, hh=h*1.45;
+  c.moveTo(l,top); c.lineTo(l+i2,top+hh);
+  c.quadraticCurveTo(cx,top+hh+h*0.16,r-i2,top+hh); c.lineTo(r,top);
+ } else if(shape==="pot"){
+  const hh=h*1.15;
+  c.moveTo(l,top);
+  c.bezierCurveTo(l-bw*0.08,top+hh*0.55, l+bw*0.16,top+hh, cx,top+hh);
+  c.bezierCurveTo(r-bw*0.16,top+hh, r+bw*0.08,top+hh*0.55, r,top);
+ } else if(shape==="tray"){
+  const hh=h*0.46, rr=Math.min(bw*0.07,hh*0.5);
+  c.moveTo(l,top); c.lineTo(l,top+hh-rr); c.quadraticCurveTo(l,top+hh,l+rr,top+hh);
+  c.lineTo(r-rr,top+hh); c.quadraticCurveTo(r,top+hh,r,top+hh-rr); c.lineTo(r,top);
+ } else if(shape==="van"){
+  const hh=h*0.92, rr=bw*0.08, cabW=bw*0.30, cabH=hh*0.42;
+  c.moveTo(l,top-cabH*0+0);              // body top-left
+  c.lineTo(l,top+hh-rr); c.quadraticCurveTo(l,top+hh,l+rr,top+hh);
+  c.lineTo(r-rr,top+hh); c.quadraticCurveTo(r,top+hh,r,top+hh-rr);
+  c.lineTo(r,top+cabH);                  // step down to the cab
+  c.lineTo(r-cabW,top+cabH);
+  c.lineTo(r-cabW,top);
+ } else if(shape==="bag"){
+  const hh=h*1.2, rr=bw*0.30;
+  c.moveTo(l,top); c.lineTo(l,top+hh-rr);
+  c.quadraticCurveTo(l,top+hh,l+rr,top+hh);
+  c.lineTo(r-rr,top+hh); c.quadraticCurveTo(r,top+hh,r,top+hh-rr);
+  c.lineTo(r,top);
+ } else { // wok
+  const hh=h*0.72;
+  c.moveTo(l,top); c.bezierCurveTo(l+bw*0.02,top+hh*1.7, r-bw*0.02,top+hh*1.7, r,top);
+ }
+ c.closePath();
+}
+function wheelPath(c,x,y,rr,shape){
+ c.beginPath();
+ if(shape==="square"){
+  const k=rr*0.42;
+  c.moveTo(x-rr+k,y-rr);
+  c.arcTo(x+rr,y-rr,x+rr,y+rr,k); c.arcTo(x+rr,y+rr,x-rr,y+rr,k);
+  c.arcTo(x-rr,y+rr,x-rr,y-rr,k); c.arcTo(x-rr,y-rr,x+rr,y-rr,k);
+ } else if(shape==="hex"){
+  for(let i=0;i<6;i++){
+   const a=Math.PI/6+i*Math.PI/3, px=x+rr*Math.cos(a), py=y+rr*Math.sin(a);
+   i?c.lineTo(px,py):c.moveTo(px,py);
+  }
+ } else if(shape==="pill"){
+  const w=rr*1.5,h2=rr*0.86,k=h2;
+  c.moveTo(x-w+k,y-h2);
+  c.arcTo(x+w,y-h2,x+w,y+h2,k); c.arcTo(x+w,y+h2,x-w,y+h2,k);
+  c.arcTo(x-w,y+h2,x-w,y-h2,k); c.arcTo(x-w,y-h2,x+w,y-h2,k);
+ } else { c.arc(x,y,rr,0,Math.PI*2); }
+ c.closePath();
+}
 function draw(cv,size,o){
  cv.width=size;cv.height=size;
  const c=cv.getContext("2d");
  c.clearRect(0,0,size,size);
  const rad=size*(o.corner/100);
- c.fillStyle=o.bg;
- if(o.square){c.fillRect(0,0,size,size);}
- else{
-  c.beginPath();c.moveTo(rad,0);c.arcTo(size,0,size,size,rad);c.arcTo(size,size,0,size,rad);
-  c.arcTo(0,size,0,0,rad);c.arcTo(0,0,size,0,rad);c.closePath();c.fill();
+ // clip to the tile so every background layer stays inside the rounded square
+ c.save();
+ c.beginPath();
+ if(o.square){c.rect(0,0,size,size);}
+ else{c.moveTo(rad,0);c.arcTo(size,0,size,size,rad);c.arcTo(size,size,0,size,rad);
+  c.arcTo(0,size,0,0,rad);c.arcTo(0,0,size,0,rad);}
+ c.closePath(); c.clip();
+
+ if(o.bgMode==="solid"){
+  c.fillStyle=o.bg; c.fillRect(0,0,size,size);
+ } else if(o.bgMode==="grad"){
+  c.fillStyle=paint(c,"grad",o.bg,o.bg2,o.bang,0,0,size,size);
+  c.fillRect(0,0,size,size);
+ } else {
+  // frosted glass: soft colour blobs, then a translucent white sheet over them
+  c.fillStyle=o.bg; c.fillRect(0,0,size,size);
+  const blobs=[[0.22,0.20,0.52,o.acc],[0.80,0.28,0.46,o.bg2],
+               [0.30,0.86,0.58,o.ink],[0.86,0.82,0.40,o.acc2]];
+  blobs.forEach(([bx,by,brr,col])=>{
+   const g=c.createRadialGradient(size*bx,size*by,0,size*bx,size*by,size*brr);
+   g.addColorStop(0,col); g.addColorStop(1,"rgba(255,255,255,0)");
+   c.globalAlpha=0.55; c.fillStyle=g; c.fillRect(0,0,size,size);
+  });
+  c.globalAlpha=1;
+  c.fillStyle="rgba(255,255,255,"+(o.frost/100)+")";
+  c.fillRect(0,0,size,size);
+  // thin inner highlight along the top edge
+  const hl=c.createLinearGradient(0,0,0,size*0.5);
+  hl.addColorStop(0,"rgba(255,255,255,.55)"); hl.addColorStop(1,"rgba(255,255,255,0)");
+  c.fillStyle=hl; c.fillRect(0,0,size,size*0.5);
  }
+ c.restore();
  const pad=o.maskable?size*0.30:size*(1-o.wpc/100)/2;
  const bw=size-pad*2, br=bw/2;
  const rim=size*(o.rim/100), gap=size*(o.gpc/100), fs=size*(o.tpc/100);
@@ -248,23 +425,37 @@ function draw(cv,size,o){
   c.arcTo(cx+bw/2,rb,cx-bw/2,rb,rr);c.arcTo(cx-bw/2,rb,cx-bw/2,ry,rr);
   c.arcTo(cx-bw/2,ry,cx+bw/2,ry,rr);c.closePath();c.fill();
  }
- c.beginPath();c.arc(cx,rb,br,0,Math.PI);c.closePath();c.fill();
+ bowlPath(c,cx,rb,br,bw,o.shape,o.depth/100);c.fill();
 
  // wheels
  if(wheelsOn){
   const wcx=bw*(o.wdx/100)/2;
-  const wcy=rb+br*0.62+wdrop;
+  const wcy=rb+br*(o.depth/100)*0.68+wdrop;
   [-1,1].forEach(sn=>{
    const x=cx+sn*wcx, y=wcy;
    // tyre: the outer disc. "void" punches it back to the background.
-   const tyre = o.wheel==="void" ? o.bg
+   const tyre = o.wheel==="void" ? (o.bgMode==="solid"?o.bg:o.voidCol)
      : (o.tyreMode==="own" ? o.tyre
         : paint(c,o.inkMode,o.ink,o.ink2,o.ang,x-wr,y-wr,x+wr,y+wr));
-   c.fillStyle=tyre;
-   c.beginPath();c.arc(x,y,wr,0,Math.PI*2);c.closePath();c.fill();
+   if(o.wshape==="ring"){
+    c.strokeStyle=tyre; c.lineWidth=wr*0.42;
+    wheelPath(c,x,y,wr*0.78,"circle"); c.stroke();
+   }else if(o.wshape==="spoke"){
+    c.strokeStyle=tyre; c.lineWidth=wr*0.24;
+    wheelPath(c,x,y,wr*0.86,"circle"); c.stroke();
+    for(let i=0;i<4;i++){
+     const a=i*Math.PI/4;
+     c.beginPath();
+     c.moveTo(x-Math.cos(a)*wr*0.8,y-Math.sin(a)*wr*0.8);
+     c.lineTo(x+Math.cos(a)*wr*0.8,y+Math.sin(a)*wr*0.8);
+     c.stroke();
+    }
+   }else{
+    c.fillStyle=tyre; wheelPath(c,x,y,wr,o.wshape); c.fill();
+   }
    if(o.hub>0){
     c.fillStyle=o.hub2;
-    c.beginPath();c.arc(x,y,wr*(o.hub/100),0,Math.PI*2);c.closePath();c.fill();
+    wheelPath(c,x,y,wr*(o.hub/100),o.wshape); c.fill();
    }
   });
  }
@@ -273,6 +464,8 @@ const opts=x=>Object.assign({bg:BG,ink:INK,ink2:INK2,acc:ACC,acc2:ACC2,font,
  inkMode,accMode,ang:+el("ang").value,
  wheel:wheelMode,wsz:+el("ws").value,wdx:+el("wx").value,wdy:+el("wy").value,
  hub:+el("hub").value,hub2:HUB,tyre:TYRE,tyreMode,
+ bgMode,bg2:BG2,bang:+el("bang").value,frost:+el("fr").value,voidCol:"#ffffff",
+ shape:bowlShape,depth:+el("dep").value,wshape:wheelShape,
  wpc:+el("w").value,tpc:+el("t").value,gpc:+el("g").value,rim:+el("r").value/10,
  fw:+el("f").value,bw2:+el("b").value,corner:+el("c").value},x||{});
 
@@ -284,6 +477,9 @@ function refresh(){
  el("vWs").textContent=el("ws").value+"%";el("vWx").textContent=el("wx").value+"%";
  el("vWy").textContent=el("wy").value+"%";el("vHub").textContent=el("hub").value+"%";
  el("vHubC").textContent=HUB; el("vTyre").textContent=tyreMode==="ink"?"match bowl":TYRE;
+ el("vBg2").textContent=BG2; el("vBAng").textContent=el("bang").value+"°";
+ el("vFr").textContent=el("fr").value+"%";
+ el("vDep").textContent=el("dep").value+"%";
  el("vBg").textContent=BG;el("vInk").textContent=INK;el("vInk2").textContent=INK2;
  el("vAcc").textContent=ACC;el("vAcc2").textContent=ACC2;
  draw(el("big"),168,opts());draw(el("mid"),84,opts());draw(el("sml"),54,opts());
@@ -305,6 +501,8 @@ function repaint(){
  swatches("swAcc2",ACCS.concat(BGS),()=>ACC2,v=>ACC2=v);
  swatches("swHub",ACCS.concat(BGS),()=>HUB,v=>HUB=v);
  swatches("swTyre",INKS.concat(ACCS),()=>TYRE,v=>TYRE=v);
+ swatches("swBg2",BGS.concat(ACCS),()=>BG2,v=>BG2=v);
+ el("hxBg2").value=BG2;
  el("hxHub").value=HUB; el("hxTyre").value=TYRE;
  refresh();
 }
@@ -315,7 +513,8 @@ el("fonts").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{
  el("fonts").querySelectorAll("[data-f]").forEach(x=>x.dataset.on=x===b?"1":"0");refresh();});
 el("palettes").innerHTML=PALETTES.map(([n],i)=>`<button data-p="${i}">${n}</button>`).join("");
 el("palettes").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
- const p=PALETTES[+b.dataset.p][1];BG=p.bg;INK=p.ink;ACC=p.acc;repaint();});
+ const p=PALETTES[+b.dataset.p][1];BG=p.bg;INK=p.ink;ACC=p.acc;
+ if(p.bg2) BG2=p.bg2; repaint();});
 function segBind(host,attr,set){
  el(host).querySelectorAll("["+attr+"]").forEach(b=>b.onclick=()=>{
   set(b.getAttribute(attr));
@@ -325,11 +524,19 @@ segBind("wheelMode","data-wm",v=>wheelMode=v);
 segBind("accMode","data-am",v=>accMode=v);
 segBind("inkMode","data-im",v=>inkMode=v);
 segBind("tyreMode","data-tm",v=>tyreMode=v);
-["w","t","g","r","f","b","c","ang","ws","wx","wy","hub"].forEach(i=>
+segBind("bgMode","data-bm",v=>bgMode=v);
+function segBind2(attr,set){
+ document.querySelectorAll("["+attr+"]").forEach(b=>b.onclick=()=>{
+  set(b.getAttribute(attr));
+  document.querySelectorAll("["+attr+"]").forEach(x=>x.dataset.on=x===b?"1":"0");refresh();});
+}
+segBind2("data-bs2",v=>bowlShape=v);
+segBind2("data-wsh",v=>wheelShape=v);
+["w","t","g","r","f","b","c","ang","ws","wx","wy","hub","bang","fr","dep"].forEach(i=>
  el(i).addEventListener("input",refresh));
 [["hxBg",v=>BG=v],["hxInk",v=>INK=v],["hxInk2",v=>INK2=v],
  ["hxAcc",v=>ACC=v],["hxAcc2",v=>ACC2=v],
- ["hxHub",v=>HUB=v],["hxTyre",v=>TYRE=v]].forEach(([id,set])=>{
+ ["hxHub",v=>HUB=v],["hxTyre",v=>TYRE=v],["hxBg2",v=>BG2=v]].forEach(([id,set])=>{
  el(id).addEventListener("input",()=>{const v=el(id).value.trim();if(okHex(v)){set(v);repaint();}});});
 
 function blobFor(size,extra){
