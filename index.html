@@ -212,7 +212,11 @@ const I={
   docket:"Docket photo",noHistory:"No deliveries yet",
   whoDriving:"Enter your PIN",ownerPin:"Owner PIN",wrongPin:"Not recognised",
   delivery:"Delivery",reseller:"Reseller",pin4:"4 digits",pin6:"6 digits",
-  orderNotCollected:"Order never marked collected.",noStores:"No stores set up yet."},
+  orderNotCollected:"Order never marked collected.",noStores:"No stores set up yet.",
+  allDays:"All",roundTrip:"Round trip",stops:"Stops",driving:"Driving",kitchenLeg:"Kitchen leg",
+  routeFrom:"Route from the kitchen",kitchen:"Kitchen",backToKitchen:"back to the kitchen",
+  schedule:"Schedule",noReturnsShort:"no returns",pctSold:"% sold",
+  editStore:"Store",parking:"Parking",km:"km"},
  th:{today:"วันนี้",money:"เงิน",setup:"ตั้งค่า",
   itsDay:d=>"วันนี้วัน"+d+"!",orderDay:"วันสั่งของ",runDay:"วันส่งของ",quietDay:"วันว่าง",
   sendOrder:"ส่งออเดอร์",forDay:d=>"สำหรับวัน"+d,orderSent:"ส่งออเดอร์แล้ว",
@@ -233,7 +237,11 @@ const I={
   docket:"รูปใบส่งของ",noHistory:"ยังไม่มีประวัติ",
   whoDriving:"ใส่รหัสของคุณ",ownerPin:"รหัสเจ้าของ",wrongPin:"รหัสไม่ถูกต้อง",
   delivery:"ส่งของ",reseller:"เจ้าของ",pin4:"รหัส 4 ตัว",pin6:"รหัส 6 ตัว",
-  orderNotCollected:"ยังไม่ได้กดรับของ",noStores:"ยังไม่มีร้านค้า"}};
+  orderNotCollected:"ยังไม่ได้กดรับของ",noStores:"ยังไม่มีร้านค้า",
+  allDays:"ทั้งหมด",roundTrip:"ระยะทางรวม",stops:"ร้าน",driving:"เวลาขับ",kitchenLeg:"จากครัว",
+  routeFrom:"เส้นทางจากครัว",kitchen:"ครัว",backToKitchen:"กลับครัว",
+  schedule:"ตารางส่ง",noReturnsShort:"ไม่มีคืน",pctSold:"% ขายได้",
+  editStore:"ร้านค้า",parking:"ที่จอดรถ",km:"กม."}};
 
 const S={view:"entry",pane:"doors",pin:"",pmsg:"",
  tab:"today",screen:"home",lang:localStorage.getItem("dr_lang")||"en",fz:+(localStorage.getItem("dr_fz")||1),
@@ -241,7 +249,8 @@ const S={view:"entry",pane:"doors",pin:"",pmsg:"",
  today:null,dow:null,week:null,
  stores:[],prices:[],prods:{},costs:{},supplierId:null,lines:[],payments:[],supPay:[],orders:[],drivers:[],
  orderQty:{},copied:false,stops:null,histStore:null,
- bSel:new Set(),bDrawn:false,dockTarget:null,map:null};
+ bSel:new Set(),bDrawn:false,dockTarget:null,map:null,
+ storeView:"all",storeOpen:null,kitchen:null};
 
 const $=i=>document.getElementById(i);
 const T=()=>I[S.lang];
@@ -332,13 +341,17 @@ async function tapKey(k,len){
 async function tryOwner(pin){
  if(DEMO){S.role="owner";S.pin="";return boot();}
  const {error}=await db.auth.signInWithPassword({email:LOGIN.owner,password:pin});
- if(error){S.pin="";S.pmsg=T().wrongPin;return padScreen();}
+ if(error){
+  S.pin="";
+  S.pmsg = /invalid login/i.test(error.message||"") ? T().wrongPin : (error.message||T().wrongPin);
+  return padScreen();
+ }
  S.pin=""; boot();
 }
 async function tryDriver(pin){
  if(DEMO){S.role="driver";S.driver={name:"Demo",name_th:"เดโม"};S.pin="";return boot();}
  const {error}=await db.auth.signInWithPassword({email:LOGIN.driver,password:DRIVER_PW});
- if(error){S.pin="";S.pmsg=T().wrongPin;return padScreen();}
+ if(error){S.pin="";S.pmsg=error.message||T().wrongPin;return padScreen();}
  const {data}=await db.rpc("driver_by_pin",{p:pin});
  const row=Array.isArray(data)?data[0]:data;
  if(!row){await db.auth.signOut();S.pin="";S.pmsg=T().wrongPin;return padScreen();}
@@ -370,9 +383,10 @@ async function loadData(){
  (pr||[]).forEach(p=>S.prods[p.id]=p);
  const {data:st,error}=await db.from("stores")
   .select("id,name,suburb,address,terms,price_tag_required,delivery_days,weeks_of_month,route_position,latitude,longitude,parking_note,is_kitchen")
-  .eq("active",true).eq("is_kitchen",false).order("route_position",{ascending:true,nullsFirst:false});
+  .eq("active",true).order("route_position",{ascending:true,nullsFirst:false});
  if(error) return fail(error.message);
- S.stores=st||[];
+ S.kitchen=(st||[]).find(x=>x.is_kitchen)||null;
+ S.stores=(st||[]).filter(x=>!x.is_kitchen);
  const ids=S.stores.map(x=>x.id); if(!ids.length) return;
  const {data:sp}=await db.from("store_products")
   .select("store_id,product_id,sell_price,retail_price,default_qty").in("store_id",ids);
@@ -402,7 +416,7 @@ function afterLoad(){
 }
 
 /* ================= SHELL ================= */
-const TABS=[["today","home"],["money","cash"],["setup","settings"]];
+const TABS=[["today","home"],["money","cash"],["stores","map-pin"],["setup","settings"]];
 function renderNav(){
  const tabs=S.role==="driver"?[["today","home"]]:TABS;
  $("navin").style.gridTemplateColumns="repeat("+tabs.length+",1fr)";
@@ -414,6 +428,8 @@ function renderNav(){
 function render(){
  setDay(S.dow); renderNav();
  if(S.histStore) return storeHistory();
+ if(S.storeOpen) return storeDetail();
+ if(S.tab==="stores") return storesTab();
  if(S.tab==="money") return moneyTab();
  if(S.tab==="setup") return setupTab();
  if(S.screen==="order") return orderScreen();
@@ -447,6 +463,16 @@ const runToday=()=>dueOn(S.dow,S.week);
 const orderFor=dISO=>S.orders.find(o=>o.for_delivery_on===dISO)||null;
 
 /* ================= TODAY ================= */
+function driverFooter(){
+ return S.role==="driver"
+  ? `<button class="btn g" id="dout" style="margin-top:18px">${esc(T().signOut)}</button>` : "";
+}
+function bindDriverFooter(){
+ const b=$("dout"); if(!b) return;
+ b.onclick=async()=>{ if(!DEMO) await db.auth.signOut();
+  S.role=null;S.driver=null;S.pane="doors";S.pin="";S.pmsg="";
+  location.href=location.pathname+location.search; };
+}
 function todayTab(){
  const tgt=orderTarget(), stops=runToday();
  const isOrder=!!tgt, isRun=stops.length>0;
@@ -487,8 +513,10 @@ function todayTab(){
  $("app").innerHTML=hero(T().itsDay(dayName(S.dow)),
    isOrder?T().orderDay:isRun?T().runDay:T().quietDay)
  +alert+task
- +(S.role==="owner"?frozenBlock(quiet)+moneyBlock(quiet)+(quiet?sellBlock():""):"");
+ +(S.role==="owner"?frozenBlock(quiet)+moneyBlock(quiet)+(quiet?sellBlock():""):"")
+ +driverFooter();
  $("app").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{S.screen=b.dataset.go;render();});
+ bindDriverFooter();
 }
 function frozenBlock(full){
  const open=S.lines.filter(l=>!isRet(l.product_id)&&l.settled_at==null);
@@ -764,9 +792,7 @@ function moneyTab(){
  <canvas class="sig" id="sig"></canvas>
  <button class="btn good" id="sok" ${S.bDrawn?"":"disabled"}>${esc(T().signClear)}</button>
  <button class="btn g" id="scl">${esc(T().back)}</button></div>`:""}
- <div class="lbl">${esc(T().stores)}</div>
- ${S.stores.map(s=>`<div class="tuck" data-hist="${s.id}">
-  <span>${esc(s.name)}</span><span class="mut">${esc(T().history)} ›</span></div>`).join("")}`;
+`;
 
  $("app").querySelectorAll("[data-bs]").forEach(e=>e.onclick=()=>{
   const d=e.dataset.bs, x=L.find(y=>y.d===d);
@@ -833,6 +859,167 @@ function storeHistory(){
   :`<div class="empty">${esc(T().noHistory)}</div>`}
  <button class="btn g" id="hb">${esc(T().back)}</button>`;
  $("hb").onclick=()=>{S.histStore=null;render();};
+}
+
+/* ================= STORES ================= */
+function hav(a,b){
+ const R=6371,t=x=>x*Math.PI/180;
+ const dl=t(b.lat-a.lat),dg=t(b.lng-a.lng);
+ const x=Math.sin(dl/2)**2+Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(dg/2)**2;
+ return 2*R*Math.asin(Math.sqrt(x));
+}
+const road=k=>k*1.35;
+const mins=k=>Math.max(2,Math.round(road(k)/34*60));
+const ll=s=>({lat:Number(s.latitude),lng:Number(s.longitude)});
+const hasLL=s=>isFinite(Number(s.latitude))&&isFinite(Number(s.longitude));
+
+function sellPct(sid){
+ const ls=S.lines.filter(l=>l.deliveries.store_id===sid&&l.settled_at&&isRet(l.product_id));
+ const out=ls.reduce((a,l)=>a+l.qty_out,0), back=ls.reduce((a,l)=>a+(l.qty_back||0),0);
+ return out?Math.round(100*(out-back)/out):null;
+}
+function storesTab(){
+ const v=S.storeView;
+ const L=(v==="all"?S.stores:S.stores.filter(x=>(x.delivery_days||[]).includes(v==="thu"?4:0)));
+ const K=S.kitchen&&hasLL(S.kitchen)?ll(S.kitchen):null;
+ const pts=L.filter(hasLL);
+ let total=0, drive=0, firstLeg=0, back=0, inner=0;
+ if(K&&pts.length){
+  let prev=K;
+  pts.forEach((s,i)=>{const k=hav(prev,ll(s));
+   if(i===0) firstLeg=road(k); else inner+=road(k);
+   total+=road(k); drive+=mins(k); prev=ll(s);});
+  back=road(hav(prev,K)); total+=back; drive+=mins(hav(prev,K));
+ }
+ $("app").innerHTML=hero(T().stores, S.stores.length+" ·",
+   `<div class="dnum" style="font-size:calc(var(--fs)*1.3)">${total?total.toFixed(0):"—"}</div>
+    <div class="dmon">${esc(T().km).toUpperCase()}</div>`)+
+ `<div class="sub" style="grid-template-columns:repeat(3,1fr);display:grid;gap:6px;margin-bottom:10px">
+ <button data-sv="all" aria-selected="${v==="all"}">${esc(T().allDays)}</button>
+ <button data-sv="thu" aria-selected="${v==="thu"}">${esc(dayName(4))}</button>
+ <button data-sv="sun" aria-selected="${v==="sun"}">${esc(dayName(0))}</button></div>
+ <div id="map"></div>
+ <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px">
+ <div class="k" style="text-align:center"><div class="kk">${esc(T().stops)}</div><div class="kv">${L.length}</div></div>
+ <div class="k" style="text-align:center"><div class="kk">${esc(T().driving)}</div>
+  <div class="kv">${drive?(drive/60).toFixed(1):"—"}<span style="font-size:.6em">h</span></div></div>
+ <div class="k" style="text-align:center"><div class="kk">${esc(T().kitchenLeg)}</div>
+  <div class="kv">${firstLeg?firstLeg.toFixed(0):"—"}</div></div></div>
+ ${S.kitchen?`<div class="lbl"><span>${esc(T().routeFrom)}</span><span class="mut">${esc(S.kitchen.suburb||"")}</span></div>
+ <div class="card"><div class="fr">
+  <div class="days" style="background:var(--wash);color:var(--ink3)"><b>⌂</b></div>
+  <div style="flex:1;min-width:0"><div style="font-weight:500">${esc(T().kitchen)}</div>
+  <div class="mut">${esc(S.kitchen.address||S.kitchen.suburb||"")}</div></div></div></div>`:""}
+ ${L.map((st,i)=>{
+   const prev = i===0 ? (K||null) : (hasLL(L[i-1])?ll(L[i-1]):null);
+   const leg = (prev&&hasLL(st)) ? road(hav(prev,ll(st))) : null;
+   const fromK = (K&&hasLL(st)) ? road(hav(K,ll(st))) : null;
+   const pct = sellPct(st.id);
+   return `${leg!=null?`<div class="mut" style="padding:2px 0 4px 44px">${leg.toFixed(1)} ${esc(T().km)}</div>`:""}
+   <div class="card" data-sd="${st.id}" style="cursor:pointer"><div class="fr">
+   <div class="days" style="background:var(--aw);color:var(--a)"><b>${i+1}</b></div>
+   <div style="flex:1;min-width:0"><div style="font-weight:500">${esc(st.name)}</div>
+   <div class="mut">${esc(st.suburb||"")} ${(st.delivery_days||[]).map(dw=>
+     `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${DAY[dw].a};margin-left:3px"></span>`).join("")}
+   ${(st.weeks_of_month||[]).length?" wk "+st.weeks_of_month.join(","):""}</div></div>
+   <div style="text-align:right"><div class="rv">${fromK!=null?fromK.toFixed(0)+" "+T().km:""}</div>
+   <div class="mut">${pct!=null?pct+T().pctSold:esc(T().noReturnsShort)}</div></div></div></div>`;}).join("")}
+ ${back?`<div class="mut" style="padding:4px 0 0 44px">${back.toFixed(1)} ${esc(T().km)} ${esc(T().backToKitchen)}</div>`:""}`;
+
+ $("app").querySelectorAll("[data-sv]").forEach(b=>b.onclick=()=>{
+  S.storeView=b.dataset.sv;S.map=null;render();});
+ $("app").querySelectorAll("[data-sd]").forEach(b=>b.onclick=()=>{S.storeOpen=b.dataset.sd;render();});
+ drawMap(L,K);
+}
+function drawMap(L,K){
+ const el=$("map"); if(!el||typeof L==="undefined") return;
+ if(typeof window.L==="undefined"){el.innerHTML='<div class="empty">Map unavailable.</div>';return;}
+ if(S.map){try{S.map.remove();}catch(e){} S.map=null;}
+ const pts=(K?[{name:T().kitchen,lat:K.lat,lng:K.lng,home:1}]:[])
+   .concat(L.filter(hasLL).map(s=>({name:s.name,lat:Number(s.latitude),lng:Number(s.longitude)})));
+ if(!pts.length){el.innerHTML='<div class="empty">'+esc(T().noStores)+'</div>';return;}
+ try{
+  S.map=window.L.map(el,{scrollWheelZoom:false,zoomControl:false});
+  window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+   {maxZoom:19,attribution:"© OpenStreetMap"}).addTo(S.map);
+  const acc=DAY[S.storeView==="thu"?4:S.storeView==="sun"?0:S.dow].i;
+  const loop=K?pts.concat([pts[0]]):pts;
+  if(loop.length>1) window.L.polyline(loop.map(p=>[p.lat,p.lng]),
+   {color:acc,weight:3,opacity:.7,dashArray:"6,5"}).addTo(S.map);
+  pts.forEach((p,i)=>window.L.marker([p.lat,p.lng],{icon:window.L.divIcon({className:"",html:
+   '<div style="width:27px;height:27px;border-radius:50%;background:'+(p.home?"#93a09a":acc)+
+   ';color:#fff;display:flex;align-items:center;justify-content:center;font:600 13px Anuphan,sans-serif;'+
+   'border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)">'+(p.home?"⌂":(K?i:i+1))+'</div>',
+   iconSize:[27,27],iconAnchor:[13,13]})}).addTo(S.map).bindPopup("<b>"+esc(p.name)+"</b>"));
+  S.map.fitBounds(pts.map(p=>[p.lat,p.lng]),{padding:[34,34]});
+  requestAnimationFrame(()=>S.map&&S.map.invalidateSize());
+  setTimeout(()=>S.map&&S.map.invalidateSize(),300);
+ }catch(e){el.innerHTML='<div class="empty">'+esc(e.message)+'</div>';}
+}
+
+function storeDetail(){
+ const st=S.stores.find(x=>x.id===S.storeOpen);
+ if(!st){S.storeOpen=null;return render();}
+ const prices=S.prices.filter(p=>p.store_id===st.id);
+ const pct=sellPct(st.id);
+ $("app").innerHTML=hero(st.name,st.suburb||"")+
+ `<div class="g2" style="margin-bottom:10px">
+ <div class="k"><div class="kk">${esc(T().sellThrough)}</div><div class="kv">${pct!=null?pct+"%":"—"}</div></div>
+ <div class="k"><div class="kk">${esc(T().products)}</div><div class="kv">${prices.length}</div></div></div>
+ <button class="btn g" data-hist="${st.id}">${esc(T().history)}</button>
+ <div class="lbl">${esc(T().schedule)}</div>
+ <div class="card">
+ <div style="display:flex;gap:4px;flex-wrap:wrap">${DAY.map((d,k)=>
+  `<button class="sm" data-dd="${st.id}:${k}" style="min-width:42px;${(st.delivery_days||[]).includes(k)
+   ?`background:${d.a};color:${k===1?"#8A7A00":"#fff"};font-weight:600`:""}">${esc(S.lang==="th"?d.th.slice(0,3):d.en.slice(0,3))}</button>`).join("")}</div>
+ <div class="lbl" style="margin:12px 0 6px">${esc(T().weeksOfMonth)} <span class="mut">${esc(T().everyWeek)}</span></div>
+ <div style="display:flex;gap:4px">${[1,2,3,4,5].map(w=>
+  `<button class="sm" data-wk="${st.id}:${w}" style="min-width:40px;${(st.weeks_of_month||[]).includes(w)
+   ?"background:var(--ink);color:#fff;font-weight:600":""}">${w}</button>`).join("")}</div>
+ </div>
+ ${st.parking_note?`<div class="lbl">${esc(T().parking)}</div>
+ <div class="card"><div class="rt">🅿 ${esc(st.parking_note)}</div></div>`:""}
+ <div class="lbl">${esc(T().products)}</div>
+ ${prices.map(p=>`<div class="card">
+ <div style="font-weight:500;margin-bottom:7px">${esc(pname(p.product_id))}
+ ${!isRet(p.product_id)?`<span class="mut">· ${esc(T().noReturns)}</span>`:""}</div>
+ <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
+ <div><span class="flbl">${esc(T().costFromMum)}</span>
+ <input type="number" value="${S.costs[p.product_id]||0}" disabled style="opacity:.5"></div>
+ <div><span class="flbl">${esc(T().youSell)}</span>
+ <input type="number" step="0.01" data-pp="${st.id}:${p.product_id}:sell_price" value="${p.sell_price}"></div>
+ <div><span class="flbl">${esc(T().defQty)}</span>
+ <input type="number" data-pp="${st.id}:${p.product_id}:default_qty" value="${p.default_qty||0}"></div></div>
+ ${st.price_tag_required?`<div style="margin-top:7px"><span class="flbl">${esc(T().shelfPrice)}</span>
+ <input type="number" step="0.01" data-pp="${st.id}:${p.product_id}:retail_price" value="${p.retail_price||0}"></div>`:""}
+ <div class="mut" style="text-align:right;color:var(--good);margin-top:6px">
+ ${money(p.sell_price-(S.costs[p.product_id]||0))} ${esc(T().each)} · ${money((p.sell_price-(S.costs[p.product_id]||0))*(p.default_qty||0))} ${esc(T().perDrop)}</div>
+ </div>`).join("")}
+ <button class="btn g" id="sdb">${esc(T().back)}</button>`;
+
+ $("sdb").onclick=()=>{S.storeOpen=null;render();};
+ $("app").querySelectorAll("[data-hist]").forEach(b=>b.onclick=()=>{S.histStore=b.dataset.hist;render();});
+ $("app").querySelectorAll("[data-dd]").forEach(b=>b.onclick=async()=>{
+  const [id,k]=b.dataset.dd.split(":");const t=S.stores.find(x=>x.id===id);
+  const a=[...(t.delivery_days||[])],n=+k;
+  a.includes(n)?a.splice(a.indexOf(n),1):a.push(n);a.sort();
+  t.delivery_days=a;S.stops=null;render();
+  if(!DEMO) await db.from("stores").update({delivery_days:a}).eq("id",id);});
+ $("app").querySelectorAll("[data-wk]").forEach(b=>b.onclick=async()=>{
+  const [id,w]=b.dataset.wk.split(":");const t=S.stores.find(x=>x.id===id);
+  const a=[...(t.weeks_of_month||[])],n=+w;
+  a.includes(n)?a.splice(a.indexOf(n),1):a.push(n);a.sort();
+  t.weeks_of_month=a;S.stops=null;render();
+  if(!DEMO) await db.from("stores").update({weeks_of_month:a}).eq("id",id);});
+ $("app").querySelectorAll("[data-pp]").forEach(inp=>inp.onchange=async()=>{
+  const [sid,pid,f]=inp.dataset.pp.split(":");
+  const v=parseFloat(inp.value)||0;
+  const row=S.prices.find(y=>y.store_id===sid&&y.product_id===pid); if(row) row[f]=v;
+  S.stops=null;
+  if(DEMO) return render();
+  const {error}=await db.from("store_products").update({[f]:v})
+   .eq("store_id",sid).eq("product_id",pid);
+  if(error) fail(error.message); else render();});
 }
 
 /* ================= SETUP ================= */
