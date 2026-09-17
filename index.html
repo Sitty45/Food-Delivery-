@@ -216,7 +216,7 @@ const I={
   allDays:"All",roundTrip:"Round trip",stops:"Stops",driving:"Driving",kitchenLeg:"Kitchen leg",
   routeFrom:"Route from the kitchen",kitchen:"Kitchen",backToKitchen:"back to the kitchen",
   schedule:"Schedule",noReturnsShort:"no returns",pctSold:"% sold",
-  editStore:"Store",parking:"Parking",km:"km",
+  editStore:"Store",parking:"Parking",km:"km",runAgain:"Deliver again",
   readyGo:"Ready to go?",loadFirst:"Load everything first",startRun:"Start the round",
   goTo:"Drive to",imHere:"I'm here",openMap:"Open map",howMany:"How many left?",
   youLeft:n=>"You left "+n,soldN:n=>"Sold "+n,next:"Next",
@@ -248,7 +248,7 @@ const I={
   allDays:"ทั้งหมด",roundTrip:"ระยะทางรวม",stops:"ร้าน",driving:"เวลาขับ",kitchenLeg:"จากครัว",
   routeFrom:"เส้นทางจากครัว",kitchen:"ครัว",backToKitchen:"กลับครัว",
   schedule:"ตารางส่ง",noReturnsShort:"ไม่มีคืน",pctSold:"% ขายได้",
-  editStore:"ร้านค้า",parking:"ที่จอดรถ",km:"กม.",
+  editStore:"ร้านค้า",parking:"ที่จอดรถ",km:"กม.",runAgain:"ส่งอีกรอบ",
   readyGo:"พร้อมออกรอบหรือยัง?",loadFirst:"โหลดของให้ครบก่อน",startRun:"เริ่มส่งของ",
   goTo:"ไปที่ร้าน",imHere:"ถึงแล้ว",openMap:"เปิดแผนที่",howMany:"เหลือกี่กล่อง?",
   youLeft:n=>"วางไว้ "+n+" กล่อง",soldN:n=>"ขายได้ "+n+" กล่อง",next:"ถัดไป",
@@ -264,7 +264,7 @@ const S={view:"entry",pane:"doors",pin:"",pmsg:"",
  stores:[],prices:[],prods:{},costs:{},supplierId:null,lines:[],payments:[],supPay:[],orders:[],drivers:[],
  orderQty:{},copied:false,stops:null,histStore:null,
  bSel:new Set(),bDrawn:false,dockTarget:null,map:null,
- storeView:"all",storeOpen:null,kitchen:null,
+ storeView:"all",storeOpen:null,kitchen:null,forceRun:false,
  dv:{phase:"brief",si:0,pi:0,loaded:{},photos:[]}};
 
 const $=i=>document.getElementById(i);
@@ -510,8 +510,11 @@ function todayTab(){
   if(S.stops==null) S.stops=buildStops();
   const left=S.stops.filter(x=>!x.done).length;
   const boxes=S.stops.reduce((a,s)=>a+s.out.reduce((x,o)=>x+o.qty,0),0);
-  task=left===0?`<div class="done"><div style="font-size:calc(var(--fs)*1.05);font-weight:600">${esc(T().roundDone)} ✓</div>
-   <div class="mut" style="color:inherit;opacity:.85">${S.stops.length} · ${money(S.stops.reduce((a,s)=>a+dueFor(s),0))} ${esc(T().collected)}</div></div>`
+  task=left===0?`<div class="done" style="padding:13px">
+   <div style="font-size:calc(var(--fs)*1.0);font-weight:600">${esc(T().roundDone)} ✓</div>
+   <div class="mut" style="color:inherit;opacity:.8">${S.stops.length} ${esc(T().stops)}</div>
+   </div>
+   <button class="btn g" id="redo" style="margin-top:0">${esc(T().runAgain)}</button>`
    :`<button class="task" data-go="run"><i class="ti ti-truck-delivery" aria-hidden="true"></i>
    <span><span class="tt">${esc(T().roundOf(dayName(S.dow)))}</span>
    <span class="ts">${esc(T().stopsLoad(left,boxes))}</span></span></button>`;
@@ -542,6 +545,8 @@ function todayTab(){
  +(S.role==="owner"?frozenBlock(quiet)+moneyBlock(quiet)+(quiet?sellBlock():""):"")
  +driverFooter();
  $("app").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{S.screen=b.dataset.go;render();});
+ const rd=$("redo");
+ if(rd) rd.onclick=()=>{ S.forceRun=true; S.stops=null; S.screen="run"; render(); };
  bindDriverFooter();
 }
 function frozenBlock(full){
@@ -673,10 +678,12 @@ function orderScreen(){
 }
 
 /* ================= RUN ================= */
+const deliveredToday=sid=>S.lines.some(l=>
+ l.deliveries.store_id===sid && l.deliveries.delivered_on===S.today);
 function buildStops(){
  return runToday().map(s=>{
   const op=S.lines.filter(l=>l.settled_at==null&&l.deliveries.store_id===s.id);
-  return {store:s,done:false,paid:null,docket:null,
+  return {store:s,done:(!S.forceRun && deliveredToday(s.id)),paid:null,docket:null,
    back:op.filter(l=>isRet(l.product_id)).map(l=>({id:l.id,pid:l.product_id,
      out:l.qty_out,price:Number(l.unit_price),qty:0})),
    cold:op.filter(l=>!isRet(l.product_id)).map(l=>({id:l.id,pid:l.product_id,
@@ -790,6 +797,7 @@ function driverShell(){
    `<div class="empty">${esc(T().runsOn)}</div>`+driverFooter();
   return bindDriverFooter();
  }
+ if(d.phase==="brief" && R.every(x=>x.done)) return dvAlreadyDone(R);
  if(d.phase==="brief") return dvBrief(R);
  if(d.phase==="done")  return dvDone(R);
  const st=R[d.si]; if(!st){d.phase="done";return driverShell();}
@@ -797,6 +805,15 @@ function driverShell(){
  if(d.phase==="count") return dvCount(st,R);
  if(d.phase==="money") return dvMoney(st,R);
  return dvDrop(st,R);
+}
+function dvAlreadyDone(R){
+ $("app").innerHTML=hero(T().itsDay(dayName(S.dow)),T().roundDone)+
+  `<div class="done" style="padding:26px 16px">
+   <div style="font-size:52px;color:var(--good);line-height:1">✓</div>
+   <div style="font-size:calc(var(--fs)*1.2);font-weight:600;margin-top:8px">${esc(T().allDone)}</div>
+   <div class="mut" style="color:inherit;opacity:.8;margin-top:3px">${R.length} ${esc(T().stops)}</div>
+   </div>`+driverFooter();
+ bindDriverFooter();
 }
 function dvBar(R){
  const d=S.dv, tot=R.length*3+2;
@@ -837,11 +854,13 @@ function dvBrief(R){
  drawMap(R.map(s=>s.store),K);
  $("app").querySelectorAll("[data-ld]").forEach(e=>e.onclick=()=>{
   S.dv.loaded[e.dataset.ld]=!S.dv.loaded[e.dataset.ld];render();});
- $("dgo").onclick=async()=>{
+ $("dgo").onclick=()=>{
   S.run.started=Date.now();
-  if(!DEMO){try{await db.from("runs").upsert({run_date:S.today,driver_ref:S.driver?.id||null},
-   {onConflict:"run_date"});}catch(e){}}
-  S.dv.phase="go";S.dv.si=0;render();};
+  S.dv.phase="go";S.dv.si=0;
+  render();                                  // move first, so the tap always responds
+  if(!DEMO){ db.from("runs").upsert({run_date:S.today,driver_ref:S.driver?.id||null},
+   {onConflict:"run_date"}).then(()=>{},()=>{}); }
+ };
  bindDriverFooter();
 }
 function dvGo(st,R){
