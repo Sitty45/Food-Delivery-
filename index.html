@@ -216,7 +216,14 @@ const I={
   allDays:"All",roundTrip:"Round trip",stops:"Stops",driving:"Driving",kitchenLeg:"Kitchen leg",
   routeFrom:"Route from the kitchen",kitchen:"Kitchen",backToKitchen:"back to the kitchen",
   schedule:"Schedule",noReturnsShort:"no returns",pctSold:"% sold",
-  editStore:"Store",parking:"Parking",km:"km"},
+  editStore:"Store",parking:"Parking",km:"km",
+  readyGo:"Ready to go?",loadFirst:"Load everything first",startRun:"Start the round",
+  goTo:"Drive to",imHere:"I'm here",openMap:"Open map",howMany:"How many left?",
+  youLeft:n=>"You left "+n,soldN:n=>"Sold "+n,next:"Next",
+  collectFrom:"Collect from the shop",gotMoney:"Got the money",
+  dropBoxes:"Drop the new boxes",dropped:"Done",allDone:"All stops done!",
+  collectedTotal:"Collected in total",addPhotos:"Add docket photos",
+  photosAdded:n=>n+" photo"+(n===1?"":"s"),finish:"Finish",stopOf:(a,b)=>"Stop "+a+" of "+b},
  th:{today:"วันนี้",money:"เงิน",setup:"ตั้งค่า",
   itsDay:d=>"วันนี้วัน"+d+"!",orderDay:"วันสั่งของ",runDay:"วันส่งของ",quietDay:"วันว่าง",
   sendOrder:"ส่งออเดอร์",forDay:d=>"สำหรับวัน"+d,orderSent:"ส่งออเดอร์แล้ว",
@@ -241,7 +248,14 @@ const I={
   allDays:"ทั้งหมด",roundTrip:"ระยะทางรวม",stops:"ร้าน",driving:"เวลาขับ",kitchenLeg:"จากครัว",
   routeFrom:"เส้นทางจากครัว",kitchen:"ครัว",backToKitchen:"กลับครัว",
   schedule:"ตารางส่ง",noReturnsShort:"ไม่มีคืน",pctSold:"% ขายได้",
-  editStore:"ร้านค้า",parking:"ที่จอดรถ",km:"กม."}};
+  editStore:"ร้านค้า",parking:"ที่จอดรถ",km:"กม.",
+  readyGo:"พร้อมออกรอบหรือยัง?",loadFirst:"โหลดของให้ครบก่อน",startRun:"เริ่มส่งของ",
+  goTo:"ไปที่ร้าน",imHere:"ถึงแล้ว",openMap:"เปิดแผนที่",howMany:"เหลือกี่กล่อง?",
+  youLeft:n=>"วางไว้ "+n+" กล่อง",soldN:n=>"ขายได้ "+n+" กล่อง",next:"ถัดไป",
+  collectFrom:"เก็บเงินจากร้าน",gotMoney:"รับเงินแล้ว",
+  dropBoxes:"วางของใหม่",dropped:"วางเสร็จแล้ว",allDone:"ส่งครบทุกร้านแล้ว!",
+  collectedTotal:"เก็บเงินได้ทั้งหมด",addPhotos:"ถ่ายรูปใบส่งของ",
+  photosAdded:n=>n+" รูป",finish:"จบรอบ",stopOf:(a,b)=>"ร้านที่ "+a+" จาก "+b}};
 
 const S={view:"entry",pane:"doors",pin:"",pmsg:"",
  tab:"today",screen:"home",lang:localStorage.getItem("dr_lang")||"en",fz:+(localStorage.getItem("dr_fz")||1),
@@ -250,7 +264,8 @@ const S={view:"entry",pane:"doors",pin:"",pmsg:"",
  stores:[],prices:[],prods:{},costs:{},supplierId:null,lines:[],payments:[],supPay:[],orders:[],drivers:[],
  orderQty:{},copied:false,stops:null,histStore:null,
  bSel:new Set(),bDrawn:false,dockTarget:null,map:null,
- storeView:"all",storeOpen:null,kitchen:null};
+ storeView:"all",storeOpen:null,kitchen:null,
+ dv:{phase:"brief",si:0,pi:0,loaded:{},photos:[]}};
 
 const $=i=>document.getElementById(i);
 const T=()=>I[S.lang];
@@ -426,7 +441,9 @@ function renderNav(){
   S.tab=b.dataset.tab;S.screen="home";S.histStore=null;render();});
 }
 function render(){
- setDay(S.dow); renderNav();
+ setDay(S.dow);
+ if(S.role==="driver"){ $("nav").classList.add("hide"); return driverShell(); }
+ renderNav();
  if(S.histStore) return storeHistory();
  if(S.storeOpen) return storeDetail();
  if(S.tab==="stores") return storesTab();
@@ -754,10 +771,186 @@ async function saveStop(i,btn){
 $("fp").onchange=function(){
  const f=this.files[0]; if(!f||S.dockTarget==null) return;
  const r=new FileReader();
- r.onload=()=>{const st=S.stops&&S.stops[S.dockTarget];
-  if(st) st.docket=r.result; S.dockTarget=null; render();};
+ r.onload=()=>{
+  if(S.dockTarget==="run"){ S.dv.photos.push(r.result); }
+  else { const st=S.stops&&S.stops[S.dockTarget]; if(st) st.docket=r.result; }
+  S.dockTarget=null; render();
+ };
  r.readAsDataURL(f);
 };
+
+/* ================= DRIVER SHELL ================= */
+/* One question a screen. Briefing with map and load list, then each stop,
+   then photos of the dockets at the end. */
+function driverShell(){
+ if(S.stops==null) S.stops=buildStops();
+ const R=S.stops, d=S.dv;
+ if(!R.length){
+  $("app").innerHTML=hero(T().itsDay(dayName(S.dow)),T().noRound)+
+   `<div class="empty">${esc(T().runsOn)}</div>`+driverFooter();
+  return bindDriverFooter();
+ }
+ if(d.phase==="brief") return dvBrief(R);
+ if(d.phase==="done")  return dvDone(R);
+ const st=R[d.si]; if(!st){d.phase="done";return driverShell();}
+ if(d.phase==="go")    return dvGo(st,R);
+ if(d.phase==="count") return dvCount(st,R);
+ if(d.phase==="money") return dvMoney(st,R);
+ return dvDrop(st,R);
+}
+function dvBar(R){
+ const d=S.dv, tot=R.length*3+2;
+ let cur=1;
+ if(d.phase!=="brief") cur=2+d.si*3+({go:0,count:1,money:1,drop:2}[d.phase]||0);
+ if(d.phase==="done") cur=tot;
+ return `<div style="display:flex;gap:2px;height:6px;margin-bottom:13px">
+  ${Array.from({length:tot},(_,i)=>`<div style="flex:1;border-radius:3px;background:${
+   i<cur?"var(--a)":"var(--line)"}"></div>`).join("")}</div>`;
+}
+function dvWrap(R,inner,actions){
+ $("app").innerHTML=dvBar(R)+inner+
+  `<div style="position:sticky;bottom:10px;padding-top:14px;display:flex;flex-direction:column;gap:9px">${actions}</div>`;
+}
+function dvBrief(R){
+ const items={};
+ R.forEach(s=>s.out.forEach(o=>{if(o.qty)items[o.pid]=(items[o.pid]||0)+o.qty;}));
+ const keys=Object.keys(items);
+ const all=keys.length>0 && keys.every(k=>S.dv.loaded[k]);
+ dvWrap(R,
+  hero(T().itsDay(dayName(S.dow)),R.length+" "+T().stops)+
+  `<div id="map"></div>
+   <div class="lbl">${esc(T().loadFirst)}</div>
+   <div class="card" style="padding:0">
+   ${keys.map(k=>`<div class="row" data-ld="${k}"
+     style="padding:14px 15px;border-bottom:1px solid var(--line);cursor:pointer">
+     <span style="display:flex;align-items:center;gap:12px">
+     <span class="cb" data-on="${S.dv.loaded[k]?1:0}">${S.dv.loaded[k]?"✓":""}</span>
+     <span style="font-size:calc(var(--fs)*1.05)">${esc(pname(k))}</span></span>
+     <span style="font-size:calc(var(--fs)*1.3);font-weight:600" class="num">${items[k]}</span></div>`).join("")}
+   </div>
+   ${R.map((s,i)=>`<div class="tuck"><span>${i+1}. ${esc(s.store.name)}</span>
+     <span class="mut">${esc(s.store.suburb||"")}</span></div>`).join("")}
+   ${driverFooter()}`,
+  `<button class="btn acc" id="dgo" ${all?"":"disabled"}
+    style="min-height:66px;font-size:calc(var(--fs)*1.15)">${esc(all?T().startRun:T().loadFirst)}</button>`);
+ const K=S.kitchen&&hasLL(S.kitchen)?ll(S.kitchen):null;
+ drawMap(R.map(s=>s.store),K);
+ $("app").querySelectorAll("[data-ld]").forEach(e=>e.onclick=()=>{
+  S.dv.loaded[e.dataset.ld]=!S.dv.loaded[e.dataset.ld];render();});
+ $("dgo").onclick=async()=>{
+  S.run.started=Date.now();
+  if(!DEMO){try{await db.from("runs").upsert({run_date:S.today,driver_ref:S.driver?.id||null},
+   {onConflict:"run_date"});}catch(e){}}
+  S.dv.phase="go";S.dv.si=0;render();};
+ bindDriverFooter();
+}
+function dvGo(st,R){
+ const s=st.store;
+ const nav=hasLL(s)?"https://www.google.com/maps/dir/?api=1&destination="+
+   s.latitude+","+s.longitude+"&travelmode=driving":null;
+ dvWrap(R,
+  `<div style="text-align:center;padding:12px 6px">
+   <div class="mut">${esc(T().stopOf(S.dv.si+1,R.length))}</div>
+   <div class="mut" style="margin-top:16px">${esc(T().goTo)}</div>
+   <div style="font-size:calc(var(--fs)*1.75);font-weight:600;line-height:1.35">${esc(s.name)}</div>
+   <div class="mut">${esc(s.suburb||"")}</div>
+   ${s.parking_note?`<div style="background:var(--aw);color:var(--a);border-radius:12px;
+     padding:12px 14px;margin-top:16px;text-align:left;font-size:calc(var(--fs)*.92)">🅿 ${esc(s.parking_note)}</div>`:""}
+   </div>`,
+  `${nav?`<a href="${nav}" target="_blank" rel="noopener" class="btn g"
+     style="display:flex;align-items:center;justify-content:center;text-decoration:none">${esc(T().openMap)}</a>`:""}
+   <button class="btn acc" id="dn" style="min-height:62px;font-size:calc(var(--fs)*1.1)">${esc(T().imHere)}</button>`);
+ $("dn").onclick=()=>{S.dv.phase=st.back.length?"count":"drop";S.dv.pi=0;render();};
+}
+function dvCount(st,R){
+ const b=st.back[S.dv.pi];
+ dvWrap(R,
+  `<div style="text-align:center;padding:8px 6px">
+   <div class="mut">${esc(st.store.name)} · ${S.dv.pi+1}/${st.back.length}</div>
+   <div style="font-size:calc(var(--fs)*1.45);font-weight:600;margin-top:12px">${esc(pname(b.pid))}</div>
+   <div style="font-size:calc(var(--fs)*1.1);margin-top:5px">${esc(T().howMany)}</div>
+   <div class="mut">${esc(T().youLeft(b.out))}</div>
+   <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin:22px 0">
+    <button id="dm1" style="width:78px;height:78px;border-radius:22px;background:var(--paper);
+      box-shadow:var(--sh);font-size:34px">−</button>
+    <span style="font-size:62px;font-weight:600;min-width:92px" class="num">${b.qty}</span>
+    <button id="dp1" style="width:78px;height:78px;border-radius:22px;background:var(--paper);
+      box-shadow:var(--sh);font-size:34px">+</button></div>
+   <div style="font-size:calc(var(--fs)*1.05);color:var(--good)">${esc(T().soldN(b.out-b.qty))}</div>
+   </div>`,
+  `<button class="btn acc" id="dn" style="min-height:62px;font-size:calc(var(--fs)*1.1)">${esc(T().next)}</button>
+   <button class="btn g" id="db">${esc(T().back)}</button>`);
+ $("dm1").onclick=()=>{b.qty=Math.max(0,b.qty-1);render();};
+ $("dp1").onclick=()=>{b.qty=Math.min(b.out,b.qty+1);render();};
+ $("dn").onclick=()=>{S.dv.pi<st.back.length-1?S.dv.pi++:S.dv.phase="money";render();};
+ $("db").onclick=()=>{S.dv.pi>0?S.dv.pi--:S.dv.phase="go";render();};
+}
+function dvMoney(st,R){
+ const due=dueFor(st);
+ dvWrap(R,
+  `<div style="text-align:center;padding:8px 6px">
+   <div class="mut">${esc(st.store.name)}</div>
+   <div style="font-size:calc(var(--fs)*1.2);font-weight:500;margin-top:14px">${esc(T().collectFrom)}</div>
+   <div style="font-size:54px;font-weight:600;color:var(--a);margin:12px 0" class="num">${money(due)}</div>
+   <div class="card">${st.back.map(b=>`<div class="row">
+     <span class="rt">${esc(pname(b.pid))}</span>
+     <span class="mut">${b.out-b.qty} × ${money(b.price)}</span></div>`).join("")}</div>
+   </div>`,
+  `<button class="btn good" id="dn" style="min-height:62px;font-size:calc(var(--fs)*1.1)">${esc(T().gotMoney)}</button>
+   <button class="btn g" id="db">${esc(T().back)}</button>`);
+ $("dn").onclick=()=>{S.dv.phase="drop";render();};
+ $("db").onclick=()=>{S.dv.phase="count";S.dv.pi=Math.max(0,st.back.length-1);render();};
+}
+function dvDrop(st,R){
+ dvWrap(R,
+  `<div style="text-align:center;padding:8px 6px">
+   <div class="mut">${esc(st.store.name)}</div>
+   <div style="font-size:calc(var(--fs)*1.2);font-weight:500;margin-top:12px">${esc(T().dropBoxes)}</div></div>
+   <div class="card">${st.out.map((o,j)=>`<div class="row">
+    <span class="rt" style="font-size:calc(var(--fs)*1.02)">${esc(pname(o.pid))}
+    ${!isRet(o.pid)?`<span class="mut">${esc(T().noReturns)}</span>`:""}</span>
+    <span class="stp"><button data-dm="${j}" aria-label="−">−</button>
+    <span class="v" style="font-size:calc(var(--fs)*1.25)">${o.qty}</span>
+    <button data-dp="${j}" aria-label="+">+</button></span></div>`).join("")}</div>`,
+  `<button class="btn good" id="dn" style="min-height:62px;font-size:calc(var(--fs)*1.1)">${esc(T().dropped)}</button>
+   <button class="btn g" id="db">${esc(T().back)}</button>`);
+ $("app").querySelectorAll("[data-dm]").forEach(b=>b.onclick=()=>{
+  const o=st.out[+b.dataset.dm];o.qty=Math.max(0,o.qty-1);render();});
+ $("app").querySelectorAll("[data-dp]").forEach(b=>b.onclick=()=>{
+  const o=st.out[+b.dataset.dp];o.qty=o.qty+1;render();});
+ $("db").onclick=()=>{S.dv.phase=st.back.length?"money":"go";render();};
+ $("dn").onclick=async()=>{
+  const btn=$("dn");btn.disabled=true;btn.textContent="…";
+  await saveStop(S.dv.si,btn);
+  if(S.dv.si<R.length-1){S.dv.si++;S.dv.phase="go";S.dv.pi=0;}else{S.dv.phase="done";}
+  render();};
+}
+function dvDone(R){
+ const tot=R.reduce((a,s)=>a+dueFor(s),0);
+ const ph=S.dv.photos;
+ dvWrap(R,
+  `<div style="text-align:center;padding:22px 10px 6px">
+   <div style="font-size:58px;color:var(--good);line-height:1">✓</div>
+   <div style="font-size:calc(var(--fs)*1.35);font-weight:600;margin-top:10px">${esc(T().allDone)}</div>
+   <div class="mut" style="margin-top:14px">${esc(T().collectedTotal)}</div>
+   <div style="font-size:44px;font-weight:600;color:var(--good)" class="num">${money(tot)}</div></div>
+   <div class="lbl">${esc(T().docket)}</div>
+   ${ph.length?`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:8px">
+     ${ph.map((p,i)=>`<img src="${p}" alt="" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px">`).join("")}
+     </div><div class="mut" style="text-align:center;margin-bottom:6px">${esc(T().photosAdded(ph.length))}</div>`:""}
+   <button class="btn g" id="dph">${esc(T().addPhotos)}</button>`,
+  `<button class="btn acc" id="dfin" style="min-height:60px">${esc(T().finish)}</button>`);
+ $("dph").onclick=()=>{S.dockTarget="run";$("fp").value="";$("fp").click();};
+ $("dfin").onclick=async()=>{
+  const b=$("dfin");b.disabled=true;b.textContent="…";
+  if(!DEMO){try{
+   await db.from("runs").update({finished_at:new Date().toISOString(),photos:S.dv.photos})
+    .eq("run_date",S.today);
+  }catch(e){}}
+  S.dv={phase:"brief",si:0,pi:0,loaded:{},photos:[]};
+  S.stops=null;S.run={started:null,finished:null,last:0,tick:null};
+  render();};
+}
 
 /* ================= MONEY ================= */
 function batchList(){
