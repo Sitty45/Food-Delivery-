@@ -509,10 +509,19 @@ function todayTab(){
    <span><span class="tt">${esc(T().nothingDue)}</span>
    <span class="ts mut">${od?esc(T().nextOrder(dayName(od.getDay()))):""}</span></span></div>`;
  }
+ /* The next order is always reachable, whatever day it is. */
+ let peek="";
+ const nd=nextDeliveryFrom(1);
+ if(nd && !isOrder){
+  const sentAlready=orderFor(iso(nd));
+  peek=`<div class="tuck" data-go="order" style="cursor:pointer">
+   <span>${esc(T().sendOrder)} · ${esc(dayName(nd.getDay()))} ${nd.getDate()}/${nd.getMonth()+1}</span>
+   <span class="mut">${sentAlready?esc(T().orderSent)+" ✓":"›"}</span></div>`;
+ }
 
  $("app").innerHTML=hero(T().itsDay(dayName(S.dow)),
    isOrder?T().orderDay:isRun?T().runDay:T().quietDay)
- +alert+task
+ +alert+task+peek
  +(S.role==="owner"?frozenBlock(quiet)+moneyBlock(quiet)+(quiet?sellBlock():""):"")
  +driverFooter();
  $("app").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{S.screen=b.dataset.go;render();});
@@ -586,7 +595,8 @@ function oVal(s,p){const k=oKey(s,p);
  if(S.orderQty[k]!=null) return S.orderQty[k];
  const x=S.prices.find(y=>y.store_id===s&&y.product_id===p); return x?.default_qty||0;}
 function orderScreen(){
- const t=orderTarget(); if(!t){S.screen="home";return render();}
+ const t=orderTarget()||nextDeliveryFrom(1);
+ if(!t){S.screen="home";return render();}
  const list=dueOn(t.getDay(),weekOf(t));
  const byP={};
  list.forEach(s=>S.prices.filter(p=>p.store_id===s.id).forEach(p=>{
