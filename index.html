@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -39,7 +40,7 @@ button:active{transform:scale(.96)}
 #app.enter{animation:enter .24s cubic-bezier(.2,.8,.2,1)}
 @keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#app.enter{animation:none}button{transition:none}}
-.wrap{max-width:560px;margin:0 auto;padding:14px 16px calc(132px + env(safe-area-inset-bottom))}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px calc(150px + env(safe-area-inset-bottom))}
 .wrap.bare{padding:env(safe-area-inset-top) 18px calc(28px + env(safe-area-inset-bottom));
  min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
 .num{font-variant-numeric:tabular-nums}
@@ -166,6 +167,9 @@ input:focus{outline:none;background:var(--paper);border-color:var(--a)}
 .msg{padding:13px 15px;border-radius:14px;font-size:calc(var(--fs)*.85);margin:10px 0}
 .msg.err{background:var(--badw);color:var(--bad)}
 .empty{text-align:center;color:var(--ink3);padding:44px 20px}
+.spin{width:30px;height:30px;border-radius:50%;margin:40px auto;
+ border:3px solid var(--line);border-top-color:var(--ink);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .ordertxt{font-size:calc(var(--fs)*1.1);line-height:2.05;white-space:pre-wrap;word-break:break-word;font-variant-numeric:tabular-nums}
 .chip{background:var(--wash);border-radius:99px;padding:5px 12px;font-size:calc(var(--fs)*.75);color:var(--ink2)}
 .seg{display:grid;gap:8px;margin-bottom:12px}
@@ -398,19 +402,33 @@ async function start(){
  S.screen="app"; $("wrap").classList.remove("bare");
  const now=new Date(); S.dow=now.getDay(); S.today=iso(now); S.week=weekOf(now);
  S.calMonth=now.getMonth(); applyType(); clearErr();
- $("app").innerHTML='<div class="empty">…</div>';
- const {data:{session}}=await db.auth.getSession();
- if(!session) return showEntry();
- S.user=session.user;
- if(!S.role){
-  const {data:pf}=await db.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
-  S.role=pf?pf.role:"driver";
-  if(S.role==="driver"&&!S.driver){await db.auth.signOut();return showEntry();}
-  S.tab=S.role==="driver"?"today":"order";
+ $("navwrap").classList.add("hide");              // no empty tab bar while loading
+ $("app").innerHTML='<div class="empty"><div class="spin"></div></div>';
+ try{
+  const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error(
+   S.lang==="th"?"โหลดช้าเกินไป ลองใหม่อีกครั้ง":"Taking too long — check your connection")),ms))]);
+  const {data:{session}}=await withTimeout(db.auth.getSession(),10000);
+  if(!session) return showEntry();
+  S.user=session.user;
+  if(!S.role){
+   const {data:pf}=await withTimeout(db.from("profiles").select("role").eq("id",session.user.id).maybeSingle(),10000);
+   S.role=pf?pf.role:"driver";
+   if(S.role==="driver"&&!S.driver){await db.auth.signOut();return showEntry();}
+   S.tab=S.role==="driver"?"today":"order";
+  }
+  await withTimeout(load(),20000);
+  S.stops=buildStops();
+  render();
+ }catch(e){
+  $("app").innerHTML=`<div class="card" style="margin-top:40px;text-align:center;padding:26px 18px">
+   <div style="font-size:40px;line-height:1">⚠︎</div>
+   <div style="font-weight:700;margin-top:10px">${S.lang==="th"?"โหลดไม่สำเร็จ":"Couldn't load"}</div>
+   <div class="mut" style="margin-top:4px">${esc(e.message||String(e))}</div>
+   <button class="btn acc" id="retry">${S.lang==="th"?"ลองใหม่":"Try again"}</button>
+   <button class="btn g" id="bail">${esc(T().signOut)}</button></div>`;
+  $("retry").onclick=()=>start();
+  $("bail").onclick=async()=>{try{await db.auth.signOut();}catch(x){} location.href=location.pathname;};
  }
- await load();
- S.stops=buildStops();
- render();
 }
 async function load(){
  const {data:sup}=await db.from("suppliers").select("id").eq("active",true).limit(1);
