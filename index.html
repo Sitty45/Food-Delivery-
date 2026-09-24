@@ -123,6 +123,7 @@ button.chip{min-height:36px;box-shadow:inset 0 0 0 1px var(--line)}
 .alert b{display:block}
 .alert.warn{background:var(--warnw);border-color:var(--warnl);color:var(--warn)}.alert.warn .ai{background:#e08e00}
 .alert.bad{background:var(--badw);border-color:var(--badl);color:var(--bad)}.alert.bad .ai{background:var(--bad)}
+.alert.good{background:var(--goodw);border-color:#a8d3ab;color:var(--good)}.alert.good .ai{background:var(--good)}
 .alert.info{background:var(--infow);border-color:var(--infol);color:var(--info)}.alert.info .ai{background:#2f6fa8}
 .alert .x{margin:-6px -6px -6px auto;width:40px;height:40px;font-size:20px;color:inherit;flex:0 0 auto}
 #err{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top) + 8px);z-index:1000;padding:0 12px;pointer-events:none}
@@ -165,6 +166,20 @@ input[type=range]{width:100%;accent-color:var(--ink);height:32px}
 .pinm{width:28px;height:28px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;
  font:700 13px Anuphan,sans-serif;border:2.5px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35)}
 
+/* photos: one thumbnail size family everywhere, big only on detail screens */
+.th{flex:0 0 auto;border-radius:10px;object-fit:cover;background:var(--wash);display:inline-flex;align-items:center;
+ justify-content:center;color:var(--faint);box-shadow:inset 0 0 0 1px var(--line)}
+.photo{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;background:var(--wash)}
+.shopph{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;display:block;margin-bottom:10px;background:var(--wash)}
+.pick{box-shadow:var(--sh);cursor:pointer}.pick:active{transform:scale(.985)}
+/* slide to confirm */
+.slide{position:relative;height:62px;border-radius:16px;background:var(--badw);box-shadow:inset 0 0 0 1.5px var(--badl);
+ overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;margin-top:4px}
+.slide .fill{position:absolute;left:0;top:0;bottom:0;width:62px;background:rgba(179,38,30,.2);border-radius:16px}
+.slide span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-left:56px;
+ color:var(--bad);font-weight:700;pointer-events:none}
+.slide .knob{position:absolute;left:0;top:0;width:62px;height:62px;border-radius:16px;background:var(--bad);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 2px 8px rgba(179,38,30,.4);touch-action:none;cursor:grab}
 /* bottom tabs */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:900;background:rgba(255,255,255,.97);
  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line);
@@ -173,6 +188,9 @@ input[type=range]{width:100%;accent-color:var(--ink);height:32px}
 .tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:var(--navh);
  color:var(--faint);font-size:calc(var(--fs)*.84);font-weight:600;padding:6px 1px 8px;position:relative;line-height:1.2}
 .tabs button i{font-size:27px}
+.tabs .bdg{position:absolute;top:5px;left:50%;margin-left:7px;min-width:19px;height:19px;border-radius:10px;padding:0 5px;
+ background:var(--bad);color:#fff;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;
+ box-shadow:0 0 0 2px #fff;font-style:normal}
 .tabs button:active{transform:none;opacity:.6}
 .tabs button[data-on="1"]{color:var(--ink);font-weight:800}
 .tabs button[data-on="1"]::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;border-radius:0 0 3px 3px;background:var(--ink)}
@@ -197,7 +215,7 @@ input[type=range]{width:100%;accent-color:var(--ink);height:32px}
 <div class="pt" id="pt"><div id="v"></div></div>
 <div id="err" role="alert" aria-live="assertive"></div>
 <div class="tabs" id="tabs" hidden><nav id="nav" role="tablist"></nav></div>
-<input type="file" accept="image/*" capture="environment" id="fp" hidden>
+<input type="file" accept="image/*" id="fp" hidden>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -225,16 +243,16 @@ th:{
  addOrder:"เพิ่มออเดอร์",ordersOnDay:"ออเดอร์วันที่เลือก",noOrdersDay:"ยังไม่มีออเดอร์วันนี้",
  boxes:n=>n+" กล่อง",storesN:n=>n+" ร้าน",repeat:"ทำซ้ำ",sent:"ส่งแล้ว",draft:"ร่าง",
  viewOnly:"ดูอย่างเดียว",tapEdit:"แตะเพื่อแก้ไข",tapFix:"แตะเพื่อแก้ไขถ้าไม่ถูก",
- supPending:"รอแม่ตอบ",supAccepted:"แม่รับแล้ว",supRejected:"แม่ปฏิเสธ",
- rejectedAlert:n=>"แม่ปฏิเสธ "+n+" ออเดอร์ของวันนี้",rejectedBody:"แก้ออเดอร์แล้วบันทึกใหม่ แม่จะได้ตอบอีกครั้ง",
- pendingAlert:n=>"ยังรอแม่ตอบ "+n+" ออเดอร์",
+ supPending:s=>"รอ"+s+"ตอบ",supAccepted:s=>s+"รับแล้ว",supRejected:s=>s+"ปฏิเสธ",
+ rejectedAlert:(n,s)=>s+"ปฏิเสธ "+n+" ออเดอร์ของวันนี้",rejectedBody:s=>"แก้ออเดอร์แล้วบันทึกใหม่ "+s+"จะได้ตอบอีกครั้ง",
+ pendingAlert:(n,s)=>"ยังรอ"+s+"ตอบ "+n+" ออเดอร์",
  repeatFrom:d=>"ทำซ้ำจาก "+d,repeatTap:"แตะเพื่อสร้างออเดอร์นี้อีกครั้ง",
  newOrder:"ออเดอร์ใหม่",editOrder:"แก้ไขออเดอร์",orderRO:"ออเดอร์ (ดูอย่างเดียว)",pastLocked:"ออเดอร์นี้ผ่านไปแล้ว แก้ไขไม่ได้",
  runName:"ชื่อรอบ",runPh:"รอบพ่อ",inOrder:"✓ อยู่ในออเดอร์",addStore:"+ เพิ่มร้าน",notRegular:"ไม่ประจำ",
  repeatWeekly:"ทำซ้ำทุกสัปดาห์",on:"เปิด",off:"ปิด",saveOrder:"บันทึกออเดอร์",deleteOrder:"ลบออเดอร์นี้",
  deleteQ:"ลบออเดอร์นี้ใช่ไหม? ลบแล้วกู้คืนไม่ได้",yesDelete:"ใช่ ลบเลย",cancel:"ยกเลิก",back:"กลับ",
- copyMsg:"คัดลอกข้อความถึงแม่",copied:"คัดลอกแล้ว",emptyOrder:"ยังไม่มีสินค้าในออเดอร์",
- resetNote:"ถ้าแก้จำนวน แม่ต้องกดรับออเดอร์ใหม่อีกครั้ง",defaultLabel:"ออเดอร์",
+ copyMsg:s=>"คัดลอกข้อความถึง"+s,copied:"คัดลอกแล้ว",emptyOrder:"ยังไม่มีสินค้าในออเดอร์",
+ resetNote:s=>"ถ้าแก้จำนวน "+s+"ต้องกดรับออเดอร์ใหม่อีกครั้ง",defaultLabel:"ออเดอร์",
  qtyOnly:"คนขับแก้ได้เฉพาะจำนวน",savedNow:"บันทึกทันทีที่แตะ",
  stores:"ร้านค้า",products:"สินค้า",hubs:"จุดฮับ",addStoreB:"เพิ่มร้านค้า",addHub:"เพิ่มจุดฮับ",addProduct:"เพิ่มสินค้า",
  fresh:"สด",dry:"แห้ง",frozen:"แช่แข็ง",cost:"ต้นทุน",costEach:c=>"ต้นทุน "+c,noLoc:"ยังไม่มีตำแหน่ง",
@@ -244,13 +262,13 @@ th:{
  regularHint:"ร้านประจำจะถูกใส่ในออเดอร์ใหม่ให้อัตโนมัติ",sellsHere:"ขายที่ร้านนี้",sellPrice:"ราคาขาย",usualQty:"จำนวนปกติ",
  priceTag:"ติดป้ายราคา",removeStore:"ลบร้านนี้",removeHub:"ลบจุดนี้",removeProduct:"ลบสินค้านี้",removeQ:"ลบใช่ไหม?",
  type:"ประเภท",returns:"รับคืนของเหลือ",newItem:"สินค้าใหม่",newStore:"ร้านใหม่",newHub:"จุดใหม่",kitchen:"ครัว",
- shopsOwe:"ร้านค้างจ่าย",outCons:"ฝากขายอยู่",mumOwed:"ค้างแม่",marginMonth:"กำไรเดือนนี้",
+ shopsOwe:"ร้านค้างจ่าย",outCons:"ฝากขายอยู่",supOwed:s=>"ค้าง"+s,marginMonth:"กำไรเดือนนี้",
  recordPay:"บันทึกร้านจ่ายเงิน",amount:"จำนวนเงิน",pickStore:"เลือกร้าน",save:"บันทึก",paySaved:"บันทึกแล้ว",
  notReceived:"ยอดที่ยังไม่ได้รับ",waitPay:"รอจ่าย",history:"ประวัติ",outSoldLeft:(o,s,l)=>"ออก "+o+" · ขาย "+s+" · เหลือ "+l,
- waitCount:"รอนับ",signHere:"ให้แม่เซ็นตรงนี้",signClear:"เซ็นและเคลียร์",openSign:"ให้แม่เซ็น",
+ waitCount:"รอนับ",signHere:"เซ็นตรงนี้",signClear:"เซ็นและเคลียร์",
  countFirst:"รอนับของคืนก่อนถึงจะจ่ายได้",noBatches:"ยังไม่มีรอบที่ต้องจ่าย",
  profitAll:"กำไรรวม",waste:"ของเสีย",profit6:"กำไร 6 สัปดาห์ล่าสุด",sellThrough:"อัตราขายได้",noData:"ยังไม่มีข้อมูล",
- language:"ภาษา",textSize:"ขนาดตัวอักษร",accounts:"บัญชีและรหัส",roleDist:"ผู้จัดจำหน่าย",roleDriver:"คนขับ",roleSup:"แม่ (ซัพพลาย)",
+ language:"ภาษา",textSize:"ขนาดตัวอักษร",accounts:"บัญชีและรหัส",roleDist:"ผู้จัดจำหน่าย",roleDriver:"คนขับ",roleSup:"ซัพพลายเออร์",
  pin:"รหัส",changePin:"เปลี่ยนรหัส",newPin:"รหัสใหม่ 4 ตัว",addAccount:"เพิ่มบัญชี",role:"ประเภทบัญชี",
  pinRule:"ต้องเป็นตัวเลข 4 ตัว",pinTaken:"รหัสนี้มีคนใช้แล้ว",needName:"ใส่ชื่อก่อน",you:"คุณ",cantRemoveSelf:"ลบบัญชีตัวเองไม่ได้",
  removeAcctQ:n=>"ลบบัญชี "+n+"?",yesRemove:"ใช่ ลบเลย",remove:"ลบ",pinHint:"แต่ละคนใช้รหัสของตัวเองเข้าแอป รหัสบอกว่าเป็นใคร",
@@ -269,6 +287,18 @@ th:{
  costMode:"วิธีคิดต้นทุน",modePct:"% ของหมวด",modeProd:"ทีละสินค้า",catPct:"% ต้นทุนของหมวดนี้",
  costOf:(c,r)=>"ต้นทุน "+c+" จากรายรับ "+r,perUnit:"ต้นทุนต่อกล่อง",makeHint:"คิดจากจำนวนที่ทำทั้งหมด รวมของที่เหลือคืน",
  pctHint:"วิธีเร็ว ลาก % ครั้งเดียวทั้งหมวด",noneInType:"ยังไม่มีสินค้าในหมวดนี้",revenueOf:r=>"รายรับ "+r,
+ supplierWord:"ซัพพลายเออร์",needsAnswer:"รอคุณตอบ",adjust:"ปรับจำนวนตามของที่มี",adjustDone:"เสร็จ",acceptAdj:"รับตามจำนวนนี้",
+ adjustedBy:s=>s+"ปรับจำนวน",ordered:n=>"สั่ง "+n,adjAlert:(n,s)=>s+"ปรับหรือปฏิเสธ "+n+" ออเดอร์",adjAlertBody:"แตะวันที่เพื่อดู",newTag:"ใหม่",
+ shopPhoto:"รูปหน้าร้าน",productPhoto:"รูปสินค้า",addPhoto:"เพิ่มรูป",changePhoto:"เปลี่ยนรูป",uploading:"กำลังอัปโหลด…",noPhoto:"ยังไม่มีรูปหน้าร้าน",
+ driverNote:"โน้ตสำหรับคนขับ",driverNoteHint:"เช่น ทางเข้า วางของตรงไหน ถามหาใคร",
+ lastLot:d=>"จากรอบก่อน ("+d+")",countLeft:"นับของเหลือจากรอบก่อน",
+ lotOf:d=>"รอบส่ง "+d,toCheck:s=>"ตรวจของเสีย แล้วเซ็นส่งให้"+s,withSup:s=>"รอ"+s+"เซ็นปิดยอด",waitCountL:"รอนับของเหลือ",
+ closedL:"ปิดยอดแล้ว",selectAll:"เลือกทั้งหมด",clearSel:"ไม่เลือก",signSend:(n,s)=>"เซ็นและส่ง "+n+" รอบให้"+s,signClose:n=>"เซ็นปิดยอด "+n+" รอบ",
+ toSign:"รอคุณเซ็นปิดยอด",beingChecked:n=>n+" รอบ กำลังรอผู้จัดจำหน่ายตรวจ",wastePct:p=>"ของเสีย "+p+"%",
+ checkedBy:(n,d)=>"ตรวจโดย "+n+" · "+d,closedBy:(n,d)=>"ปิดยอดโดย "+n+" · "+d,legacy:"ปิดยอดแบบเก่า",tapDetail:"แตะเพื่อดูรายละเอียด",byStore:"แยกตามร้าน",
+ danger:"ล้างข้อมูล",resetTitle:"ล้างข้อมูลทั้งหมดเพื่อเริ่มใหม่",
+ resetWhat:"ลบออเดอร์ การส่งของ การนับของเหลือ การจ่ายเงิน และการเซ็นทั้งหมด ร้าน สินค้า จุดฮับ และบัญชีจะยังอยู่",
+ resetOpen:"ล้างข้อมูล…",cantUndo:"ย้อนกลับไม่ได้ ข้อมูลที่ลบจะหายถาวร",slideReset:"เลื่อนไปจนสุดเพื่อลบ",resetDone:"ล้างข้อมูลแล้ว",resetBusy:"กำลังลบ…",done:"เรียบร้อย",
  noSupplier:"ยังไม่ได้ตั้งซัพพลายเออร์"},
 en:{
  enterPin:"Enter your 4-digit PIN",wrongPin:"PIN not recognised",locked:"Too many tries. Wait 10 minutes.",del:"Delete",
@@ -279,16 +309,16 @@ en:{
  addOrder:"Add order",ordersOnDay:"Orders on this day",noOrdersDay:"No orders on this day yet",
  boxes:n=>n+" box"+(n===1?"":"es"),storesN:n=>n+" store"+(n===1?"":"s"),repeat:"Repeats",sent:"Sent",draft:"Draft",
  viewOnly:"View only",tapEdit:"Tap to edit",tapFix:"Tap to fix if it's wrong",
- supPending:"Waiting for mum",supAccepted:"Mum accepted",supRejected:"Mum declined",
- rejectedAlert:n=>"Mum declined "+n+" order"+(n===1?"":"s")+" for this day",rejectedBody:"Edit and save it again so she can answer again.",
- pendingAlert:n=>n+" order"+(n===1?" is":"s are")+" waiting for mum",
+ supPending:s=>"Waiting for "+s,supAccepted:s=>s+" accepted",supRejected:s=>s+" declined",
+ rejectedAlert:(n,s)=>s+" declined "+n+" order"+(n===1?"":"s")+" for this day",rejectedBody:s=>"Edit and save it again so "+s+" can answer again.",
+ pendingAlert:(n,s)=>n+" order"+(n===1?" is":"s are")+" waiting for "+s,
  repeatFrom:d=>"Repeat from "+d,repeatTap:"Tap to create this order again",
  newOrder:"New order",editOrder:"Edit order",orderRO:"Order (view only)",pastLocked:"This date has passed. The order can't be changed.",
  runName:"Run name",runPh:"Dad's run",inOrder:"✓ In order",addStore:"+ Add store",notRegular:"Not regular",
  repeatWeekly:"Repeat every week",on:"On",off:"Off",saveOrder:"Save order",deleteOrder:"Delete this order",
  deleteQ:"Delete this order? This can't be undone.",yesDelete:"Yes, delete",cancel:"Cancel",back:"Back",
- copyMsg:"Copy message for mum",copied:"Copied",emptyOrder:"Add at least one item first",
- resetNote:"If quantities change, mum has to accept the order again",defaultLabel:"Order",
+ copyMsg:s=>"Copy message for "+s,copied:"Copied",emptyOrder:"Add at least one item first",
+ resetNote:s=>"If quantities change, "+s+" has to accept the order again",defaultLabel:"Order",
  qtyOnly:"Drivers can change quantities only",savedNow:"Saves as you tap",
  stores:"Stores",products:"Products",hubs:"Hubs",addStoreB:"Add store",addHub:"Add hub",addProduct:"Add product",
  fresh:"Fresh",dry:"Dry",frozen:"Frozen",cost:"Cost",costEach:c=>"Cost "+c,noLoc:"No location yet",
@@ -298,13 +328,13 @@ en:{
  regularHint:"Regular stores are added to new orders automatically",sellsHere:"Sold here",sellPrice:"Sell price",usualQty:"Usual qty",
  priceTag:"Needs price tags",removeStore:"Remove this store",removeHub:"Remove this hub",removeProduct:"Remove this product",removeQ:"Remove it?",
  type:"Type",returns:"Takes back leftovers",newItem:"New item",newStore:"New store",newHub:"New hub",kitchen:"Kitchen",
- shopsOwe:"Shops owe you",outCons:"On consignment",mumOwed:"Mum is owed",marginMonth:"Margin this month",
+ shopsOwe:"Shops owe you",outCons:"On consignment",supOwed:s=>"Owed to "+s,marginMonth:"Margin this month",
  recordPay:"Record a shop payment",amount:"Amount",pickStore:"Choose a store",save:"Save",paySaved:"Saved",
  notReceived:"Not yet received",waitPay:"To be paid",history:"History",outSoldLeft:(o,s,l)=>"out "+o+" · sold "+s+" · left "+l,
- waitCount:"not counted",signHere:"Mum signs here",signClear:"Sign & clear",openSign:"Get mum to sign",
+ waitCount:"not counted",signHere:"Sign here",signClear:"Sign & clear",
  countFirst:"Count the leftovers before this can be paid",noBatches:"Nothing to pay yet",
  profitAll:"Profit to date",waste:"Wastage",profit6:"Profit, last 6 weeks",sellThrough:"Sell-through",noData:"No data yet",
- language:"Language",textSize:"Text size",accounts:"Accounts & PINs",roleDist:"Distributor",roleDriver:"Driver",roleSup:"Mum (supplier)",
+ language:"Language",textSize:"Text size",accounts:"Accounts & PINs",roleDist:"Distributor",roleDriver:"Driver",roleSup:"Supplier",
  pin:"PIN",changePin:"Change PIN",newPin:"New 4-digit PIN",addAccount:"Add account",role:"Account type",
  pinRule:"PIN must be 4 digits",pinTaken:"That PIN is already in use",needName:"Enter a name first",you:"you",cantRemoveSelf:"You can't remove your own account",
  removeAcctQ:n=>"Remove "+n+"?",yesRemove:"Yes, remove",remove:"Remove",pinHint:"Everyone signs in with their own PIN. The PIN decides which app they see.",
@@ -323,6 +353,18 @@ en:{
  costMode:"How to work out cost",modePct:"% of the type",modeProd:"Per product",catPct:"Cost % for this type",
  costOf:(c,r)=>"Cost "+c+" of "+r+" income",perUnit:"Cost per box",makeHint:"Counted on everything made, including leftovers",
  pctHint:"Quick way: one % for the whole type",noneInType:"No products of this type yet",revenueOf:r=>"Income "+r,
+ supplierWord:"Supplier",needsAnswer:"Needs your answer",adjust:"Adjust to what's available",adjustDone:"Done",acceptAdj:"Accept these amounts",
+ adjustedBy:s=>"Adjusted by "+s,ordered:n=>"ordered "+n,adjAlert:(n,s)=>s+" changed or declined "+n+" order"+(n===1?"":"s"),adjAlertBody:"Tap a date to see it",newTag:"New",
+ shopPhoto:"Shop front photo",productPhoto:"Product photo",addPhoto:"Add photo",changePhoto:"Change photo",uploading:"Uploading…",noPhoto:"No shop photo yet",
+ driverNote:"Note for the driver",driverNoteHint:"e.g. which door, where the boxes go, who to ask for",
+ lastLot:d=>"From the last lot ("+d+")",countLeft:"Count leftovers from the last lot",
+ lotOf:d=>"Lot delivered "+d,toCheck:s=>"Check wastage, then sign and send to "+s,withSup:s=>"Waiting for "+s+" to sign",waitCountL:"Waiting for the leftover count",
+ closedL:"Closed",selectAll:"Select all",clearSel:"Clear",signSend:(n,s)=>"Sign & send "+n+" lot"+(n===1?"":"s")+" to "+s,signClose:n=>"Sign to close "+n+" lot"+(n===1?"":"s"),
+ toSign:"Waiting for your signature",beingChecked:n=>n+" lot"+(n===1?" is":"s are")+" being checked by the distributor",wastePct:p=>"Wastage "+p+"%",
+ checkedBy:(n,d)=>"Checked by "+n+" · "+d,closedBy:(n,d)=>"Closed by "+n+" · "+d,legacy:"Closed (old system)",tapDetail:"Tap for details",byStore:"By store",
+ danger:"Reset",resetTitle:"Delete all data and start again",
+ resetWhat:"Deletes every order, delivery, leftover count, payment and sign-off. Stores, products, hubs and accounts are kept.",
+ resetOpen:"Reset data…",cantUndo:"This can't be undone. Deleted data is gone for good.",slideReset:"Slide all the way to delete",resetDone:"All data cleared",resetBusy:"Deleting…",done:"Done",
  noSupplier:"No supplier set up yet"}};
 
 /* =================== setup =================== */
@@ -335,7 +377,8 @@ const S={lang:localStorage.getItem("ss_lang")||"th",fz:+(localStorage.getItem("s
  today:null,dow:0,supplier:null,prods:{},costs:{},make:{},stores:[],hubs:[],prices:[],lines:[],
  payments:[],supPay:[],orders:[],accounts:[],
  tab:null,pick:null,ob:null,confirm:null,st:"store",open:null,payForm:null,signing:null,sigDrawn:false,
- period:"week",ctype:null,stops:null,dv:{phase:"notify",si:0,pi:0,loaded:{},photos:[]},addAcct:null,pinEdit:null};
+ period:"week",ctype:null,stops:null,dv:{phase:"notify",si:0,pi:0,loaded:{},photos:[]},addAcct:null,pinEdit:null,
+ signoffs:[],sel:new Set(),lotOpen:null,sigCache:{},adj:null,reset:false,photoTarget:null,uploading:null};
 
 const $=id=>document.getElementById(id);
 const T=()=>I18N[S.lang];
@@ -373,10 +416,31 @@ function fail(m){
 }
 const alertBox=(k,title,body,icon)=>`<div class="alert ${k}"><span class="ai">${ic(icon||({warn:"alert-triangle",bad:"alert-octagon",info:"info-circle"})[k])}</span>
  <span class="grow"><b>${esc(title)}</b>${body?esc(body):""}</span></div>`;
+/* the supplier's name, whatever the distributor called her account */
+function sup(){
+ if(role()==="supplier"&&S.acct) return nm(S.acct);
+ const a=isDist()&&S.accounts.find(x=>x.role==="supplier");
+ if(a) return nm(a);
+ if(S.supplier&&(S.supplier.name||S.supplier.name_th)) return nm(S.supplier);
+ return T().supplierWord;
+}
 function supChip(st){
- if(st==="accepted") return `<span class="chip good">${esc(T().supAccepted)}</span>`;
- if(st==="rejected") return `<span class="chip bad">${esc(T().supRejected)}</span>`;
- return `<span class="chip warn">${esc(T().supPending)}</span>`;
+ if(st==="accepted") return `<span class="chip good">${esc(T().supAccepted(sup()))}</span>`;
+ if(st==="rejected") return `<span class="chip bad">${esc(T().supRejected(sup()))}</span>`;
+ return `<span class="chip warn">${esc(T().supPending(sup()))}</span>`;
+}
+/* one product picture, same everywhere; big photos only on the detail screen */
+const TYPE_IC={fresh:"bowl",dry:"cookie",frozen:"snowflake"};
+function thumb(pid,sz){
+ const p=S.prods[pid],s=sz||40;
+ return p&&p.photo_1?`<img class="th" src="${esc(p.photo_1)}" alt="" loading="lazy" style="width:${s}px;height:${s}px">`
+  :`<span class="th" style="width:${s}px;height:${s}px;font-size:${Math.round(s*.46)}px">${ic(TYPE_IC[p?p.type:"fresh"]||"bowl")}</span>`;
+}
+const pline=(pid,sz)=>`<span class="fr" style="gap:10px;min-width:0">${thumb(pid,sz)}<span style="min-width:0">${esc(pname(pid))}</span></span>`;
+function toast(m){
+ $("err").innerHTML=`<div class="alert good"><span class="ai">${ic("circle-check")}</span><span class="grow"><b>${esc(m)}</b></span>
+  <button class="x" data-a="errx" aria-label="close">${ic("x")}</button></div>`;
+ setTimeout(()=>{if($("err").querySelector(".alert.good"))clearErr();},3500);
 }
 
 /* =================== schedule & orders =================== */
@@ -445,7 +509,7 @@ async function pressKey(k){
 async function signOut(){
  try{await db.auth.signOut();}catch(e){}
  localStorage.removeItem("ss_acct");S.acct=null;S.tab=null;S.ob=null;S.stops=null;S.pick=null;S.open=null;S.ctype=null;S.confirm=null;
- S.dv={phase:"notify",si:0,pi:0,loaded:{},photos:[]};
+ S.dv={phase:"notify",si:0,pi:0,loaded:{},photos:[]};S.sel=new Set();S.lotOpen=null;S.adj=null;S.reset=false;
  pinScreen();
 }
 
@@ -474,10 +538,10 @@ async function start(){
 async function q(p){const {data,error}=await p;if(error) throw error;return data||[];}
 async function load(){
  const since=addDays(S.today,-70);
- const [sup,pr,st,hb,sp,dl,pay,spy,spp,po]=await Promise.all([
-  q(db.from("suppliers").select("id,name,cost_cfg").eq("active",true).limit(1)),
-  q(db.from("products").select("id,name,name_th,type,returnable").eq("active",true).order("created_at")),
-  q(db.from("stores").select("id,name,suburb,address,price_tag_required,delivery_days,weeks_of_month,route_position,latitude,longitude,parking_note,parking_note_th,regular")
+ const [sup,pr,st,hb,sp,dl,pay,spy,spp,po,so]=await Promise.all([
+  q(db.from("suppliers").select("id,name,name_th,cost_cfg").eq("active",true).limit(1)),
+  q(db.from("products").select("id,name,name_th,type,returnable,photo_1").eq("active",true).order("created_at")),
+  q(db.from("stores").select("id,name,suburb,address,price_tag_required,delivery_days,weeks_of_month,route_position,latitude,longitude,parking_note,parking_note_th,regular,photo_approach,driver_note")
    .eq("active",true).eq("is_kitchen",false).order("route_position",{ascending:true,nullsFirst:false})),
   q(db.from("hubs").select("id,name,name_th,note,address,latitude,longitude,is_kitchen,position").eq("active",true).order("position",{ascending:true,nullsFirst:false})),
   q(db.from("store_products").select("store_id,product_id,sell_price,retail_price,default_qty")),
@@ -485,22 +549,31 @@ async function load(){
   q(db.from("store_payments").select("store_id,amount,paid_on")),
   q(db.from("supplier_payments").select("amount,paid_on,covers_dates")),
   q(db.from("supplier_products").select("product_id,unit_cost,make_cost")),
-  q(db.from("purchase_orders").select("id,for_delivery_on,label,recurring,status,sup_status,sent_at,created_at")
-   .gte("for_delivery_on",since).order("for_delivery_on").order("created_at"))]);
- S.supplier=sup[0]||null;
+  q(db.from("purchase_orders").select(PO_COLS).gte("for_delivery_on",since).order("for_delivery_on").order("created_at")),
+  q(db.from("lot_signoffs").select("lot_date,amount,waste_pct,dist_signed_at,dist_signed_by,sup_signed_at,sup_signed_by"))]);
+ S.supplier=sup[0]||null;S.signoffs=so;
  S.prods={};pr.forEach(p=>{S.prods[p.id]=p;});
  S.stores=st;S.hubs=hb;S.prices=sp;S.lines=dl;S.payments=pay;S.supPay=spy;
  S.costs={};S.make={};spp.forEach(c=>{S.costs[c.product_id]=Number(c.unit_cost);S.make[c.product_id]=c.make_cost==null?null:Number(c.make_cost);});
- const pol=po.length?await q(db.from("purchase_order_lines").select("id,purchase_order_id,product_id,store_id,qty_plain,qty_price_tagged,unit_cost")
-  .in("purchase_order_id",po.map(o=>o.id))):[];
+ const pol=po.length?await q(db.from("purchase_order_lines").select(POL_COLS).in("purchase_order_id",po.map(o=>o.id))):[];
  S.orders=po.map(o=>Object.assign(o,{lines:pol.filter(l=>l.purchase_order_id===o.id)}));
- if(isDist()) S.accounts=await q(db.from("drivers").select("id,name,name_th,pin,role,active").eq("active",true).order("name"));
+ if(isDist()){
+  S.accounts=await q(db.from("drivers").select("id,name,name_th,pin,role,active").eq("active",true).order("name"));
+  syncSupplierName();
+ }
+}
+const PO_COLS="id,for_delivery_on,label,recurring,status,sup_status,sup_adjusted,sup_seen,sent_at,created_at";
+const POL_COLS="id,purchase_order_id,product_id,store_id,qty_plain,qty_price_tagged,qty_ordered,unit_cost";
+/* keep the suppliers row named after the supplier account, so drivers see the same name */
+function syncSupplierName(){
+ const a=S.accounts.find(x=>x.role==="supplier");
+ if(!a||!S.supplier||(S.supplier.name===a.name&&S.supplier.name_th===a.name_th)) return;
+ S.supplier.name=a.name;S.supplier.name_th=a.name_th;
+ db.from("suppliers").update({name:a.name,name_th:a.name_th}).eq("id",S.supplier.id).then(()=>{},()=>{});
 }
 async function reloadOrders(){
- const po=await q(db.from("purchase_orders").select("id,for_delivery_on,label,recurring,status,sup_status,sent_at,created_at")
-  .gte("for_delivery_on",addDays(S.today,-70)).order("for_delivery_on").order("created_at"));
- const pol=po.length?await q(db.from("purchase_order_lines").select("id,purchase_order_id,product_id,store_id,qty_plain,qty_price_tagged,unit_cost")
-  .in("purchase_order_id",po.map(o=>o.id))):[];
+ const po=await q(db.from("purchase_orders").select(PO_COLS).gte("for_delivery_on",addDays(S.today,-70)).order("for_delivery_on").order("created_at"));
+ const pol=po.length?await q(db.from("purchase_order_lines").select(POL_COLS).in("purchase_order_id",po.map(o=>o.id))):[];
  S.orders=po.map(o=>Object.assign(o,{lines:pol.filter(l=>l.purchase_order_id===o.id)}));
 }
 function nextOrderDay(){
@@ -522,12 +595,24 @@ function render(){
  $("v").innerHTML=screen();
  $("tabs").hidden=false;
  $("nav").style.gridTemplateColumns=`repeat(${tabs.length},1fr)`;
+ const bd=badges();
  $("nav").innerHTML=tabs.map(t=>`<button role="tab" data-a="tab" data-x="${t[0]}" data-on="${S.tab===t[0]?1:0}" aria-selected="${S.tab===t[0]}">
-  ${ic(t[1])}<span>${esc(T()[t[2]])}</span></button>`).join("");
+  ${ic(t[1])}<span>${esc(T()[t[2]])}</span>${bd[t[0]]?`<b class="bdg">${bd[t[0]]}</b>`:""}</button>`).join("");
  AFTER.forEach(f=>{try{f();}catch(e){console.error(e);}});
  if(same) window.scrollTo(0,y);
  else{window.scrollTo(0,0);const v=$("v");v.classList.remove("enter");void v.offsetWidth;v.classList.add("enter");}
  LAST=key;
+}
+function badges(){
+ const b={};
+ if(isDist()){
+  b.order=S.orders.filter(o=>!o.sup_seen).length;
+  b.pay=lots().filter(x=>x.state==="check").length;
+ }else if(role()==="supplier"){
+  b.sorder=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending").length;
+  b.spay=lots().filter(x=>x.state==="sup").length;
+ }
+ return b;
 }
 function screen(){
  const t=S.tab;
@@ -542,7 +627,7 @@ function screen(){
   if(t==="hist") return S.ob?qtyEditor():driverHistory();
   return driverRound();
  }
- if(t==="spay") return batchView(true);
+ if(t==="spay") return supPayTab();
  if(t==="sstats") return S.ctype?supTypeDetail():supStats();
  return supOrders();
 }
@@ -575,26 +660,34 @@ function dayStrip(sel,from,to,mark){
 /* =================== DISTRIBUTOR: orders =================== */
 function orderTab(){
  const d=dOf(S.pick),list=ordersOn(S.pick),today=new Date();
- const past=S.pick<S.today;
+ const past=S.pick<S.today,sn=sup();
  const rej=list.filter(o=>o.sup_status==="rejected").length,pend=list.filter(o=>o.sup_status==="pending").length;
- // recurring orders from the same weekday last week that haven't been made for this date yet
  const labels=list.map(o=>(o.label||"").trim());
  const reps=past?[]:ordersOn(addDays(S.pick,-7)).filter(o=>o.recurring&&!labels.includes((o.label||"").trim()));
+ // anything the supplier changed or declined that the distributor hasn't opened yet, on any day
+ const unseen=S.orders.filter(o=>!o.sup_seen);
+ const days=[...new Set(unseen.map(o=>o.for_delivery_on))];
  return dayStrip(S.pick,-7,14,(s,dd)=>dueOn(dd).length>0)+
  hero(T().itsDay(dayName(today.getDay())),T().picked(dayName(d.getDay()),d.getDate(),list.length))+
- (rej?alertBox("bad",T().rejectedAlert(rej),T().rejectedBody):"")+
- (!rej&&pend&&!past?alertBox("warn",T().pendingAlert(pend),"","clock"):"")+
+ (unseen.length?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().adjAlert(unseen.length,sn))}</b>
+  ${esc(T().adjAlertBody)}<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${days.map(x=>`<button class="chip" data-a="pick" data-x="${x}"
+   style="background:#fff">${esc(dayName(dOf(x).getDay()))} ${esc(shortDate(x))}</button>`).join("")}</div></span></div>`:"")+
+ (rej?alertBox("bad",T().rejectedAlert(rej,sn),T().rejectedBody(sn)):"")+
+ (!rej&&pend&&!past?alertBox("warn",T().pendingAlert(pend,sn),"","clock"):"")+
  (past?"":`<button class="btn gold" data-a="newOrd">${ic("plus")}${esc(T().addOrder)}</button>`)+
  reps.map(o=>`<button class="card tap" data-a="repOrd" data-x="${o.id}" style="margin-top:8px;box-shadow:0 0 0 2px var(--gold)">
   <div class="fr">${ic("repeat")}<div class="grow"><div class="b">${esc(o.label||T().defaultLabel)} · ${esc(T().boxes(oBoxes(o)))}</div>
   <div class="mut">${esc(T().repeatFrom(shortDate(o.for_delivery_on)))} · ${esc(T().repeatTap)}</div></div></div></button>`).join("")+
  `<div class="lbl">${esc(T().ordersOnDay)}</div>`+
- (list.length?list.map(o=>`<button class="card tap ${o.sup_status==="rejected"?"bad":""}" data-a="editOrd" data-x="${o.id}">
+ (list.length?list.map(o=>`<button class="card tap ${o.sup_status==="rejected"?"bad":""}" data-a="editOrd" data-x="${o.id}"
+   style="${!o.sup_seen&&o.sup_status!=="rejected"?"box-shadow:0 0 0 2px var(--gold)":""}">
    <div class="row" style="padding-top:0"><span class="b">${esc(o.label||T().defaultLabel)}
-    ${o.recurring?`<span class="chip" data-on="1" style="margin-left:4px">${ic("repeat")}${esc(T().repeat)}</span>`:""}</span>
+    ${o.recurring?`<span class="chip" data-on="1" style="margin-left:4px">${ic("repeat")}${esc(T().repeat)}</span>`:""}
+    ${!o.sup_seen?`<span class="chip gold" style="margin-left:4px">${esc(T().newTag)}</span>`:""}</span>
     <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
    <div class="fr" style="justify-content:space-between;flex-wrap:wrap;gap:6px">
-    <span class="mut">${esc(T().storesN(oStores(o)))} · ${esc(past?T().viewOnly:T().tapEdit)}</span>${supChip(o.sup_status)}</div></button>`).join("")
+    <span class="mut">${esc(T().storesN(oStores(o)))} · ${esc(past?T().viewOnly:T().tapEdit)}</span>
+    <span style="display:flex;gap:5px;flex-wrap:wrap">${o.sup_adjusted?`<span class="chip warn">${ic("adjustments")}${esc(T().adjustedBy(sn))}</span>`:""}${supChip(o.sup_status)}</span></div></button>`).join("")
   :`<div class="empty">${esc(T().noOrdersDay)}</div>`);
 }
 function openBuilder(o,fromRepeat){
@@ -602,8 +695,11 @@ function openBuilder(o,fromRepeat){
  if(!o){const d=dOf(S.pick);
   dueOn(d).filter(s=>s.regular!==false).forEach(s=>{
    const u={};S.prices.filter(p=>p.store_id===s.id).forEach(p=>{u[p.product_id]=p.default_qty||0;});m[s.id]=u;});}
+ const ordered={};
+ if(o&&!fromRepeat) o.lines.forEach(l=>{if(l.qty_ordered!=null&&l.qty_ordered!==qty(l)) ordered[l.store_id+"|"+l.product_id]=l.qty_ordered;});
+ if(o&&!fromRepeat&&!o.sup_seen){o.sup_seen=true;db.from("purchase_orders").update({sup_seen:true}).eq("id",o.id).then(()=>{},()=>{});}
  S.ob={id:fromRepeat?null:(o?o.id:null),date:S.pick,label:o?(o.label||""):"",recurring:o?!!o.recurring:false,
-  stores:m,orig:fromRepeat?"":JSON.stringify(m),copied:false,confirm:false};
+  stores:m,orig:fromRepeat?"":JSON.stringify(m),copied:false,confirm:false,ordered};
  render();
 }
 function orderBuild(){
@@ -619,7 +715,7 @@ function orderBuild(){
  }
  const cur=S.orders.find(o=>o.id===ob.id);
  return hero(ob.id?T().editOrder:T().newOrder,sub)+
- (cur&&cur.sup_status!=="pending"?alertBox("info",T().resetNote,"","info-circle"):"")+
+ (cur&&cur.sup_status!=="pending"?alertBox("info",T().resetNote(sup()),"","info-circle"):"")+
  `<div class="card"><label class="flbl" for="lbl">${esc(T().runName)}</label>
   <input class="tf" id="lbl" data-in="label" value="${esc(ob.label)}" placeholder="${esc(T().runPh)}" autocomplete="off"></div>
  ${S.stores.map(s=>{
@@ -630,14 +726,14 @@ function orderBuild(){
   <div class="row" style="padding-top:0"><span><span class="b">${esc(s.name)}</span>
    ${s.regular===false?`<span class="chip" style="margin-left:4px">${esc(T().notRegular)}</span>`:""}</span>
    <button class="chip" data-a="togStore" data-x="${s.id}" data-on="${on?1:0}">${esc(on?T().inOrder:T().addStore)}</button></div>
-  ${on?pids.map(p=>`<div class="row"><span>${esc(pname(p))}</span>
+  ${on?pids.map(p=>`<div class="row"><span>${pline(p,32)}${ob.ordered&&ob.ordered[s.id+"|"+p]!=null?`<div class="mut" style="color:var(--warn);font-weight:600;margin-top:2px">${esc(T().ordered(ob.ordered[s.id+"|"+p]))} · ${esc(T().adjustedBy(sup()))}</div>`:""}</span>
    <span class="stp"><button data-a="bq" data-x="${s.id}|${p}|-1" aria-label="−">−</button>
    <span class="v" id="q-${s.id}-${p}">${ob.stores[s.id][p]||0}</span>
    <button data-a="bq" data-x="${s.id}|${p}|1" aria-label="+">+</button></span></div>`).join(""):""}</div>`;}).join("")}
  <button class="card row" data-a="togRec" style="padding:12px 14px"><span>${ic("repeat")} ${esc(T().repeatWeekly)}</span>
   <span class="chip" data-on="${ob.recurring?1:0}">${esc(ob.recurring?T().on:T().off)}</span></button>
  <button class="btn good" data-a="saveOrd">${ic("check")}${esc(T().saveOrder)}</button>
- <button class="btn g" data-a="copyOrd">${ic(ob.copied?"check":"copy")}${esc(ob.copied?T().copied:T().copyMsg)}</button>
+ <button class="btn g" data-a="copyOrd">${ic(ob.copied?"check":"copy")}${esc(ob.copied?T().copied:T().copyMsg(sup()))}</button>
  ${ob.id?(ob.confirm?`<div style="margin-top:12px">${alertBox("bad",T().deleteQ,"","trash")}
    <div class="g2"><button class="btn g nomt" data-a="delNo">${esc(T().cancel)}</button>
    <button class="btn bad nomt" data-a="delYes">${ic("trash")}${esc(T().yesDelete)}</button></div></div>`
@@ -657,7 +753,7 @@ async function saveOrder(btn){
   if(id){
    const changed=JSON.stringify(ob.stores)!==ob.orig;
    const patch={label:lab||null,recurring:ob.recurring};
-   if(changed){patch.sup_status="pending";patch.sup_at=null;}
+   if(changed){patch.sup_status="pending";patch.sup_at=null;patch.sup_adjusted=false;patch.sup_seen=true;}
    const {error}=await db.from("purchase_orders").update(patch).eq("id",id);if(error) throw error;
    if(changed){
     const {error:e1}=await db.from("purchase_order_lines").delete().eq("purchase_order_id",id);if(e1) throw e1;
@@ -710,7 +806,7 @@ function productList(){
  return `<div class="g3">${TYPES.map(t=>`<div class="k c"><div class="kk">${esc(T()[t])}</div><div class="kv">${P.filter(p=>p.type===t).length}</div></div>`).join("")}</div>
  <button class="btn gold" data-a="addProd">${ic("plus")}${esc(T().addProduct)}</button>
  ${TYPES.map(t=>`<div class="lbl">${esc(T()[t])}</div>${P.filter(p=>p.type===t).map(p=>`<button class="card tap" data-a="open" data-x="product|${p.id}"><div class="fr">
-  <span class="ph" style="width:42px;height:42px;aspect-ratio:1;margin:0;font-size:18px">${ic(t==="frozen"?"snowflake":t==="dry"?"cookie":"bowl")}</span>
+  ${thumb(p.id,48)}
   <div class="grow"><div class="b">${esc(pname(p.id))}</div><div class="mut">${esc(S.lang==="th"?p.name:(p.name_th||""))} · ${esc(T().costEach(money(S.costs[p.id]||0)))}</div></div></div></button>`).join("")
   ||`<div class="empty">—</div>`}`).join("")}`;
 }
@@ -721,13 +817,20 @@ const locBlock=o=>`<div class="card"><div class="row" style="padding-top:0"><spa
  <span class="mut">${o.latitude?Number(o.latitude).toFixed(4)+", "+Number(o.longitude).toFixed(4):esc(T().noLoc)}</span></div>
  <input class="tf" data-in="f:address" value="${esc(o.address||"")}" autocomplete="off">
  <button class="btn g" data-a="useLoc">${ic("current-location")}${esc(T().useLoc)}</button></div>`;
+function photoBlock(kind,url){
+ const busy=S.uploading===kind+S.open.id;
+ return `<div class="card"><div class="flbl">${esc(kind==="store"?T().shopPhoto:T().productPhoto)}</div>
+  ${url?`<img class="photo" src="${esc(url)}" alt="">`:`<div class="ph" style="aspect-ratio:4/3;margin:0">${ic(kind==="store"?"building-store":"photo")}</div>`}
+  <button class="btn g" data-a="photoPick" data-x="${kind}" ${busy?"disabled":""}>${ic("camera")}${esc(busy?T().uploading:url?T().changePhoto:T().addPhoto)}</button></div>`;
+}
 function storeDetail(){
  const s=storeOf(S.open.id);if(!s){S.open=null;return spTab();}
  const pids=Object.keys(S.prods);
- return hero(s.name,s.suburb||"")+
+ return hero(s.name,s.suburb||"")+photoBlock("store",s.photo_approach)+
  `<div class="card"><div class="fld"><label class="flbl">${esc(T().name)}</label><input class="tf" data-in="f:name" value="${esc(s.name)}"></div>
   <div class="fld"><label class="flbl">${esc(T().suburb)}</label><input class="tf" data-in="f:suburb" value="${esc(s.suburb||"")}"></div>
-  <label class="flbl">${esc(T().parking)}</label><input class="tf" data-in="f:${S.lang==="th"?"parking_note_th":"parking_note"}" value="${esc((S.lang==="th"?s.parking_note_th:s.parking_note)||"")}"></div>
+  <div class="fld"><label class="flbl">${esc(T().parking)}</label><input class="tf" data-in="f:parking_note" value="${esc(s.parking_note||s.parking_note_th||"")}"></div>
+  <label class="flbl">${esc(T().driverNote)}</label><input class="tf" data-in="f:driver_note" value="${esc(s.driver_note||"")}" placeholder="${esc(T().driverNoteHint)}"></div>
  <button class="card row" data-a="togField" data-x="regular" style="padding:12px 14px"><span><span class="b">${esc(T().regular)}</span><div class="mut">${esc(T().regularHint)}</div></span>
   <span class="chip" data-on="${s.regular!==false?1:0}">${esc(s.regular!==false?T().on:T().off)}</span></button>
  <button class="card row" data-a="togField" data-x="price_tag_required" style="padding:12px 14px"><span class="b">${esc(T().priceTag)}</span>
@@ -740,7 +843,7 @@ function storeDetail(){
  ${locBlock(s)}
  <div class="lbl">${esc(T().products)}</div>
  ${pids.map(pid=>{const sp=spOf(s.id,pid);
-  return `<div class="card ${sp?"":""}"><div class="row" style="padding-top:0"><span class="b">${esc(pname(pid))}</span>
+  return `<div class="card"><div class="row" style="padding-top:0">${pline(pid,36)}
    <button class="chip" data-a="togSell" data-x="${pid}" data-on="${sp?1:0}">${esc(sp?T().sellsHere:T().off)}</button></div>
    ${sp?`<div class="g2" style="padding-top:6px"><div><label class="flbl">${esc(T().sellPrice)}</label>
     <input class="tf" type="number" step="0.01" inputmode="decimal" data-in="sp:${pid}:sell_price" value="${sp.sell_price}"></div>
@@ -760,7 +863,7 @@ function hubDetail(){
 }
 function productDetail(){
  const p=S.prods[S.open.id];if(!p){S.open=null;return spTab();}
- return hero(pname(p.id),T()[p.type])+
+ return hero(pname(p.id),T()[p.type])+photoBlock("product",p.photo_1)+
  `<div class="card"><div class="fld"><label class="flbl">${esc(T().nameTh)}</label><input class="tf" data-in="f:name_th" value="${esc(p.name_th||"")}"></div>
   <div class="fld"><label class="flbl">${esc(T().name)}</label><input class="tf" data-in="f:name" value="${esc(p.name||"")}"></div>
   <label class="flbl">${esc(T().cost)}</label><input class="tf" type="number" step="0.01" inputmode="decimal" data-in="cost" value="${S.costs[p.id]||0}"></div>
@@ -795,35 +898,88 @@ function drawMap(stores,hubs,numbered){
 }
 
 /* =================== money (shared by distributor & supplier) =================== */
+/* A lot = everything delivered on one date. It moves through:
+   count (waiting for leftovers) -> check (distributor checks wastage & signs) -> sup (supplier signs) -> closed */
+function lots(){
+ const M={};
+ S.lines.filter(l=>isRet(l.product_id)).forEach(l=>{
+  const d=l.deliveries.delivered_on,sid=l.deliveries.store_id;
+  const m=M[d]=M[d]||{d,stores:{},items:{},cost:0,out:0,back:0,counted:true};
+  const it=m.items[l.product_id]=m.items[l.product_id]||{pid:l.product_id,out:0,sold:0,left:0};
+  const ss=(m.stores[sid]=m.stores[sid]||{})[l.product_id]=(m.stores[sid]||{})[l.product_id]||{out:0,left:0,counted:true};
+  it.out+=l.qty_out;m.out+=l.qty_out;ss.out+=l.qty_out;
+  if(!l.settled_at){m.counted=false;ss.counted=false;}
+  else{const b=l.qty_back||0,sold=l.qty_out-b;it.sold+=sold;it.left+=b;ss.left+=b;m.back+=b;m.cost+=sold*Number(l.unit_cost);}
+ });
+ const paid={};S.supPay.forEach(p=>(p.covers_dates||[]).forEach(d=>{paid[d]=1;}));
+ const so={};S.signoffs.forEach(x=>{so[x.lot_date]=x;});
+ return Object.values(M).sort((a,b)=>a.d<b.d?1:-1).map(m=>{
+  const o=so[m.d]||null;
+  m.so=o;m.waste=m.out?Math.round(100*m.back/m.out):0;
+  m.state=paid[m.d]||(o&&o.sup_signed_at)?"closed":o&&o.dist_signed_at?"sup":m.counted?"check":"count";
+  return m;});
+}
 function balances(){
  const set=S.lines.filter(l=>l.settled_at);
  const sold=l=>l.qty_out-(l.qty_back||0);
  const rev=set.reduce((a,l)=>a+sold(l)*Number(l.unit_price),0),cost=set.reduce((a,l)=>a+sold(l)*Number(l.unit_cost),0);
- const paid=S.payments.reduce((a,p)=>a+Number(p.amount),0),mumPaid=S.supPay.reduce((a,p)=>a+Number(p.amount),0);
+ const paid=S.payments.reduce((a,p)=>a+Number(p.amount),0),supPaid=S.supPay.reduce((a,p)=>a+Number(p.amount),0);
  const flight=S.lines.filter(l=>!l.settled_at&&isRet(l.product_id)).reduce((a,l)=>a+l.qty_out*Number(l.unit_price),0);
  const m=S.today.slice(0,7),mt=set.filter(l=>l.deliveries.delivered_on.slice(0,7)===m);
- return {owed:rev-paid,flight,mum:cost-mumPaid,margin:rev-cost,
+ return {owed:rev-paid,flight,sup:cost-supPaid,margin:rev-cost,
   month:mt.reduce((a,l)=>a+sold(l)*(Number(l.unit_price)-Number(l.unit_cost)),0)};
 }
-function batches(){
- const M={};
- S.lines.filter(l=>isRet(l.product_id)).forEach(l=>{
-  const d=l.deliveries.delivered_on;
-  const m=M[d]=M[d]||{d,stores:{},items:{},cost:0,counted:true};
-  m.stores[l.deliveries.store_id]=1;
-  const it=m.items[l.product_id]=m.items[l.product_id]||{pid:l.product_id,out:0,sold:0};
-  it.out+=l.qty_out;
-  if(!l.settled_at){m.counted=false;}else{const s=l.qty_out-(l.qty_back||0);it.sold+=s;m.cost+=s*Number(l.unit_cost);}
- });
- const cl={};S.supPay.forEach(p=>(p.covers_dates||[]).forEach(d=>{cl[d]=1;}));
- return Object.values(M).sort((a,b)=>a.d<b.d?1:-1).map(m=>Object.assign(m,{cleared:!!cl[m.d]}));
+const wasteColor=w=>w>=20?"var(--bad)":w>=10?"var(--warn)":"inherit";
+function lotItems(x){
+ return Object.values(x.items).map(it=>`<div class="row" style="font-size:calc(var(--fs)*.92)">${pline(it.pid,28)}
+  <span class="mut" style="text-align:right">${x.counted?esc(T().outSoldLeft(it.out,it.sold,it.left)):esc(T().waitCount)+" · "+it.out}</span></div>`).join("");
+}
+function lotHead(x,withBox){
+ const d=dOf(x.d),sel=S.sel.has(x.d);
+ return `<div class="row" style="padding-top:0"><span class="fr">${withBox?`<span class="cb" data-on="${sel?1:0}">${sel?"✓":""}</span>`:""}
+  <span><span class="b">${esc(dayName(d.getDay()))} ${esc(shortDate(x.d))}</span>
+  <div class="mut">${esc(T().storesN(Object.keys(x.stores).length))}${x.counted?` · <b style="color:${wasteColor(x.waste)}">${esc(T().wastePct(x.waste))}</b>`:""}</div></span></span>
+  <span class="rv">${x.counted?money(x.cost):"—"}</span></div>`;
+}
+/* selectable list + one signature for however many are ticked (batch sign) */
+function signList(list,state,label){
+ if(!list.length) return `<div class="empty">${esc(T().noBatches)}</div>`;
+ const allSel=list.every(x=>S.sel.has(x.d)),selL=list.filter(x=>S.sel.has(x.d));
+ const tot=selL.reduce((a,x)=>a+x.cost,0);
+ if(selL.length) after(()=>sigPad($("sig")));
+ return `<div style="display:flex;justify-content:flex-end;margin:-2px 0 6px"><button class="chip" data-a="selAll" data-x="${state}">${esc(allSel?T().clearSel:T().selectAll)}</button></div>`+
+ list.map(x=>`<div class="card pick ${S.sel.has(x.d)?"on":""}" data-a="lotSel" data-x="${x.d}" role="checkbox" aria-checked="${S.sel.has(x.d)}">
+  ${lotHead(x,true)}${lotItems(x)}</div>`).join("")+
+ (selL.length?`<div class="card on" style="margin-top:4px"><div class="row" style="padding-top:0"><span class="b">${esc(label(selL.length))}</span><span class="rv">${money(tot)}</span></div>
+  <span class="flbl">${esc(T().signHere)}</span><canvas class="sig" id="sig"></canvas>
+  <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="selNone">${esc(T().cancel)}</button>
+  <button class="btn good nomt" id="sigOk" data-a="lotSign" data-x="${state}" ${S.sigDrawn?"":"disabled"}>${ic("signature")}${esc(T().done)}</button></div></div>`:"");
+}
+function lotHistory(list){
+ if(!list.length) return "";
+ return `<div class="lbl"><span>${esc(T().history)}</span><span>${esc(T().tapDetail)}</span></div>`+list.slice(0,20).map(x=>{
+  const open=S.lotOpen===x.d,o=x.so,sig=S.sigCache[x.d]||{};
+  const when=t=>t?shortDate(iso(new Date(t))):"";
+  return `<div class="card tap" data-a="lotOpen" data-x="${x.d}">${lotHead(x,false)}
+  ${open?lotItems(x)+
+   `<div class="lbl" style="margin-top:10px">${esc(T().byStore)}</div>`+Object.keys(x.stores).map(sid=>{const st=storeOf(sid),ps=x.stores[sid];
+    const o2=Object.values(ps).reduce((a,v)=>a+v.out,0),l2=Object.values(ps).reduce((a,v)=>a+v.left,0);
+    return `<div class="row" style="font-size:calc(var(--fs)*.9)"><span>${esc(st?st.name:"—")}</span>
+     <span class="mut">${o2} → ${l2} · <b style="color:${wasteColor(o2?Math.round(100*l2/o2):0)}">${o2?Math.round(100*l2/o2):0}%</b></span></div>`;}).join("")+
+   (o?`<div style="margin-top:10px">${o.dist_signed_at?`<div class="mut">${esc(T().checkedBy(o.dist_signed_by||"",when(o.dist_signed_at)))}</div>
+     ${sig.dist?`<img src="${sig.dist}" alt="" style="height:56px;margin:2px 0 6px;background:var(--wash);border-radius:8px">`:""}`:""}
+    ${o.sup_signed_at?`<div class="mut">${esc(T().closedBy(o.sup_signed_by||"",when(o.sup_signed_at)))}</div>
+     ${sig.sup?`<img src="${sig.sup}" alt="" style="height:56px;margin-top:2px;background:var(--wash);border-radius:8px">`:""}`:""}</div>`
+    :`<div class="mut" style="margin-top:8px">${esc(T().legacy)}</div>`)
+  :""}</div>`;}).join("");
 }
 function payTab(){
- const b=balances(),f=S.payForm;
+ const b=balances(),f=S.payForm,L=lots(),sn=sup();
+ const chk=L.filter(x=>x.state==="check"),sp=L.filter(x=>x.state==="sup"),cnt=L.filter(x=>x.state==="count"),cl=L.filter(x=>x.state==="closed");
  return `<div class="g2">
   <div class="k"><div class="kk">${esc(T().shopsOwe)}</div><div class="kv">${money(b.owed)}</div></div>
   <div class="k"><div class="kk">${esc(T().outCons)}</div><div class="kv">${money(b.flight)}</div></div>
-  <div class="k"><div class="kk">${esc(T().mumOwed)}</div><div class="kv">${money(b.mum)}</div></div>
+  <div class="k"><div class="kk">${esc(T().supOwed(sn))}</div><div class="kv">${money(b.sup)}</div></div>
   <div class="k"><div class="kk">${esc(T().marginMonth)}</div><div class="kv">${money(b.month)}</div></div></div>
  ${f?`<div class="card on" style="margin-top:8px"><div class="b" style="margin-bottom:8px">${esc(T().recordPay)}</div>
    <label class="flbl">${esc(T().pickStore)}</label>
@@ -832,28 +988,22 @@ function payTab(){
    <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="payCancel">${esc(T().cancel)}</button>
    <button class="btn good nomt" data-a="paySave" ${f.sid?"":"disabled"}>${esc(T().save)}</button></div></div>`
   :`<button class="btn g" data-a="payOpen">${ic("receipt")}${esc(T().recordPay)}</button>`}
- ${batchView(false)}`;
+ <div class="lbl">${esc(T().toCheck(sn))}</div>
+ ${signList(chk,"check",n=>T().signSend(n,sn))}
+ ${sp.length?`<div class="lbl">${esc(T().withSup(sn))}</div>${sp.map(x=>`<div class="card">${lotHead(x,false)}
+  <div class="mut">${esc(T().checkedBy(x.so.dist_signed_by||"",shortDate(iso(new Date(x.so.dist_signed_at)))))}</div></div>`).join("")}`:""}
+ ${cnt.length?`<div class="lbl">${esc(T().waitCountL)}</div>${cnt.map(x=>`<div class="card" style="opacity:.62">${lotHead(x,false)}${lotItems(x)}</div>`).join("")}`:""}
+ ${lotHistory(cl)}`;
 }
-function batchView(isSup){
- const L=batches(),pend=L.filter(x=>!x.cleared),hist=L.filter(x=>x.cleared);
- const owed=pend.filter(x=>x.counted).reduce((a,x)=>a+x.cost,0);
- return (isSup?`<div class="k c" style="margin-bottom:10px"><div class="kk">${esc(T().notReceived)}</div>
-  <div class="kv" style="font-size:calc(var(--fs)*1.9)">${money(owed)}</div></div>`:"")+
- `<div class="lbl">${esc(T().waitPay)}</div>
- ${pend.length?pend.map(x=>{const d=dOf(x.d),sig=S.signing===x.d;
-  return `<div class="card ${x.counted?"on":""}" style="${x.counted?"":"opacity:.62"}">
-  <div class="row" style="padding-top:0"><span class="b">${esc(dayName(d.getDay()))} ${esc(shortDate(x.d))}</span><span class="rv">${x.counted?money(x.cost):"—"}</span></div>
-  ${Object.values(x.items).map(it=>`<div class="row" style="font-size:calc(var(--fs)*.9)"><span>${esc(pname(it.pid))}</span>
-   <span class="mut">${x.counted?esc(T().outSoldLeft(it.out,it.sold,it.out-it.sold)):esc(T().waitCount)+" · "+it.out}</span></div>`).join("")}
-  ${!x.counted?`<div class="mut" style="margin-top:6px">${ic("hourglass")} ${esc(T().countFirst)}</div>`
-   :sig?`<div class="mut" style="margin-top:8px">${esc(T().signHere)}</div><canvas class="sig" id="sig"></canvas>
-     <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="sigNo">${esc(T().cancel)}</button>
-     <button class="btn good nomt" id="sigOk" data-a="sigOk" data-x="${x.d}" ${S.sigDrawn?"":"disabled"}>${ic("signature")}${esc(T().signClear)}</button></div>`
-   :`<button class="btn good" data-a="sigOpen" data-x="${x.d}">${ic("signature")}${esc(T().openSign)}</button>`}</div>`;}).join("")
-  :`<div class="empty">${esc(T().noBatches)}</div>`}
- ${hist.length?`<div class="lbl">${esc(T().history)}</div>${hist.slice(0,12).map(x=>`<div class="card row"><span>${esc(dayName(dOf(x.d).getDay()))} ${esc(shortDate(x.d))}</span>
-  <span class="rv">${money(x.cost)} <span class="chip good" style="margin-left:4px">✓</span></span></div>`).join("")}`:""}`+
- (S.signing?(after(()=>sigPad($("sig"))),""):"");
+function supPayTab(){
+ const L=lots(),sp=L.filter(x=>x.state==="sup"),chk=L.filter(x=>x.state==="check").length,cl=L.filter(x=>x.state==="closed");
+ const owed=sp.reduce((a,x)=>a+x.cost,0);
+ return `<div class="k c" style="margin-bottom:10px"><div class="kk">${esc(T().notReceived)}</div>
+  <div class="kv" style="font-size:calc(var(--fs)*1.9)">${money(owed)}</div></div>
+ ${chk?alertBox("info",T().beingChecked(chk),"","hourglass"):""}
+ <div class="lbl">${esc(T().toSign)}</div>
+ ${signList(sp,"sup",n=>T().signClose(n))}
+ ${lotHistory(cl)}`;
 }
 function sigPad(cv){
  if(!cv) return;
@@ -926,7 +1076,34 @@ function setTab(){
    <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="acCancel">${esc(T().cancel)}</button>
    <button class="btn good nomt" data-a="acSave">${esc(T().save)}</button></div></div>`
   :`<button class="btn gold" data-a="acOpen">${ic("user-plus")}${esc(T().addAccount)}</button>`}`:""}
+ ${isDist()?`<div class="lbl" style="color:var(--bad);margin-top:26px">${esc(T().danger)}</div>
+  <div class="card" style="box-shadow:0 0 0 1.5px var(--badl)">
+   <div class="b">${esc(T().resetTitle)}</div><div class="mut" style="margin-top:4px">${esc(T().resetWhat)}</div>
+   ${S.reset?(after(bindSlide),`<div style="margin-top:12px">${alertBox("bad",T().cantUndo,"","alert-octagon")}
+     <div class="slide" id="slide"><div class="fill" id="sfill"></div><span id="stxt">${esc(T().slideReset)}</span>
+      <div class="knob" id="knob" role="slider" aria-label="${esc(T().slideReset)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">${ic("trash")}</div></div>
+     <button class="btn g" data-a="resetNo">${esc(T().cancel)}</button></div>`)
+   :`<button class="btn bt" data-a="resetOpen">${ic("trash")}${esc(T().resetOpen)}</button>`}</div>`:""}
  <button class="btn g" data-a="out" style="margin-top:22px">${ic("logout")}${esc(T().signOut)}</button>`;
+}
+/* slide-to-confirm: has to be dragged from the left edge all the way across; a tap does nothing */
+function bindSlide(){
+ const tr=$("slide"),kn=$("knob"),fl=$("sfill");if(!tr) return;
+ let x0=null,max=0,x=0;
+ const set=v=>{x=Math.max(0,Math.min(max,v));kn.style.transform=`translateX(${x}px)`;fl.style.width=(x+62)+"px";kn.setAttribute("aria-valuenow",Math.round(100*x/max));};
+ kn.addEventListener("pointerdown",e=>{e.preventDefault();kn.setPointerCapture(e.pointerId);max=tr.clientWidth-62;x0=e.clientX-x;kn.style.transition="none";fl.style.transition="none";});
+ kn.addEventListener("pointermove",e=>{if(x0==null)return;set(e.clientX-x0);});
+ const end=()=>{if(x0==null)return;x0=null;
+  if(x>=max*.96){set(max);$("stxt").textContent=T().resetBusy;doReset();}
+  else{kn.style.transition="transform .25s ease";fl.style.transition="width .25s ease";set(0);}};
+ kn.addEventListener("pointerup",end);kn.addEventListener("pointercancel",end);
+}
+async function doReset(){
+ const {error}=await db.rpc("hard_reset");
+ if(error){S.reset=false;render();return fail(error.message);}
+ S.reset=false;S.sel=new Set();S.lotOpen=null;S.sigCache={};S.stops=null;S.dv={phase:"notify",si:0,pi:0,loaded:{},photos:[]};
+ try{await load();}catch(e){}
+ render();toast(T().resetDone);
 }
 
 /* =================== DRIVER =================== */
@@ -936,13 +1113,19 @@ function buildStops(){
  ordersOn(S.today).filter(o=>o.sup_status!=="rejected").forEach(o=>o.lines.forEach(l=>{const n=qty(l);if(!n)return;
   per[l.store_id]=per[l.store_id]||{};per[l.store_id][l.product_id]=(per[l.store_id][l.product_id]||0)+n;}));
  return S.stores.filter(s=>per[s.id]).map(s=>{
-  const open=S.lines.filter(l=>!l.settled_at&&l.deliveries.store_id===s.id&&l.deliveries.delivered_on<S.today&&isRet(l.product_id));
-  return {store:s,done:deliveredToday(s.id),
-   back:open.map(l=>({id:l.id,pid:l.product_id,out:l.qty_out,price:Number(l.unit_price),qty:0})),
+  // leftovers belong to the LAST lot at this shop (anything delivered before today and not counted yet), never today's drop
+  const open=S.lines.filter(l=>!l.settled_at&&l.deliveries.store_id===s.id&&l.deliveries.delivered_on<S.today&&isRet(l.product_id))
+   .sort((a,b)=>a.deliveries.delivered_on<b.deliveries.delivered_on?1:-1);
+  const back={};
+  open.forEach(l=>{const b=back[l.product_id]=back[l.product_id]||{pid:l.product_id,out:0,qty:0,lines:[],date:l.deliveries.delivered_on};
+   b.out+=l.qty_out;b.lines.push({id:l.id,out:l.qty_out,price:Number(l.unit_price)});});
+  return {store:s,done:deliveredToday(s.id),back:Object.values(back),
    out:Object.keys(per[s.id]).map(pid=>{const sp=spOf(s.id,pid);
     return {pid,qty:per[s.id][pid],price:sp?Number(sp.sell_price):0,cost:S.costs[pid]||0};})};});
 }
-const dueFor=st=>st.back.reduce((a,b)=>a+(b.out-b.qty)*b.price,0);
+/* leftovers are put against the newest stock first; the rest of each line counts as sold */
+function alloc(b){let left=b.qty;return b.lines.map(l=>{const bk=Math.min(left,l.out);left-=bk;return {id:l.id,back:bk,sold:l.out-bk,price:l.price};});}
+const dueFor=st=>st.back.reduce((a,b)=>a+alloc(b).reduce((x,l)=>x+l.sold*l.price,0),0);
 function nextTodo(from){const R=S.stops;for(let i=from;i<R.length;i++) if(!R[i].done) return i;return -1;}
 function dvBar(){return `<div class="bar">${S.stops.map((s,i)=>`<i class="${s.done||i<=S.dv.si||S.dv.phase==="done"?"on":""}"></i>`).join("")}</div>`;}
 function driverRound(){
@@ -968,30 +1151,35 @@ function dvBriefV(R){
  after(()=>drawMap(todo.map(s=>s.store),S.hubs,true));
  return statusBar()+`<div id="map"></div>
  <div class="lbl"><span>${esc(T().loadVan(todo.length))}</span><span>${keys.filter(k=>S.dv.loaded[k]).length}/${keys.length}</span></div>
- <div class="card" style="padding:2px 14px">${keys.map(k=>`<div class="row" data-a="ld" data-x="${k}" style="cursor:pointer;padding:13px 0">
-  <span class="fr"><span class="cb" data-on="${S.dv.loaded[k]?1:0}">${S.dv.loaded[k]?"✓":""}</span>${esc(pname(k))}</span>
+ <div class="card" style="padding:2px 14px">${keys.map(k=>`<div class="row" data-a="ld" data-x="${k}" style="cursor:pointer;padding:11px 0">
+  <span class="fr"><span class="cb" data-on="${S.dv.loaded[k]?1:0}">${S.dv.loaded[k]?"✓":""}</span>${pline(k,44)}</span>
   <span class="rv" style="font-size:calc(var(--fs)*1.25)">${it[k]}</span></div>`).join("")}</div>
  ${todo.map((s,i)=>`<div class="card row" style="padding:10px 14px"><span class="fr"><span class="pinm" style="background:var(--ink)">${i+1}</span><span class="b">${esc(s.store.name)}</span></span>
   <span class="mut">${esc(s.store.suburb||"")}</span></div>`).join("")}
  <button class="btn ${all?"good":""} big" data-a="dvStart" ${all?"":"disabled"}>${all?ic("truck-delivery"):""}${esc(all?T().startRound:T().loadAll)}</button>`;
 }
 function dvGoV(st,R){
- const s=st.store,n=R.filter(x=>!x.done||x===st).indexOf(st)+1,tot=R.filter(x=>!x.done||x===st).length;
+ const s=st.store,live=R.filter(x=>!x.done||x===st),n=live.indexOf(st)+1;
  const nav=s.latitude&&s.longitude?"https://www.google.com/maps/dir/?api=1&destination="+s.latitude+","+s.longitude+"&travelmode=driving":null;
- const note=S.lang==="th"?(s.parking_note_th||s.parking_note):(s.parking_note||s.parking_note_th);
- return dvBar()+`<div class="mut center">${esc(T().stopOf(n,tot))}</div>
- <div class="card center" style="margin-top:8px"><div class="ph">${ic("building-store")}</div>
+ const park=s.parking_note||s.parking_note_th;
+ return dvBar()+`<div class="mut center">${esc(T().stopOf(n,live.length))}</div>
+ <div class="card center" style="margin-top:8px">
+  ${s.photo_approach?`<img class="shopph" src="${esc(s.photo_approach)}" alt="">`
+   :`<div class="ph" style="aspect-ratio:16/10;flex-direction:column;gap:4px">${ic("building-store")}<span style="font-size:calc(var(--fs)*.8)">${esc(T().noPhoto)}</span></div>`}
   <div style="font-size:calc(var(--fs)*1.55);font-weight:700;line-height:1.3">${esc(s.name)}</div><div class="mut">${esc(s.suburb||"")}</div></div>
- ${note?alertBox("info",T().parking,note,"parking"):""}
+ ${s.driver_note?alertBox("info",T().driverNote,s.driver_note,"note"):""}
+ ${park?alertBox("info",T().parking,park,"parking"):""}
  ${nav?`<a class="btn g" href="${nav}" target="_blank" rel="noopener">${ic("map-2")}${esc(T().openMap)}</a>`:""}
  <button class="btn good big" data-a="dvHere">${esc(T().here)}</button>`;
 }
 function dvCountV(st){
  const b=st.back[S.dv.pi];
  return dvBar()+`<div class="center"><div class="mut">${esc(st.store.name)} · ${S.dv.pi+1}/${st.back.length}</div>
- <div style="font-size:calc(var(--fs)*1.4);font-weight:700;margin-top:8px">${esc(pname(b.pid))}</div>
+ <div class="chip warn" style="margin-top:8px">${ic("history")}${esc(T().lastLot(dayName(dOf(b.date).getDay())+" "+shortDate(b.date)))}</div>
+ <div style="margin-top:12px">${thumb(b.pid,72)}</div>
+ <div style="font-size:calc(var(--fs)*1.4);font-weight:700;margin-top:6px">${esc(pname(b.pid))}</div>
  <div>${esc(T().howMany)}</div><div class="mut">${esc(T().youLeft(b.out))}</div>
- <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin:20px 0">
+ <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin:18px 0">
   <button class="huge" data-a="cnt" data-x="-1" aria-label="−">−</button><span class="big" id="cv" style="min-width:80px">${b.qty}</span>
   <button class="huge" data-a="cnt" data-x="1" aria-label="+">+</button></div>
  <span class="chip good" id="soldTxt" style="font-size:var(--fs);padding:6px 14px">${esc(T().soldN(b.out-b.qty))}</span></div>
@@ -1002,16 +1190,17 @@ function dvMoneyV(st){
  return dvBar()+`<div class="center"><div class="mut">${esc(st.store.name)}</div>
  <div class="b" style="margin-top:12px">${esc(T().collect)}</div>
  <div class="rv" style="font-size:52px;margin:10px 0 14px">${money(dueFor(st))}</div></div>
- <div class="card">${st.back.map(b=>`<div class="row"><span>${esc(pname(b.pid))}</span><span class="mut">${b.out-b.qty} × ${money(b.price)}</span></div>`).join("")}</div>
+ <div class="card">${st.back.map(b=>{const sold=b.out-b.qty,amt=alloc(b).reduce((a,l)=>a+l.sold*l.price,0);
+  return `<div class="row">${pline(b.pid,32)}<span class="mut">${esc(T().soldN(sold))} · <b style="color:var(--ink)">${money(amt)}</b></span></div>`;}).join("")}</div>
  <button class="btn good big" data-a="dvMoneyOk">${ic("cash")}${esc(T().gotMoney)}</button>
  <button class="btn g" data-a="dvMoneyBack">${ic("arrow-left")}${esc(T().back)}</button>`;
 }
 function dvDropV(st){
- return dvBar()+`<div class="center"><div class="mut">${esc(st.store.name)}</div><div class="b" style="margin:8px 0">${esc(T().dropNew)}</div></div>
- <div class="card">${st.out.map((o,j)=>`<div class="row"><span>${esc(pname(o.pid))}${isRet(o.pid)?"":`<div><span class="chip">${ic("snowflake")}${esc(T().noReturns)}</span></div>`}</span>
+ return dvBar()+`<div class="center"><div class="mut">${esc(st.store.name)}</div><div class="b" style="margin:8px 0;font-size:calc(var(--fs)*1.15)">${esc(T().dropNew)}</div></div>
+ <div class="card">${st.out.map((o,j)=>`<div class="row"><span>${pline(o.pid,44)}${isRet(o.pid)?"":`<div style="margin:4px 0 0 54px"><span class="chip">${ic("snowflake")}${esc(T().noReturns)}</span></div>`}</span>
   <span class="stp"><button data-a="drop" data-x="${j}|-1" aria-label="−">−</button><span class="v" id="dq${j}">${o.qty}</span>
   <button data-a="drop" data-x="${j}|1" aria-label="+">+</button></span></div>`).join("")}</div>
- <button class="btn good big" data-a="dvDropOk">${ic("check")}${esc(T().dropped)}</button>
+ <button class="btn good big" data-a="dvDropOk">${ic("check")}${esc(st.back.length?T().next:T().dropped)}</button>
  <button class="btn g" data-a="dvDropBack">${ic("arrow-left")}${esc(T().back)}</button>`;
 }
 function dvDoneV(R){
@@ -1026,9 +1215,11 @@ function dvDoneV(R){
 async function saveStop(st){
  const now=new Date().toISOString();
  for(const b of st.back){
-  const {error}=await db.from("delivery_lines").update({qty_back:b.qty,reason:b.qty>0?"unsold":null,settled_at:now}).eq("id",b.id);
-  if(error) throw error;
-  const l=S.lines.find(x=>x.id===b.id);if(l){l.qty_back=b.qty;l.settled_at=now;}
+  for(const a of alloc(b)){
+   const {error}=await db.from("delivery_lines").update({qty_back:a.back,reason:a.back>0?"unsold":null,settled_at:now}).eq("id",a.id);
+   if(error) throw error;
+   const l=S.lines.find(x=>x.id===a.id);if(l){l.qty_back=a.back;l.settled_at=now;}
+  }
  }
  const amt=dueFor(st);
  if(amt>0){
@@ -1072,7 +1263,7 @@ function qtyEditor(){
  `<button class="btn g" data-a="closeOrd">${ic("arrow-left")}${esc(T().back)}</button>`;
 }
 
-/* =================== SUPPLIER (mum) =================== */
+/* =================== SUPPLIER =================== */
 function supOrders(){
  const list=ordersOn(S.pick),acc=list.filter(o=>o.sup_status==="accepted");
  const t={fresh:0,dry:0,frozen:0},pt={};
@@ -1080,20 +1271,38 @@ function supOrders(){
   pt[l.product_id]=pt[l.product_id]||{q:0,tag:0};pt[l.product_id].q+=n;pt[l.product_id].tag+=l.qty_price_tagged||0;}));
  const waiting=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending").length;
  const d=dOf(S.pick);
+ const tagChip=n=>n?` <span class="chip gold">${esc(T().tagged(n))}</span>`:"";
  return statusBar()+dayStrip(S.pick,-3,14,s=>ordersOn(s).length>0)+
  (waiting?alertBox("warn",T().needAnswer(waiting),"","bell-ringing"):"")+
  `<div class="lbl"><span>${esc(T().toMake)} · ${esc(dayName(d.getDay()))} ${d.getDate()}</span><span>${esc(T().acceptedOnly)}</span></div>
  <div class="g3">${TYPES.map(ty=>`<div class="k c"><div class="kk">${esc(T()[ty])}</div><div class="kv">${t[ty]}</div></div>`).join("")}</div>
- ${Object.keys(pt).length?`<div class="card" style="margin-top:8px">${Object.keys(pt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.08)">
-  <span>${esc(pname(pid))} ${pt[pid].tag?`<span class="chip gold">${esc(T().tagged(pt[pid].tag))}</span>`:""}</span><span class="rv">${pt[pid].q}</span></div>`).join("")}</div>`:""}
+ ${Object.keys(pt).length?`<div class="card" style="margin-top:8px">${Object.keys(pt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.05)">
+  <span>${pline(pid,40)}${tagChip(pt[pid].tag)}</span><span class="rv">${pt[pid].q}</span></div>`).join("")}</div>`:""}
  <div class="lbl">${esc(T().incoming)}</div>
- ${list.length?list.map(o=>{const st=o.sup_status,tt=prodTotals(o);
-  return `<div class="card ${st==="pending"?"on":""}" style="${st==="rejected"?"opacity:.55":""}">
-  <div class="row" style="padding-top:0"><span class="b">${esc(o.label||T().defaultLabel)}</span>
-   ${st==="accepted"?`<span class="chip good">${esc(T().accepted)}</span>`:st==="rejected"?`<span class="chip bad">${esc(T().rejected)}</span>`:`<span class="chip warn">${esc(T().supPending)}</span>`}</div>
-  ${Object.keys(tt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.08)"><span>${esc(pname(pid))}
-   ${tt[pid].tag?`<span class="chip gold">${esc(T().tagged(tt[pid].tag))}</span>`:""}</span><span class="rv">${tt[pid].q}</span></div>`).join("")}
-  ${st==="pending"?`<div class="g2" style="margin-top:6px"><button class="btn good nomt" data-a="supAns" data-x="${o.id}|accepted">${ic("check")}${esc(T().accept)}</button>
+ ${list.length?list.map(o=>{
+  const st=o.sup_status,editing=S.adj&&S.adj.id===o.id;
+  const head=`<div class="row" style="padding-top:0"><span class="b">${esc(o.label||T().defaultLabel)}</span>
+   ${st==="accepted"?`<span class="chip good">${esc(T().accepted)}</span>`:st==="rejected"?`<span class="chip bad">${esc(T().rejected)}</span>`
+    :`<span class="chip warn">${esc(T().needsAnswer)}</span>`}</div>`;
+  if(editing){
+   const by={};o.lines.forEach(l=>{(by[l.store_id]=by[l.store_id]||[]).push(l);});
+   return `<div class="card on">${head}${Object.keys(by).map(sid=>{const s=storeOf(sid);
+    return `<div class="mut b" style="margin-top:8px">${esc(s?s.name:"—")}</div>${by[sid].map(l=>{const v=S.adj.q[l.id],was=l.qty_ordered!=null?l.qty_ordered:qty(l);
+     return `<div class="row"><span>${pline(l.product_id,32)}${tagChip(l.qty_price_tagged)}
+      ${v!==was?`<div class="mut" style="color:var(--warn);font-weight:600">${esc(T().ordered(was))}</div>`:""}</span>
+      <span class="stp"><button data-a="adjQ" data-x="${l.id}|-1" aria-label="−">−</button><span class="v" id="aq-${l.id}">${v}</span>
+      <button data-a="adjQ" data-x="${l.id}|1" aria-label="+">+</button></span></div>`;}).join("")}`;}).join("")}
+    <button class="btn good" data-a="supAccept" data-x="${o.id}">${ic("check")}${esc(T().acceptAdj)}</button>
+    <button class="btn g" data-a="adjCancel">${esc(T().cancel)}</button></div>`;
+  }
+  const tt=prodTotals(o);
+  const ordered={};o.lines.forEach(l=>{if(l.qty_ordered!=null)ordered[l.product_id]=(ordered[l.product_id]||0)+l.qty_ordered;else ordered[l.product_id]=(ordered[l.product_id]||0)+qty(l);});
+  return `<div class="card ${st==="pending"?"on":""}" style="${st==="rejected"?"opacity:.55":""}">${head}
+  ${Object.keys(tt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.05)"><span>${pline(pid,40)}${tagChip(tt[pid].tag)}
+   ${o.sup_adjusted&&ordered[pid]!==tt[pid].q?`<div class="mut" style="color:var(--warn);font-weight:600;margin-left:50px">${esc(T().ordered(ordered[pid]))}</div>`:""}</span>
+   <span class="rv">${tt[pid].q}</span></div>`).join("")}
+  ${st==="pending"?`<button class="btn g" data-a="adjOpen" data-x="${o.id}">${ic("adjustments")}${esc(T().adjust)}</button>
+   <div class="g2" style="margin-top:8px"><button class="btn good nomt" data-a="supAccept" data-x="${o.id}">${ic("check")}${esc(T().accept)}</button>
    <button class="btn bad nomt" data-a="supAns" data-x="${o.id}|rejected">${ic("x")}${esc(T().reject)}</button></div>`
    :`<div style="text-align:right;margin-top:4px"><button class="chip" data-a="supAns" data-x="${o.id}|pending">${esc(T().undo)}</button></div>`}</div>`;}).join("")
   :`<div class="empty">${esc(T().noOrders)}</div>`}`;
@@ -1160,8 +1369,8 @@ const ACT={
  key:(el)=>pressKey(el.dataset.x),
  retry:()=>start(),
  out:()=>signOut(),
- tab:(el)=>{S.tab=el.dataset.x;S.ob=null;S.open=null;S.confirm=null;S.ctype=null;S.signing=null;S.payForm=null;
-  S.addAcct=null;S.pinEdit=null;if(S.tab==="sorder"&&S.pick<S.today)S.pick=nextOrderDay();render();},
+ tab:(el)=>{S.tab=el.dataset.x;S.ob=null;S.open=null;S.confirm=null;S.ctype=null;S.payForm=null;
+  S.addAcct=null;S.pinEdit=null;S.sel=new Set();S.sigDrawn=false;S.lotOpen=null;S.adj=null;S.reset=false;if(S.tab==="sorder"&&S.pick<S.today)S.pick=nextOrderDay();render();},
  pick:(el)=>{S.pick=el.dataset.x;render();},
 
  /* distributor orders */
@@ -1240,16 +1449,39 @@ const ACT={
   const {error}=await db.from("store_payments").insert(row);
   if(error){el.disabled=false;return fail(error.message);}
   S.payments.push(row);S.payForm=null;render();},
- sigOpen:(el)=>{S.signing=el.dataset.x;S.sigDrawn=false;render();},
- sigNo:()=>{S.signing=null;render();},
- sigOk:async(el)=>{const d=el.dataset.x,b=batches().find(x=>x.d===d);if(!b||!S.supplier)return;el.disabled=true;
-  const row={supplier_id:S.supplier.id,amount:b.cost,paid_on:S.today,covers_dates:[d],signed_at:new Date().toISOString(),
-   signature:$("sig").toDataURL("image/png"),signed_by:nm(S.acct)};
-  const {error}=await db.from("supplier_payments").insert(row);
-  if(error){el.disabled=false;return fail(error.message);}
-  S.supPay.push({amount:b.cost,paid_on:S.today,covers_dates:[d]});S.signing=null;render();},
+ lotSel:(el)=>{const d=el.dataset.x;S.sel.has(d)?S.sel.delete(d):S.sel.add(d);S.sigDrawn=false;render();},
+ selAll:(el)=>{const L=lots().filter(x=>x.state===el.dataset.x),all=L.every(x=>S.sel.has(x.d));
+  S.sel=new Set(all?[]:L.map(x=>x.d));S.sigDrawn=false;render();},
+ selNone:()=>{S.sel=new Set();S.sigDrawn=false;render();},
+ lotSign:async(el)=>{
+  const state=el.dataset.x,L=lots().filter(x=>x.state===state&&S.sel.has(x.d));if(!L.length)return;
+  el.disabled=true;const now=new Date().toISOString(),sig=$("sig").toDataURL("image/png"),who=nm(S.acct);
+  try{
+   if(state==="check"){
+    const rows=L.map(x=>({lot_date:x.d,amount:x.cost,waste_pct:x.waste,dist_signed_at:now,dist_signed_by:who,dist_signature:sig}));
+    const {error}=await db.from("lot_signoffs").upsert(rows,{onConflict:"lot_date"});if(error) throw error;
+    rows.forEach(r=>{const o=S.signoffs.find(x=>x.lot_date===r.lot_date);const v={lot_date:r.lot_date,amount:r.amount,waste_pct:r.waste_pct,dist_signed_at:now,dist_signed_by:who};
+     o?Object.assign(o,v):S.signoffs.push(v);});
+    S.sel=new Set();render();toast(T().signSend(L.length,sup()));
+   }else{
+    const dates=L.map(x=>x.d),amt=L.reduce((a,x)=>a+x.cost,0);
+    const {data,error}=await db.from("supplier_payments").insert({supplier_id:S.supplier.id,amount:amt,paid_on:S.today,covers_dates:dates,
+     signed_at:now,signature:sig,signed_by:who}).select("id").single();if(error) throw error;
+    const {error:e2}=await db.from("lot_signoffs").update({sup_signed_at:now,sup_signed_by:who,sup_signature:sig,payment_id:data.id}).in("lot_date",dates);
+    if(e2) throw e2;
+    S.supPay.push({amount:amt,paid_on:S.today,covers_dates:dates});
+    S.signoffs.forEach(o=>{if(dates.includes(o.lot_date)){o.sup_signed_at=now;o.sup_signed_by=who;}});
+    S.sel=new Set();render();toast(T().signClose(L.length));
+   }
+  }catch(e){el.disabled=false;fail(e.message||String(e));}},
+ lotOpen:async(el)=>{const d=el.dataset.x;S.lotOpen=S.lotOpen===d?null:d;render();
+  if(S.lotOpen&&!S.sigCache[d]&&S.signoffs.some(x=>x.lot_date===d)){
+   const {data}=await db.from("lot_signoffs").select("dist_signature,sup_signature").eq("lot_date",d).single();
+   if(data){S.sigCache[d]={dist:data.dist_signature,sup:data.sup_signature};if(S.lotOpen===d)render();}}},
 
  /* settings / accounts */
+ resetOpen:()=>{S.reset=true;render();},
+ resetNo:()=>{S.reset=false;render();},
  acOpen:()=>{S.addAcct={role:"driver"};render();},
  acRole:(el)=>{const a=S.addAcct;a.th=$("acTh").value;a.en=$("acEn").value;a.pin=$("acPin").value;a.role=el.dataset.x;render();},
  acCancel:()=>{S.addAcct=null;render();},
@@ -1260,7 +1492,7 @@ const ACT={
   el.disabled=true;
   const {data,error}=await db.from("drivers").insert({name:en||th,name_th:th||null,pin,role:S.addAcct.role}).select("id,name,name_th,pin,role,active").single();
   if(error){el.disabled=false;return fail(error.code==="23505"?T().pinTaken:error.message);}
-  S.accounts.push(data);S.addAcct=null;render();},
+  S.accounts.push(data);S.addAcct=null;syncSupplierName();render();},
  pinEdit:(el)=>{S.pinEdit=S.pinEdit===el.dataset.x?null:el.dataset.x;render();},
  pinSave:async(el)=>{const pin=$("pinNew").value.trim();if(!/^[0-9]{4}$/.test(pin)) return fail(T().pinRule);
   if(S.accounts.some(x=>x.pin===pin&&x.id!==el.dataset.x)) return fail(T().pinTaken);
@@ -1279,21 +1511,19 @@ const ACT={
  ld:(el)=>{S.dv.loaded[el.dataset.x]=!S.dv.loaded[el.dataset.x];render();},
  dvStart:()=>{S.dv.si=nextTodo(0);S.dv.pi=0;S.dv.phase="go";render();
   db.from("runs").upsert({run_date:S.today,driver_ref:role()==="driver"?S.acct.id:null},{onConflict:"run_date"}).then(()=>{},()=>{});},
- dvHere:()=>{const st=S.stops[S.dv.si];S.dv.pi=0;S.dv.phase=st.back.length?"count":"drop";render();},
+ dvHere:()=>{S.dv.pi=0;S.dv.phase="drop";render();},
  cnt:(el)=>{const st=S.stops[S.dv.si],b=st.back[S.dv.pi];b.qty=Math.max(0,Math.min(b.out,b.qty+ +el.dataset.x));
   $("cv").textContent=b.qty;$("soldTxt").textContent=T().soldN(b.out-b.qty);},
  cntNext:()=>{const st=S.stops[S.dv.si];if(S.dv.pi<st.back.length-1)S.dv.pi++;else S.dv.phase="money";render();},
- cntBack:()=>{if(S.dv.pi>0)S.dv.pi--;else S.dv.phase="go";render();},
- dvMoneyOk:()=>{S.dv.phase="drop";render();},
+ cntBack:()=>{if(S.dv.pi>0)S.dv.pi--;else S.dv.phase="drop";render();},
+ dvMoneyOk:(el)=>finishStop(el),
  dvMoneyBack:()=>{const st=S.stops[S.dv.si];S.dv.phase="count";S.dv.pi=Math.max(0,st.back.length-1);render();},
  drop:(el)=>{const [j,d]=el.dataset.x.split("|");const o=S.stops[S.dv.si].out[+j];o.qty=Math.max(0,o.qty+ +d);$("dq"+j).textContent=o.qty;},
- dvDropBack:()=>{const st=S.stops[S.dv.si];S.dv.phase=st.back.length?"money":"go";render();},
- dvDropOk:async(el)=>{el.disabled=true;
-  try{await saveStop(S.stops[S.dv.si]);}catch(e){el.disabled=false;return fail(e.message||String(e));}
-  const n=nextTodo(S.dv.si+1);
-  if(n<0) S.dv.phase="done"; else {S.dv.si=n;S.dv.pi=0;S.dv.phase="go";}
-  render();},
- photo:()=>{$("fp").value="";$("fp").click();},
+ dvDropBack:()=>{S.dv.phase="go";render();},
+ dvDropOk:(el)=>{const st=S.stops[S.dv.si];
+  if(st.back.length){S.dv.pi=0;S.dv.phase="count";render();}else finishStop(el);},
+ photo:()=>{S.photoTarget=null;$("fp").value="";$("fp").click();},
+ photoPick:(el)=>{S.photoTarget={kind:el.dataset.x,id:S.open.id};$("fp").value="";$("fp").click();},
  dvFinish:async(el)=>{el.disabled=true;
   try{await db.from("runs").update({finished_at:new Date().toISOString(),photos:S.dv.photos}).eq("run_date",S.today);}catch(e){}
   S.dv={phase:"notify",si:0,pi:0,loaded:{},photos:[]};S.stops=null;render();},
@@ -1307,9 +1537,30 @@ const ACT={
 
  /* supplier */
  supAns:async(el)=>{const [id,st]=el.dataset.x.split("|");const o=S.orders.find(x=>x.id===id);if(!o)return;
-  const prev=o.sup_status;o.sup_status=st;render();
-  const {error}=await db.from("purchase_orders").update({sup_status:st,sup_at:st==="pending"?null:new Date().toISOString()}).eq("id",id);
-  if(error){o.sup_status=prev;render();fail(error.message);}},
+  const prev={s:o.sup_status,seen:o.sup_seen};o.sup_status=st;
+  const patch={sup_status:st,sup_at:st==="pending"?null:new Date().toISOString()};
+  if(st==="rejected"){patch.sup_seen=false;o.sup_seen=false;}
+  render();
+  const {error}=await db.from("purchase_orders").update(patch).eq("id",id);
+  if(error){o.sup_status=prev.s;o.sup_seen=prev.seen;render();fail(error.message);}},
+ adjOpen:(el)=>{const o=S.orders.find(x=>x.id===el.dataset.x);if(!o)return;
+  const q={};o.lines.forEach(l=>{q[l.id]=qty(l);});S.adj={id:o.id,q};render();},
+ adjCancel:()=>{S.adj=null;render();},
+ adjQ:(el)=>{const [id,d]=el.dataset.x.split("|");S.adj.q[id]=Math.max(0,S.adj.q[id]+ +d);render();},
+ supAccept:async(el)=>{const o=S.orders.find(x=>x.id===el.dataset.x);if(!o)return;el.disabled=true;
+  try{
+   const ch=S.adj&&S.adj.id===o.id?o.lines.filter(l=>S.adj.q[l.id]!==qty(l)):[];
+   for(const l of ch){
+    const n=S.adj.q[l.id],tag=(l.qty_price_tagged||0)>0,patch=tag?{qty_price_tagged:n}:{qty_plain:n};
+    if(l.qty_ordered==null) patch.qty_ordered=qty(l);
+    const {error}=await db.from("purchase_order_lines").update(patch).eq("id",l.id);if(error) throw error;
+    Object.assign(l,patch);
+   }
+   const patch={sup_status:"accepted",sup_at:new Date().toISOString()};
+   if(ch.length){patch.sup_adjusted=true;patch.sup_seen=false;}
+   const {error}=await db.from("purchase_orders").update(patch).eq("id",o.id);if(error) throw error;
+   Object.assign(o,patch);S.adj=null;S.stops=null;render();
+  }catch(e){el.disabled=false;fail(e.message||String(e));}},
  period:(el)=>{S.period=el.dataset.x;render();},
  ctype:(el)=>{S.ctype=el.dataset.x;render();},
  ctBack:()=>{S.ctype=null;render();},
@@ -1344,11 +1595,41 @@ document.addEventListener("input",e=>{
 });
 $("fp").addEventListener("change",e=>{
  const f=e.target.files&&e.target.files[0];if(!f) return;
- const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
-  const c=document.createElement("canvas"),s=Math.min(1,1000/Math.max(im.width,im.height));
-  c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);
-  S.dv.photos.push(c.toDataURL("image/jpeg",.7));render();};im.src=r.result;};r.readAsDataURL(f);
+ if(S.photoTarget) return uploadPhoto(f);
+ shrink(f,1000).then(b=>{const r=new FileReader();r.onload=()=>{S.dv.photos.push(r.result);render();};r.readAsDataURL(b);}).catch(()=>{});
 });
+function shrink(file,max){
+ return new Promise((res,rej)=>{const r=new FileReader();r.onerror=rej;r.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{
+  const s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");
+  c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+  c.toBlob(b=>b?res(b):rej(new Error("image")),"image/jpeg",.82);};im.src=r.result;};r.readAsDataURL(file);});
+}
+/* photos go to the public "photos" bucket; a new file name each time so phones never show the old one */
+async function uploadPhoto(file){
+ const t=S.photoTarget;S.photoTarget=null;S.uploading=t.kind+t.id;render();
+ try{
+  const blob=await shrink(file,t.kind==="store"?1400:900);
+  const path=(t.kind==="store"?"stores/":"products/")+t.id+"-"+Date.now()+".jpg";
+  const up=await db.storage.from("photos").upload(path,blob,{contentType:"image/jpeg",upsert:false});
+  if(up.error) throw up.error;
+  const url=db.storage.from("photos").getPublicUrl(path).data.publicUrl;
+  const col=t.kind==="store"?"photo_approach":"photo_1",tbl=t.kind==="store"?"stores":"products";
+  const obj=t.kind==="store"?storeOf(t.id):S.prods[t.id],old=obj&&obj[col];
+  const {error}=await db.from(tbl).update({[col]:url}).eq("id",t.id);if(error) throw error;
+  if(obj) obj[col]=url;
+  const op=old&&old.split("/object/public/photos/")[1];
+  if(op) db.storage.from("photos").remove([op]).then(()=>{},()=>{});
+ }catch(e){fail(e.message||String(e));}
+ S.uploading=null;render();
+}
+/* end of a stop: settle last lot's leftovers, record the cash, record today's drop */
+async function finishStop(el){
+ el.disabled=true;
+ try{await saveStop(S.stops[S.dv.si]);}catch(e){el.disabled=false;return fail(e.message||String(e));}
+ const n=nextTodo(S.dv.si+1);
+ if(n<0) S.dv.phase="done"; else {S.dv.si=n;S.dv.pi=0;S.dv.phase="go";}
+ render();
+}
 
 /* =================== boot =================== */
 applyType();
