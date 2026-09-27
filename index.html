@@ -294,6 +294,89 @@ html.fz2 .wkg .w{font-size:calc(var(--fs)*.74)}
  font-variant-numeric:tabular-nums}
 .pad button:active{background:var(--flat)}
 .pad button.x{background:transparent;box-shadow:none;font-size:26px;color:var(--mut)}
+/* ======== v3: colour band + glass. Tappable = frosted lifted panel with ›; information = flat on the background ======== */
+body{background:var(--bg)}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(70% 45% at 100% 35%,rgba(var(--argb),.16),transparent 70%),
+  radial-gradient(60% 40% at 0% 85%,rgba(var(--argb),.12),transparent 70%),var(--bg)}
+.band{position:relative;margin:calc(-1*(env(safe-area-inset-top) + 14px)) -16px 18px;padding:calc(env(safe-area-inset-top) + 18px) 16px 22px;
+ color:#fff;border-radius:0 0 34px 34px;overflow:hidden;
+ background:radial-gradient(120% 90% at 100% 0%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,var(--a) 10%,var(--a2) 100%);
+ box-shadow:0 14px 34px -18px rgba(var(--argb),.9)}
+.band::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-90px;bottom:-150px;
+ background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);pointer-events:none}
+.band>*{position:relative;z-index:1}
+.band .top{margin:0 0 14px}
+.band .av{background:rgba(255,255,255,.2);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45);color:#fff}
+.band .hi{color:#fff}
+.band .mut{color:rgba(255,255,255,.88)}
+.band .rolechip{background:rgba(255,255,255,.2);color:#fff}
+.btitle{font-size:calc(var(--fs)*1.6);font-weight:600;line-height:1.25;margin:2px 2px 6px}
+.bst{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin-top:12px}
+.bk{font-size:calc(var(--fs)*.84);color:rgba(255,255,255,.88)}
+.bv{font-size:calc(var(--fs)*1.45);font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.bv.big1{font-size:calc(var(--fs)*2.3)}
+.band .sub{background:rgba(255,255,255,.16);margin:10px 0 0}
+.band .sub button{color:#fff}
+.band .sub button[data-on="1"]{background:#fff;color:var(--a2)}
+.band .ctx{margin:0}
+.band .chip.wxc,.band .chip.evc{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
+/* week on the band: plain days see-through, days with orders solid white, the chosen day dark */
+.band .wkhead .wkl{color:#fff}
+.band .wkn{background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);color:#fff}
+.band .wkhead .chip{background:#fff;color:var(--a2);box-shadow:none}
+.band .wkg{margin-bottom:6px !important}
+.band .wkg button{background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28);color:rgba(255,255,255,.9)}
+.band .wkg .n{color:#fff}
+.band .wkg .due{box-shadow:none;outline:2px dashed rgba(255,255,255,.7);outline-offset:-2px}
+.band .wkg .has{background:#fff;box-shadow:0 6px 14px -6px rgba(0,0,0,.35);color:var(--a2);outline:0}
+.band .wkg .has .n{color:var(--a2)}
+.band .wkg .has .c{background:var(--a);color:#fff}
+.band .wkg button[data-sel="1"]{background:#10161B;box-shadow:0 8px 18px -8px rgba(0,0,0,.6);color:rgba(255,255,255,.85)}
+.band .wkg button[data-sel="1"] .n{color:#fff}
+.band .wkg button[data-sel="1"] .c{background:#fff;color:#10161B}
+.band .wkg .tl{background:#fff;color:var(--a2)}
+.band .wkg .evf{color:#FFD27A}
+.band .wkg .has .evf{color:#B7791F}
+/* information panels: flat, no shadow */
+.card{background:rgba(255,255,255,.62);box-shadow:none;border:1px solid rgba(255,255,255,.85)}
+.card.on{box-shadow:0 0 0 2px var(--a)}
+.card.bad{box-shadow:0 0 0 2px var(--bad)}
+/* things you tap: frosted, lifted */
+button.card,.card.tap,.card.pick,.k.tap{background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.95);
+ -webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
+ box-shadow:0 12px 26px -14px rgba(var(--argb),.45),0 2px 6px rgba(20,26,31,.06)}
+button.card.bad,.card.tap.bad{box-shadow:0 0 0 2px var(--bad),0 12px 26px -14px rgba(179,38,30,.4)}
+.card.pick.on{box-shadow:0 0 0 2px var(--a),0 12px 26px -14px rgba(var(--argb),.45)}
+.hero{padding-top:0}
+.hero .hd>.dn,.hero .hd>.dm{background:rgba(var(--argb),.12)}
+.tabs nav{background:rgba(16,22,27,.78);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);
+ box-shadow:0 14px 32px rgba(16,22,27,.32),inset 0 0 0 1px rgba(255,255,255,.08)}
+.btn.g{background:#fff}
+#map{border:1px solid rgba(255,255,255,.85)}
+/* supplier: what to make, sized by amount */
+.mkg{display:flex;flex-direction:column;gap:8px}
+.mkr{display:flex;gap:8px;flex-wrap:wrap}
+.mk{flex-basis:0;min-width:104px;border-radius:22px;padding:14px 14px 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+ text-align:left;position:relative;overflow:hidden;font-size:var(--fs);gap:1px}
+.mk .mkn{font-weight:600;line-height:1.25;margin-top:auto;padding-top:8px}
+.mk .mkq{font-size:calc(var(--fs)*2.1);font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}
+.mk .mku{font-size:calc(var(--fs)*.84);opacity:.88}
+.mk .mkt{margin-top:6px;background:#FFF1D1;color:#6B4200;border-radius:99px;padding:2px 10px;font-size:calc(var(--fs)*.8);font-weight:600}
+.mk img,.mk .mki{width:38px;height:38px;border-radius:12px;object-fit:cover;flex:0 0 auto}
+.mk .mki{display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(255,255,255,.22)}
+.mk.t1{background:linear-gradient(160deg,var(--a),var(--a2));color:#fff;box-shadow:0 14px 28px -14px rgba(var(--argb),.9)}
+.mk.t1 .mkq{font-size:calc(var(--fs)*3.2)}
+.mk.t2{background:var(--aw);color:var(--a2);box-shadow:inset 0 0 0 2px var(--a)}
+.mk.t2 .mki,.mk.t3 .mki{background:rgba(var(--argb),.12);color:var(--a)}
+.mk.t3{background:rgba(255,255,255,.86);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line),0 8px 18px -12px rgba(var(--argb),.4)}
+.mk[aria-expanded="true"]{outline:3px solid var(--ink);outline-offset:2px}
+/* phones set to reduce transparency (and old browsers): solid panels */
+@media (prefers-reduced-transparency:reduce){
+ .card,button.card,.card.tap,.card.pick,.k.tap{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+ .tabs nav{background:#141A1F;-webkit-backdrop-filter:none;backdrop-filter:none}}
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+ button.card,.card.tap,.card.pick,.k.tap{background:#fff}.tabs nav{background:#141A1F}}
 </style>
 </head>
 <body>
@@ -413,6 +496,8 @@ th:{
  lotReview:"ทบทวนแต่ละรอบ",insight:(g,a,b)=>g+": ขายได้ "+a+"% เทียบกับเฉลี่ย "+b+"%",sellBasis:"คิดจากขนมสดที่รับคืนได้ (ของที่วาง เทียบกับของที่ขายได้)",
  addEventShort:"งาน/วันหยุด",repeatShort:l=>"ทำซ้ำ "+l,otherStores:"ร้านอื่น แตะเพื่อเพิ่ม",addShort:"เพิ่ม",removeShort:"เอาออก",
  showDetail:"ดูรายละเอียด",hideDetail:"ซ่อนรายละเอียด",madeOn:d=>"สั่ง "+d,
+ totalBoxes:n=>"รวม "+n+" กล่อง",notIncl:n=>"ยังไม่รวม "+n+" ออเดอร์ที่รอคุณตอบ",byStoreOf:p=>p+" แยกตามร้าน",
+ tapTile:"แตะช่องเพื่อดูว่าแต่ละร้านได้เท่าไร",boxesWord:"กล่อง",
  noSupplier:"ยังไม่ได้ตั้งซัพพลายเออร์"},
 en:{
  enterPin:"Enter your 4-digit PIN",wrongPin:"PIN not recognised",locked:"Too many tries. Wait 10 minutes.",del:"Delete",
@@ -500,6 +585,8 @@ en:{
  lotReview:"Lot by lot",insight:(g,a,b)=>g+": sold "+a+"% vs "+b+"% on average",sellBasis:"Based on fresh desserts that can be returned (boxes left out vs boxes sold).",
  addEventShort:"Event",repeatShort:l=>"Repeat "+l,otherStores:"Other stores, tap to add",addShort:"Add",removeShort:"Remove",
  showDetail:"Show details",hideDetail:"Hide details",madeOn:d=>"made "+d,
+ totalBoxes:n=>"Total "+n+" boxes",notIncl:n=>"Not counting "+n+(n===1?" order":" orders")+" waiting for your answer",byStoreOf:p=>p+" by store",
+ tapTile:"Tap a box to see how many go to each store",boxesWord:"boxes",
  noSupplier:"No supplier set up yet"}};
 
 /* =================== setup =================== */
@@ -513,7 +600,7 @@ const S={lang:localStorage.getItem("ss_lang")||"th",fz:+(localStorage.getItem("s
  payments:[],supPay:[],orders:[],accounts:[],
  tab:null,pick:null,ob:null,confirm:null,st:"store",open:null,payForm:null,signing:null,sigDrawn:false,
  period:"week",ctype:null,stops:null,dv:{phase:"notify",si:0,pi:0,loaded:{},photos:[]},addAcct:null,pinEdit:null,
- round:null,more:{},dels:[],weather:{},events:[],holidays:[],evForm:null,lotNotes:{},themes:Object.assign({},THEME_DEFAULT),signoffs:[],sel:new Set(),lotOpen:null,sigCache:{},adj:null,reset:false,photoTarget:null,uploading:null};
+ round:null,more:{},mk:null,dels:[],weather:{},events:[],holidays:[],evForm:null,lotNotes:{},themes:Object.assign({},THEME_DEFAULT),signoffs:[],sel:new Set(),lotOpen:null,sigCache:{},adj:null,reset:false,photoTarget:null,uploading:null};
 
 const $=id=>document.getElementById(id);
 const T=()=>I18N[S.lang];
@@ -550,6 +637,7 @@ function applyTheme(r){
  const t=THEMES[k]||{a:"#141A1F",a2:"#141A1F",aw:"#EEF1F4",bg:"#F3F6F8"};
  const st=document.documentElement.style;
  st.setProperty("--a",t.a);st.setProperty("--a2",t.a2);st.setProperty("--aw",t.aw);st.setProperty("--bg",t.bg);
+ const h=t.a.replace("#","");st.setProperty("--argb",[0,2,4].map(i=>parseInt(h.substr(i,2),16)).join(","));
  const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute("content",t.bg);
  if(r&&k){try{localStorage.setItem("ss_theme_"+r,k);}catch(e){}}
 }
@@ -767,6 +855,10 @@ function lotCtxLine(x){
 }
 
 /* =================== simple building blocks =================== */
+/* the role-coloured band at the top: greeting, week and headline numbers sit straight on the colour */
+const band=inner=>`<section class="band">${inner}</section>`;
+const bandTitle=t=>`<div class="btitle">${esc(t)}</div>`;
+const bandStats=items=>`<div class="bst">${items.map(([k,v])=>`<div><div class="bk">${esc(k)}</div><div class="bv">${v}</div></div>`).join("")}</div>`;
 /* one status per order card, most important first */
 function statusChip(o){
  const sn=sup();
@@ -987,9 +1079,7 @@ function render(){
  const tabs=role()==="distributor"?[["order","clipboard-list","tOrder"],["sp","building-store","tSP"],["pay","cash","tPay"],["stats","chart-bar","tStats"],["set","settings","tSet"]]
   :role()==="driver"?[["round","truck-delivery","tRound"],["hist","history","tHist"],["set","settings","tSet"]]
   :[["sorder","clipboard-list","tOrder"],["spay","cash","tPay"],["sstats","chart-bar","tStats"],["set","settings","tSet"]];
- const TITLE={sp:"tSP",pay:"tPay",stats:"tStats",set:"tSet",spay:"tPay",sstats:"tStats"};
- const titled=TITLE[S.tab]&&!S.open&&!S.ctype;
- $("v").innerHTML=(titled?`<div class="ptitle">${esc(T()[TITLE[S.tab]])}</div>`:"")+screen();
+ $("v").innerHTML=screen();
  $("tabs").hidden=false;
  $("nav").style.gridTemplateColumns=`repeat(${tabs.length},1fr)`;
  const bd=badges();
@@ -1082,7 +1172,7 @@ function orderTab(){
  const reps=past?[]:ordersOn(addDays(S.pick,-7)).filter(o=>o.recurring&&!labels.includes((o.label||"").trim()));
  const unseen=S.orders.filter(o=>!o.sup_seen);
  const days=[...new Set(unseen.map(o=>o.for_delivery_on))];
- return statusBar()+dayStrip(S.pick,-7,21,(s,dd)=>dueOn(dd).length>0)+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,true)+
+ return band(statusBar()+dayStrip(S.pick,-7,21,(s,dd)=>dueOn(dd).length>0))+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,true)+
  (unseen.length?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().adjAlert(unseen.length,sn))}</b>
   <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${days.map(x=>`<button class="chip" data-a="pick" data-x="${x}" style="background:#fff">${esc(dayDate(x))}</button>`).join("")}</div></span></div>`:"")+
  (past?"":`<button class="btn gold" data-a="newOrd" style="margin:0 0 12px">${ic("plus")}${esc(T().addOrder)}</button>`)+
@@ -1197,7 +1287,7 @@ async function deleteOrder(btn){
 
 /* =================== DISTRIBUTOR: stores / hubs / products =================== */
 function spTab(){
- return `<div class="sub" style="grid-template-columns:1fr 1fr">
+ return band(bandTitle(T().tSP))+`<div class="sub" style="grid-template-columns:1fr 1fr">
   <button data-a="st" data-x="store" data-on="${S.st==="store"?1:0}">${esc(T().stores)}</button>
   <button data-a="st" data-x="product" data-on="${S.st==="product"?1:0}">${esc(T().products)}</button></div>`+
   (S.st==="store"?storeList():productList());
@@ -1395,11 +1485,7 @@ function lotHistory(list){
 function payTab(){
  const b=balances(),f=S.payForm,L=lots(),sn=sup();
  const chk=L.filter(x=>x.state==="check"),sp=L.filter(x=>x.state==="sup"),cnt=L.filter(x=>x.state==="count"),cl=L.filter(x=>x.state==="closed");
- return `<div class="g2">
-  <div class="k"><div class="kk">${esc(T().shopsOwe)}</div><div class="kv">${money(b.owed)}</div></div>
-  <div class="k"><div class="kk">${esc(T().outCons)}</div><div class="kv">${money(b.flight)}</div></div>
-  <div class="k"><div class="kk">${esc(T().supOwed(sn))}</div><div class="kv">${money(b.sup)}</div></div>
-  <div class="k"><div class="kk">${esc(T().marginMonth)}</div><div class="kv">${money(b.month)}</div></div></div>
+ return band(bandTitle(T().tPay)+bandStats([[T().shopsOwe,money(b.owed)],[T().outCons,money(b.flight)],[T().supOwed(sn),money(b.sup)],[T().marginMonth,money(b.month)]]))+`
  ${f?`<div class="card on" style="margin-top:8px"><div class="b" style="margin-bottom:8px">${esc(T().recordPay)}</div>
    <label class="flbl">${esc(T().pickStore)}</label>
    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${S.stores.map(s=>`<button class="chip" data-a="payStore" data-x="${s.id}" data-on="${f.sid===s.id?1:0}">${esc(s.name)}</button>`).join("")}</div>
@@ -1418,8 +1504,7 @@ function payTab(){
 function supPayTab(){
  const L=lots(),sp=L.filter(x=>x.state==="sup"),chk=L.filter(x=>x.state==="check").length,cl=L.filter(x=>x.state==="closed");
  const owed=sp.reduce((a,x)=>a+x.cost,0);
- return `<div class="k c" style="margin-bottom:10px"><div class="kk">${esc(T().notReceived)}</div>
-  <div class="kv" style="font-size:calc(var(--fs)*1.9)">${money(owed)}</div></div>
+ return band(bandTitle(T().tPay)+`<div class="bk" style="margin-top:6px">${esc(T().notReceived)}</div><div class="bv big1">${money(owed)}</div>`)+`
  ${chk?alertBox("info",T().beingChecked(chk),"","hourglass"):""}
  <div class="lbl">${esc(T().toSign)}</div>
  ${signList(sp,"sup",n=>T().signClose(n))}
@@ -1456,9 +1541,7 @@ function statsTab(){
   if(w) w.v+=(l.qty_out-(l.qty_back||0))*(Number(l.unit_price)-Number(l.unit_cost));});
  const mx=Math.max(1,...wk.map(w=>Math.abs(w.v)));
  const sp=S.stores.map(s=>({s,p:sellPct(s.id)})).filter(x=>x.p!=null).sort((a,b)=>b.p-a.p);
- return `<div class="g2">
-  <div class="k"><div class="kk">${esc(T().profitAll)}</div><div class="kv">${money0(b.margin)}</div></div>
-  <div class="k"><div class="kk">${esc(T().waste)}</div><div class="kv">${o?Math.round(100*bk/o)+"%":"—"}</div></div></div>
+ return band(bandTitle(T().tStats)+bandStats([[T().profitAll,money0(b.margin)],[T().waste,o?Math.round(100*bk/o)+"%":"—"]]))+`
  <div class="lbl">${esc(T().profit6)}</div>
  <div class="card"><div class="bars">${wk.map(w=>`<div><span>${w.v?money0(w.v):""}</span><i class="${w.v<0?"neg":""}" style="height:${Math.round(80*Math.abs(w.v)/mx)}%"></i>
   <span>${esc(shortDate(w.start))}</span></div>`).join("")}</div></div>
@@ -1513,7 +1596,7 @@ function effectsHtml(){
 function setTab(){
  const roles=[["distributor","roleDist"],["driver","roleDriver"],["supplier","roleSup"]];
  const a=S.addAcct;
- return `<div class="lbl">${esc(T().language)}</div>
+ return band(bandTitle(T().tSet))+`<div class="lbl">${esc(T().language)}</div>
  <div class="sub" style="grid-template-columns:1fr 1fr"><button data-a="lang" data-x="th" data-on="${S.lang==="th"?1:0}">ไทย</button>
   <button data-a="lang" data-x="en" data-on="${S.lang==="en"?1:0}">English</button></div>
  <div class="lbl">${esc(T().textSize)}</div>
@@ -1605,7 +1688,7 @@ function driverRound(){
  if(!o){S.round=null;S.stops=null;return roundList();}
  if(!S.stops) S.stops=buildStops(o);
  const R=S.stops,dv=S.dv;
- if(dv.phase!=="done"&&nextTodo(0)<0) return statusBar()+`<div class="card center" style="padding:26px 14px;background:var(--goodw);color:var(--good)">
+ if(dv.phase!=="done"&&nextTodo(0)<0) return band(statusBar())+`<div class="card center" style="padding:26px 14px;background:var(--goodw);color:var(--good)">
   <div style="font-size:44px;line-height:1">✓</div><div class="b" style="font-size:calc(var(--fs)*1.2);margin-top:6px">${esc(o.label||T().defaultLabel)} · ${esc(T().roundDone)}</div></div>
   <button class="btn g" data-a="roundBack">${ic("arrow-left")}${esc(T().backRounds)}</button>`;
  if(dv.phase==="brief") return dvBriefV(R,o);
@@ -1633,7 +1716,7 @@ function roundList(){
    <div class="mut">${esc(p.done?T().roundProgress(p.done,p.total):T().tapLoad(p.total))}</div>
    ${o.sup_status==="pending"?`<div style="margin-top:6px">${supChip(o.sup_status)}</div>`:""}</div></div></button>`;
  };
- return statusBar()+ctxRow(S.today,false)+
+ return band(statusBar()+ctxRow(S.today,false))+
  (todays.length?todays.map(card).join(""):`<div class="empty">${ic("mood-empty")} ${esc(T().noRoundToday)}</div>`)+
  (next.length?`<div class="lbl">${esc(T().nextRounds)}</div><div class="card list">`+next.map(o=>`<div class="lrow">
   ${dateTileMini(o.for_delivery_on)}<span class="grow"><span class="b">${esc(o.label||T().defaultLabel)}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span>
@@ -1644,7 +1727,7 @@ function dvBriefV(R,o){
  const it={};R.filter(s=>!s.done).forEach(s=>s.out.forEach(x=>{if(x.qty)it[x.pid]=(it[x.pid]||0)+x.qty;}));
  const keys=Object.keys(it),all=keys.length>0&&keys.every(k=>S.dv.loaded[k]),todo=R.filter(s=>!s.done);
  after(()=>drawMap(todo.map(s=>s.store),S.hubs,true));
- return statusBar()+`<div class="b" style="font-size:calc(var(--fs)*1.25);margin:2px 2px 8px">${esc(o.label||T().defaultLabel)}</div>
+ return band(statusBar())+`<div class="b" style="font-size:calc(var(--fs)*1.25);margin:2px 2px 8px">${esc(o.label||T().defaultLabel)}</div>
  <div id="map"></div>
  <div class="lbl"><span>${esc(T().loadVan(todo.length))}</span><span>${keys.filter(k=>S.dv.loaded[k]).length}/${keys.length}</span></div>
  <div class="card" style="padding:2px 14px">${keys.map(k=>`<div class="row" data-a="ld" data-x="${k}" style="cursor:pointer;padding:11px 0">
@@ -1743,7 +1826,7 @@ async function saveStop(st){
 }
 function driverHistory(){
  const list=ordersOn(S.pick);
- return statusBar()+dayStrip(S.pick,-7,21,null)+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,false)+
+ return band(statusBar()+dayStrip(S.pick,-7,21,null))+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,false)+
  (list.length?list.map(orderCard).join(""):`<div class="empty">${esc(T().noOrdersDay)}</div>`);
 }
 function qtyEditor(){
@@ -1765,18 +1848,20 @@ function supOrders(){
  const list=ordersOn(S.pick),acc=list.filter(o=>o.sup_status==="accepted");
  const t={fresh:0,dry:0,frozen:0},pt={};
  acc.forEach(o=>o.lines.forEach(l=>{const n=qty(l);if(!n)return;const p=S.prods[l.product_id];if(p)t[p.type]+=n;
-  pt[l.product_id]=pt[l.product_id]||{q:0,tag:0};pt[l.product_id].q+=n;pt[l.product_id].tag+=l.qty_price_tagged||0;}));
+  const x=pt[l.product_id]=pt[l.product_id]||{q:0,tag:0,st:{}};x.q+=n;x.tag+=l.qty_price_tagged||0;
+  const y=x.st[l.store_id]=x.st[l.store_id]||{q:0,tag:0};y.q+=n;y.tag+=l.qty_price_tagged||0;}));
+ const pendHere=list.filter(o=>o.sup_status==="pending").length;
  const waiting=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending").length;
  const d=dOf(S.pick);
  const tagChip=n=>n?` <span class="chip gold">${esc(T().tagged(n))}</span>`:"";
- return statusBar()+dayStrip(S.pick,-3,21,null)+
+ return band(statusBar()+dayStrip(S.pick,-3,21,null))+
  hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,false)+
  (waiting?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().needAnswer(waiting))}</b>
   <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${[...new Set(S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending").map(o=>o.for_delivery_on))]
    .map(x=>`<button class="chip" data-a="pick" data-x="${x}" style="background:#fff">${esc(dayDate(x))}</button>`).join("")}</div></span></div>`:"")+
- `<div class="lbl" style="margin-top:6px"><span>${esc(T().toMake)}</span><span>${esc(T().acceptedOnly)}</span></div>
- ${Object.keys(pt).length?`<div class="card">${Object.keys(pt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.05)">
-  <span>${pline(pid,40)}${tagChip(pt[pid].tag)}</span><span class="rv">${pt[pid].q}</span></div>`).join("")}</div>`:`<div class="empty">—</div>`}
+ `<div class="lbl" style="margin-top:6px"><span>${esc(T().toMake)}</span><span>${esc(T().totalBoxes(Object.values(pt).reduce((a,x)=>a+x.q,0)))}</span></div>
+ ${makeTiles(pt)}
+ ${pendHere?`<div class="mut" style="margin:8px 4px 0">${ic("clock")} ${esc(T().notIncl(pendHere))}</div>`:""}
  <div class="lbl">${esc(T().incoming)}</div>
  ${list.length?list.map(o=>{
   const st=o.sup_status,editing=S.adj&&S.adj.id===o.id;
@@ -1806,6 +1891,33 @@ function supOrders(){
    :`<div style="text-align:right;margin-top:4px"><button class="chip" data-a="supAns" data-x="${o.id}|pending">${esc(T().undo)}</button></div>`}</div>`;}).join("")
   :`<div class="empty">${esc(T().noOrders)}</div>`}`+comingUp(true);
 }
+/* What to make today, sized by how much is needed: the biggest job gets the biggest box.
+   Every box shows its number large, because box sizes are only a quick guide. Tap a box for the per-store split. */
+function makeTiles(pt){
+ const items=Object.keys(pt).map(pid=>Object.assign({pid},pt[pid])).filter(x=>x.q>0).sort((a,b)=>b.q-a.q);
+ if(!items.length) return `<div class="empty">—</div>`;
+ const tot=items.reduce((a,x)=>a+x.q,0),rows=[],rest=items.slice();
+ // a clear majority gets its own full-width row; otherwise products pair up two to a row
+ if(rest.length===1||rest[0].q/tot>=.4){rows.push([rest.shift()]);while(rest.length) rows.push(rest.splice(0,rest.length<=3?rest.length:2));}
+ else while(rest.length) rows.push(rest.splice(0,2));
+ const H=rows.length===1?170:300;
+ const tile=x=>{
+  const sh=x.q/tot,cls=sh>=.35?"t1":sh>=.15?"t2":"t3",p=S.prods[x.pid],open=S.mk===x.pid;
+  return `<button class="mk ${cls}" data-a="mkPick" data-x="${x.pid}" aria-expanded="${open}" style="flex:${x.q} 1 0">
+   ${p&&p.photo_1?`<img src="${esc(p.photo_1)}" alt="">`:`<span class="mki">${ic(TYPE_IC[p?p.type:"fresh"]||"bowl")}</span>`}
+   <span class="mkn">${esc(pname(x.pid))}</span>
+   <span class="mkq">${x.q}</span>
+   <span class="mku">${esc(T().boxesWord)} · ${Math.round(100*sh)}%</span>
+   ${x.tag?`<span class="mkt">${esc(T().tagged(x.tag))}</span>`:""}</button>`;
+ };
+ const sel=S.mk&&pt[S.mk]?pt[S.mk]:null;
+ return `<div class="mkg">${rows.map(r=>{const rs=r.reduce((a,x)=>a+x.q,0);
+   return `<div class="mkr" style="min-height:${rows.length===1?H:Math.max(118,Math.round(H*rs/tot))}px">${r.map(tile).join("")}</div>`;}).join("")}</div>
+ ${sel?`<div class="card on" style="margin-top:10px"><div class="b">${esc(T().byStoreOf(pname(S.mk)))}</div>
+   ${Object.keys(sel.st).map(sid=>{const st=storeOf(sid),y=sel.st[sid];
+    return `<div class="row"><span>${esc(st?st.name:"—")}${y.tag?` <span class="chip gold">${esc(T().tagged(y.tag))}</span>`:""}</span><span class="rv" style="font-size:calc(var(--fs)*1.3)">${y.q}</span></div>`;}).join("")}</div>`
+  :`<div class="mut" style="margin:8px 4px 0">${ic("hand-finger")} ${esc(T().tapTile)}</div>`}`;
+}
 function periodFrom(){
  if(S.period==="month") return S.today.slice(0,8)+"01";
  const x=dOf(S.today);x.setDate(x.getDate()-((x.getDay()+6)%7));return iso(x);
@@ -1824,10 +1936,9 @@ function supCalc(){
 }
 function supStats(){
  const r=supCalc(),rev=TYPES.reduce((a,t)=>a+r[t].rev,0),cost=TYPES.reduce((a,t)=>a+r[t].cost,0),c=cfg();
- return `<div class="sub" style="grid-template-columns:1fr 1fr"><button data-a="period" data-x="week" data-on="${S.period==="week"?1:0}">${esc(T().thisWeek)}</button>
-  <button data-a="period" data-x="month" data-on="${S.period==="month"?1:0}">${esc(T().thisMonth)}</button></div>
- <div class="g2"><div class="k"><div class="kk">${esc(T().income)}</div><div class="kv">${money0(rev)}</div></div>
-  <div class="k"><div class="kk">${esc(T().profit)}</div><div class="kv" style="color:${rev-cost<0?"var(--bad)":"var(--good)"}">${money0(rev-cost)}</div></div></div>
+ return band(bandTitle(T().tStats)+`<div class="sub" style="grid-template-columns:1fr 1fr"><button data-a="period" data-x="week" data-on="${S.period==="week"?1:0}">${esc(T().thisWeek)}</button>
+  <button data-a="period" data-x="month" data-on="${S.period==="month"?1:0}">${esc(T().thisMonth)}</button></div>`+
+  bandStats([[T().income,money0(rev)],[T().profit,money0(rev-cost)]]))+`
  <div class="lbl">${esc(T().costByType)}</div>
  <div class="g3">${TYPES.map(t=>{const x=r[t],pct=c[t].mode==="prod"?(x.rev?Math.round(100*x.cost/x.rev):null):c[t].pct;
   return `<button class="k c tap" data-a="ctype" data-x="${t}"><div class="kk">${esc(T()[t])}</div><div class="kv">${pct==null?"—":pct+"%"}</div>
@@ -1871,7 +1982,7 @@ const ACT={
  tab:(el)=>{S.tab=el.dataset.x;S.evForm=null;S.ob=null;S.open=null;S.confirm=null;S.ctype=null;S.payForm=null;
   S.addAcct=null;S.pinEdit=null;S.sel=new Set();S.sigDrawn=false;S.lotOpen=null;S.adj=null;S.reset=false;if(S.tab==="sorder"&&S.pick<S.today)S.pick=nextOrderDay();render();
   softReload(false);},
- pick:(el)=>{S.pick=el.dataset.x;S.evForm=null;render();if(el.dataset.top)window.scrollTo(0,0);},
+ pick:(el)=>{S.pick=el.dataset.x;S.evForm=null;S.mk=null;render();if(el.dataset.top)window.scrollTo(0,0);},
  obDate:(el)=>{keepLabel();const ob=S.ob,nd=el.dataset.x;
   // a new order nobody has touched yet follows the new day's regular stores
   if(!ob.id&&ob.auto&&JSON.stringify(ob.stores)===ob.auto){ob.stores=prefill(nd);ob.auto=JSON.stringify(ob.stores);}
@@ -1988,6 +2099,7 @@ const ACT={
  /* settings / accounts */
  resetOpen:()=>{S.reset=true;render();},
  noop:()=>{},
+ mkPick:(el)=>{S.mk=S.mk===el.dataset.x?null:el.dataset.x;render();},
  more:(el)=>{S.more[el.dataset.x]=!S.more[el.dataset.x];render();},
  evNew:()=>{S.evForm={id:null,name:"",kind:"festival",from:S.pick,to:S.pick,note:""};render();setTimeout(()=>{const e=$("evName");if(e)e.focus();},50);},
  evEdit:(el)=>{const e=S.events.find(x=>x.id===el.dataset.x);if(!e)return;
