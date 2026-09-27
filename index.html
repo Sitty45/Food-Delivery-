@@ -147,7 +147,7 @@ button.chip{min-height:46px;padding:0 14px;box-shadow:inset 0 0 0 1.5px var(--li
 #err .alert{max-width:516px;margin:0 auto;box-shadow:var(--sh2);pointer-events:auto;animation:drop .22s ease}
 
 /* week grid: every day of the week visible at once; days with orders filled in the theme colour with a count */
-.wkhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 10px;min-height:46px}
+.wkhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;min-height:52px}
 .wkl{font-weight:600;font-size:calc(var(--fs)*1.02)}
 .wkg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:10px}
 .wkg button{height:98px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0;
@@ -163,10 +163,13 @@ button.chip{min-height:46px;padding:0 14px;box-shadow:inset 0 0 0 1.5px var(--li
 .wkg .has .n{color:var(--a2)}
 .wkg .has .c{background:var(--a);color:#fff}
 .wkg .c.p{background:#FFB020 !important;color:#1A1300 !important}
+.wkg .c:empty{background:transparent !important}
+.tf[type=date]{min-width:0;display:block;-webkit-appearance:none;appearance:none;text-align:left}
 .wkg button[data-sel="1"]{background:var(--ink);box-shadow:0 8px 18px -8px rgba(17,23,28,.6);color:rgba(255,255,255,.85);outline:0}
 .wkg button[data-sel="1"] .n{color:#fff}
 .wkg button[data-sel="1"] .c{background:#fff;color:var(--ink)}
-.wkbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 12px}
+.wkg{margin-bottom:22px !important}
+.wkbtns{display:none}
 .wkbtns .btn{margin:0;min-height:52px;font-size:calc(var(--fs)*.9);font-weight:500;padding:0 10px}
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 4px 16px;font-size:calc(var(--fs)*.86);color:var(--mut)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -230,6 +233,35 @@ input[type=range]{width:100%;accent-color:var(--a);height:32px}
 .slide .knob{position:absolute;left:0;top:0;width:62px;height:62px;border-radius:50%;background:var(--bad);color:#fff;
  display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 2px 8px rgba(179,38,30,.4);touch-action:none;cursor:grab}
 
+/* weather & events */
+.ctx{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-4px 2px 14px}
+.ctx .wxl{display:inline-flex;align-items:center;gap:6px;font-weight:500;color:var(--ink);margin-right:2px}
+.ctx .wxl i{font-size:1.35em;color:var(--a)}
+.chip.wxc{background:var(--infow);color:var(--info)}
+.chip.evc{background:#FFF1D1;color:#6B4200}
+button.chip.evc{box-shadow:inset 0 0 0 1.5px #F2C66E}
+.wkg .evf{position:absolute;top:3px;right:4px;color:#B7791F;font-size:14px;line-height:1}
+.wkg button[data-sel="1"] .evf{color:#FFD27A}
+.legend .lf{color:#B7791F;font-size:1.1em;display:inline-flex}
+.hbar{height:12px;border-radius:6px;background:var(--flat);overflow:hidden;margin-top:6px}
+.hbar i{display:block;height:100%;border-radius:6px;background:var(--a)}
+.eff{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline;padding:10px 0}
+.card .eff+.eff{border-top:1px solid var(--line)}
+.eff .d{font-weight:600;font-size:calc(var(--fs)*.9);white-space:nowrap}
+/* short lists inside one card */
+button.card,.lrow{font-size:var(--fs)}
+.card.list{padding:2px 18px}
+.lrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:66px;padding:10px 0;position:relative}
+.lrow+.lrow{border-top:1px solid var(--line)}
+.lrow.tap{padding-right:26px}
+.lrow.tap::after{content:"";position:absolute;right:4px;top:50%;width:9px;height:9px;margin-top:-5px;border-top:2px solid var(--faint);
+ border-right:2px solid var(--faint);transform:rotate(45deg)}
+.lrow:active{background:var(--aw)}
+div.lrow:active{background:none}
+.wkn{flex:0 0 52px;height:52px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--line);font-size:24px;
+ display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.wkn[disabled]{opacity:.3}
+.wkhead .wkl{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center}
 /* biggest text size: 3-up tiles become 2 + 1 */
 html.fz2 .g3{grid-template-columns:1fr 1fr}
 html.fz2 .g3>:nth-child(3){grid-column:1/-1}
@@ -358,7 +390,7 @@ th:{
  toSign:"รอคุณเซ็นปิดยอด",beingChecked:n=>n+" รอบ กำลังรอผู้จัดจำหน่ายตรวจ",wastePct:p=>"ของเสีย "+p+"%",
  checkedBy:(n,d)=>"ตรวจโดย "+n+" · "+d,closedBy:(n,d)=>"ปิดยอดโดย "+n+" · "+d,legacy:"ปิดยอดแบบเก่า",tapDetail:"แตะเพื่อดูรายละเอียด",byStore:"แยกตามร้าน",
  danger:"ล้างข้อมูล",resetTitle:"ล้างข้อมูลทั้งหมดเพื่อเริ่มใหม่",
- resetWhat:"ลบออเดอร์ การส่งของ การนับของเหลือ การจ่ายเงิน และการเซ็นทั้งหมด ร้าน สินค้า จุดฮับ และบัญชีจะยังอยู่",
+ resetWhat:"ลบออเดอร์ การส่งของ การนับของเหลือ การจ่ายเงิน การเซ็น และงาน/วันหยุดทั้งหมด ร้าน สินค้า จุดฮับ บัญชี และข้อมูลอากาศจะยังอยู่",
  resetOpen:"ล้างข้อมูล…",cantUndo:"ย้อนกลับไม่ได้ ข้อมูลที่ลบจะหายถาวร",slideReset:"เลื่อนไปจนสุดเพื่อลบ",resetDone:"ล้างข้อมูลแล้ว",resetBusy:"กำลังลบ…",done:"เรียบร้อย",
  needed:"ต้องส่ง",made:"สั่งเมื่อ",relToday:"วันนี้",relTomorrow:"พรุ่งนี้",inDays:n=>"อีก "+n+" วัน",daysAgo:n=>n+" วันที่แล้ว",
  advance:"สั่งล่วงหน้า",deliveredAt:t=>"ส่งแล้ว "+t,delivering:(a,b)=>"กำลังส่ง "+a+"/"+b,deliveredLock:"ออเดอร์นี้ส่งแล้ว แก้ไขไม่ได้",
@@ -369,6 +401,18 @@ th:{
  themes:"สีของแต่ละบัญชี",themeHint:"เลือกสีให้แต่ละประเภทบัญชี จะได้แยกออกง่าย ใช้กับทุกเครื่อง",
  thanks:n=>"ขอบคุณ "+n+"!",roundFinished:"จบรอบนี้แล้ว",cashHandover:"เงินสดที่ต้องส่งมอบ",
  prevWeek:"สัปดาห์ก่อน",nextWeek:"สัปดาห์หน้า",backToday:"กลับไปวันนี้",
+ wx:c=>c==null?"ไม่มีข้อมูล":c===0?"แดดจัด ฟ้าใส":c<=2?"มีเมฆบางส่วน":c===3?"เมฆมาก":c<=48?"หมอก":c<=57?"ฝนปรอย":c<=67?"ฝนตก":c<=77?"หิมะ":c<=82?"ฝนตกเป็นช่วง":"พายุฝนฟ้าคะนอง",
+ forecast:"พยากรณ์",mm:"มม.",weather:"อากาศ",
+ addEvent:"เพิ่มงาน/วันหยุด",editEvent:"แก้ไขงาน/วันหยุด",evName:"ชื่อ",evNamePh:"เช่น งานเทศกาลไทย ดาร์ลิ่งฮาร์เบอร์",evType:"ประเภท",
+ ev_festival:"งานเทศกาล",ev_holiday:"วันหยุด",ev_other:"อื่นๆ",evFrom:"ตั้งแต่วันที่",evTo:"ถึงวันที่",evNote:"หมายเหตุ",
+ evDelete:"ลบรายการนี้",evNeedName:"ใส่ชื่องานก่อน",autoHoliday:"วันหยุดราชการ NSW",lgEvent:"มีงาน/วันหยุด",
+ onShelf:"ช่วงวางขาย",lotNote:"เหตุผล / หมายเหตุ (ถ้ามี)",lotNotePh:"เช่น ฝนตกทั้งวัน มีงานเทศกาลใกล้ๆ",
+ whatAffects:"อะไรมีผลต่อยอดขาย",allLots:"เฉลี่ยทุกรอบ",byTemp:"อุณหภูมิช่วงวางขาย",hot:"ร้อน 30° ขึ้นไป",warm:"อุ่น 25–29°",cool:"เย็น ต่ำกว่า 25°",
+ byRain:"ฝน",rainy:"ฝนตก (5 มม. ขึ้นไป)",dryDays:"ไม่มีฝน",byEvent:"งานเทศกาล / วันหยุด",withEvent:"มีงานหรือวันหยุด",noEvent:"ช่วงปกติ",
+ byDay:"วันที่ส่งของ",nLots:n=>n+" รอบ",soldPct:p=>"ขายได้ "+p+"%",needMore:"ข้อมูลยังน้อย ประมาณ 8 รอบขึ้นไปถึงจะเริ่มเห็นแนวโน้ม",
+ lotReview:"ทบทวนแต่ละรอบ",insight:(g,a,b)=>g+": ขายได้ "+a+"% เทียบกับเฉลี่ย "+b+"%",sellBasis:"คิดจากขนมสดที่รับคืนได้ (ของที่วาง เทียบกับของที่ขายได้)",
+ addEventShort:"งาน/วันหยุด",repeatShort:l=>"ทำซ้ำ "+l,otherStores:"ร้านอื่น แตะเพื่อเพิ่ม",addShort:"เพิ่ม",removeShort:"เอาออก",
+ showDetail:"ดูรายละเอียด",hideDetail:"ซ่อนรายละเอียด",madeOn:d=>"สั่ง "+d,
  noSupplier:"ยังไม่ได้ตั้งซัพพลายเออร์"},
 en:{
  enterPin:"Enter your 4-digit PIN",wrongPin:"PIN not recognised",locked:"Too many tries. Wait 10 minutes.",del:"Delete",
@@ -433,7 +477,7 @@ en:{
  toSign:"Waiting for your signature",beingChecked:n=>n+" lot"+(n===1?" is":"s are")+" being checked by the distributor",wastePct:p=>"Wastage "+p+"%",
  checkedBy:(n,d)=>"Checked by "+n+" · "+d,closedBy:(n,d)=>"Closed by "+n+" · "+d,legacy:"Closed (old system)",tapDetail:"Tap for details",byStore:"By store",
  danger:"Reset",resetTitle:"Delete all data and start again",
- resetWhat:"Deletes every order, delivery, leftover count, payment and sign-off. Stores, products, hubs and accounts are kept.",
+ resetWhat:"Deletes every order, delivery, leftover count, payment, sign-off and event. Stores, products, hubs, accounts and weather are kept.",
  resetOpen:"Reset data…",cantUndo:"This can't be undone. Deleted data is gone for good.",slideReset:"Slide all the way to delete",resetDone:"All data cleared",resetBusy:"Deleting…",done:"Done",
  needed:"Needed",made:"Made",relToday:"Today",relTomorrow:"Tomorrow",inDays:n=>"In "+n+" days",daysAgo:n=>n+(n===1?" day":" days")+" ago",
  advance:"Advance order",deliveredAt:t=>"Delivered "+t,delivering:(a,b)=>"Delivering "+a+"/"+b,deliveredLock:"This order has been delivered and can't be changed.",
@@ -444,6 +488,18 @@ en:{
  themes:"Colour for each account",themeHint:"Pick a colour for each account type so they're easy to tell apart. Applies on every phone.",
  thanks:n=>"Thank you, "+n+"!",roundFinished:"This round is finished",cashHandover:"Collected cash to hand over",
  prevWeek:"Previous week",nextWeek:"Next week",backToday:"Back to today",
+ wx:c=>c==null?"No data":c===0?"Sunny, clear":c<=2?"Partly cloudy":c===3?"Cloudy":c<=48?"Fog":c<=57?"Drizzle":c<=67?"Rain":c<=77?"Snow":c<=82?"Showers":"Thunderstorm",
+ forecast:"forecast",mm:"mm",weather:"Weather",
+ addEvent:"Add event / holiday",editEvent:"Edit event / holiday",evName:"Name",evNamePh:"e.g. Thai festival, Darling Harbour",evType:"Type",
+ ev_festival:"Festival",ev_holiday:"Holiday",ev_other:"Other",evFrom:"From",evTo:"To",evNote:"Note",
+ evDelete:"Delete this event",evNeedName:"Enter a name first",autoHoliday:"NSW public holiday",lgEvent:"Event or holiday",
+ onShelf:"On shelf",lotNote:"Reason / note (optional)",lotNotePh:"e.g. rained all day, festival nearby",
+ whatAffects:"What affects sales",allLots:"All lots",byTemp:"Temperature while on shelf",hot:"Hot, 30° and up",warm:"Warm, 25–29°",cool:"Cool, under 25°",
+ byRain:"Rain",rainy:"Rainy (5 mm or more)",dryDays:"Dry",byEvent:"Festivals & holidays",withEvent:"During an event or holiday",noEvent:"Normal days",
+ byDay:"Delivery day",nLots:n=>n+(n===1?" lot":" lots"),soldPct:p=>"Sold "+p+"%",needMore:"Not much data yet. Patterns start to show after about 8 lots.",
+ lotReview:"Lot by lot",insight:(g,a,b)=>g+": sold "+a+"% vs "+b+"% on average",sellBasis:"Based on fresh desserts that can be returned (boxes left out vs boxes sold).",
+ addEventShort:"Event",repeatShort:l=>"Repeat "+l,otherStores:"Other stores, tap to add",addShort:"Add",removeShort:"Remove",
+ showDetail:"Show details",hideDetail:"Hide details",madeOn:d=>"made "+d,
  noSupplier:"No supplier set up yet"}};
 
 /* =================== setup =================== */
@@ -457,7 +513,7 @@ const S={lang:localStorage.getItem("ss_lang")||"th",fz:+(localStorage.getItem("s
  payments:[],supPay:[],orders:[],accounts:[],
  tab:null,pick:null,ob:null,confirm:null,st:"store",open:null,payForm:null,signing:null,sigDrawn:false,
  period:"week",ctype:null,stops:null,dv:{phase:"notify",si:0,pi:0,loaded:{},photos:[]},addAcct:null,pinEdit:null,
- round:null,dels:[],themes:Object.assign({},THEME_DEFAULT),signoffs:[],sel:new Set(),lotOpen:null,sigCache:{},adj:null,reset:false,photoTarget:null,uploading:null};
+ round:null,more:{},dels:[],weather:{},events:[],holidays:[],evForm:null,lotNotes:{},themes:Object.assign({},THEME_DEFAULT),signoffs:[],sel:new Set(),lotOpen:null,sigCache:{},adj:null,reset:false,photoTarget:null,uploading:null};
 
 const $=id=>document.getElementById(id);
 const T=()=>I18N[S.lang];
@@ -593,6 +649,156 @@ function deliveryChip(o){
 const dateTileMini=dISO=>{const d=dOf(dISO),c=DAY[d.getDay()];
  return `<span class="dtile" style="background:${c.w};color:${c.i}"><b>${d.getDate()}</b><span>${esc(dayAb(d.getDay()))}</span></span>`;};
 
+/* =================== weather & events =================== */
+const num=v=>v==null?null:Number(v);
+/* one point for the whole delivery area: the middle of the stores (Sydney inner west if none set) */
+function wxPoint(){
+ const p=S.stores.filter(s=>isFinite(Number(s.latitude))&&s.latitude!=null);
+ if(!p.length) return {lat:-33.92,lng:151.15};
+ return {lat:+(p.reduce((a,s)=>a+Number(s.latitude),0)/p.length).toFixed(2),lng:+(p.reduce((a,s)=>a+Number(s.longitude),0)/p.length).toFixed(2)};
+}
+/* Open-Meteo: free, no account. Past 92 days are observed weather, the next 14 are forecast.
+   Saved into weather_days so every phone and the analysis use the same numbers. Refreshed at most every 3 hours. */
+async function refreshWeather(){
+ let last=0;try{last=+localStorage.getItem("ss_wx_at")||0;}catch(e){}
+ if(S.weather[S.today]&&S.weather[addDays(S.today,7)]&&Date.now()-last<3*3600e3) return false;
+ const {lat,lng}=wxPoint();
+ const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lng+
+  "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=Australia%2FSydney&past_days=92&forecast_days=14");
+ if(!r.ok) return false;
+ const dd=(await r.json()).daily;if(!dd||!dd.time) return false;
+ const now=new Date().toISOString();
+ const rows=dd.time.map((t,i)=>({day:t,tmax:dd.temperature_2m_max[i],tmin:dd.temperature_2m_min[i],rain_mm:dd.precipitation_sum[i],code:dd.weather_code[i],fetched_at:now}))
+  .filter(x=>x.tmax!=null);
+ rows.forEach(x=>{S.weather[x.day]={tmax:x.tmax,tmin:x.tmin,rain_mm:x.rain_mm,code:x.code};});
+ try{localStorage.setItem("ss_wx_at",String(Date.now()));}catch(e){}
+ db.from("weather_days").upsert(rows,{onConflict:"day"}).then(()=>{},()=>{});
+ return true;
+}
+/* NSW public holidays, if the free holiday service answers (it's optional; events can always be added by hand) */
+function parseHolidays(arr){
+ const txt=n=>typeof n==="string"?n:Array.isArray(n)?((n.find(x=>/en/i.test(x.language||x.lang||""))||n[0]||{}).text||""):"";
+ return (Array.isArray(arr)?arr:[]).filter(h=>{
+  const subs=h.subdivisionCodes||h.counties||null;
+  const nat=h.nationalHoliday!=null?h.nationalHoliday:h.global!=null?h.global:!subs;
+  return nat||(Array.isArray(subs)&&subs.some(c=>/NSW/i.test(String(c))));
+ }).map(h=>({date:String(h.date||h.startDate||"").slice(0,10),name:txt(h.name)||txt(h.localName)})).filter(h=>h.date&&h.name);
+}
+async function loadHolidays(){
+ const y=+S.today.slice(0,4),m=+S.today.slice(5,7),years=[y];
+ if(m<=3) years.push(y-1); if(m>=10) years.push(y+1);
+ const out=[];
+ for(const yr of years){
+  let c=null;try{c=JSON.parse(localStorage.getItem("ss_hol_"+yr)||"null");}catch(e){}
+  if(!c||Date.now()-c.at>30*864e5){
+   let list=[];
+   for(const url of ["https://nagerholidays.com/api/v4/Holidays/AU/"+yr,"https://date.nager.at/api/v3/PublicHolidays/"+yr+"/AU"]){
+    try{const r=await fetch(url);if(r.ok){list=parseHolidays(await r.json());if(list.length)break;}}catch(e){}
+   }
+   c={at:Date.now(),list};
+   if(list.length) try{localStorage.setItem("ss_hol_"+yr,JSON.stringify(c));}catch(e){}
+  }
+  out.push(...c.list);
+ }
+ const was=JSON.stringify(S.holidays);S.holidays=out;return was!==JSON.stringify(out);
+}
+async function refreshContext(){
+ let changed=false;
+ try{changed=await refreshWeather()||changed;}catch(e){}
+ try{changed=await loadHolidays()||changed;}catch(e){}
+ const typing=document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName);
+ const busy=S.evForm||S.ob||S.payForm||S.addAcct||S.adj||S.reset||S.pinEdit||S.open||S.sel.size||(S.round&&S.dv.phase!=="brief");
+ if(changed&&S.screen==="app"&&!typing&&!busy) render();
+}
+function eventsOn(d){
+ const man=S.events.filter(e=>e.starts_on<=d&&e.ends_on>=d);
+ const hol=S.holidays.filter(h=>h.date===d&&!man.some(e=>e.kind==="holiday"))
+  .map(h=>({name:h.name,kind:"holiday",auto:true,starts_on:d,ends_on:d}));
+ return man.concat(hol);
+}
+const EV_IC={festival:"confetti",holiday:"beach",weather:"cloud-storm",other:"flag-3"};
+const WX_IC=c=>c==null?"cloud-question":c===0?"sun":c<=2?"sun-low":c===3?"cloud":c<=48?"mist":c<=67?"cloud-rain":c<=77?"snowflake":c<=82?"cloud-rain":"cloud-storm";
+function wxChip(d){
+ const w=S.weather[d];if(!w||w.tmax==null) return "";
+ return `<span class="chip wxc" title="${esc(T().wx(w.code)+" · "+Math.round(w.tmax)+"°/"+Math.round(w.tmin)+"°")}">${ic(WX_IC(w.code))}${Math.round(w.tmax)}°${w.rain_mm>=1?` · ${ic("droplet")}${Math.round(w.rain_mm)} ${esc(T().mm)}`:""}</span>`;
+}
+const evChip=(e,tap)=>tap&&!e.auto?`<button class="chip evc" data-a="evEdit" data-x="${e.id}">${ic(EV_IC[e.kind]||"flag-3")}${esc(e.name)}</button>`
+ :`<span class="chip evc">${ic(EV_IC[e.kind]||"flag-3")}${esc(e.name)}${e.auto?` · ${esc(T().autoHoliday)}`:""}</span>`;
+/* the weather + events line under a day heading; the distributor can add events here */
+function ctxRow(d,canEdit){
+ const evs=eventsOn(d),wx=wxChip(d);
+ if(!wx&&!evs.length&&!canEdit) return "";
+ return `<div class="ctx">${wx}${evs.map(e=>evChip(e,canEdit)).join("")}
+  ${canEdit&&!S.evForm?`<button class="chip" data-a="evNew">${ic("plus")}${esc(T().addEventShort)}</button>`:""}</div>
+  ${canEdit&&S.evForm?eventForm():""}`;
+}
+function eventForm(){
+ const f=S.evForm;
+ return `<div class="card on"><div class="b" style="margin-bottom:10px">${esc(f.id?T().editEvent:T().addEvent)}</div>
+  <div class="fld"><label class="flbl" for="evName">${esc(T().evName)}</label><input class="tf" id="evName" value="${esc(f.name||"")}" placeholder="${esc(T().evNamePh)}" autocomplete="off"></div>
+  <div class="fld"><span class="flbl">${esc(T().evType)}</span><div style="display:flex;flex-wrap:wrap;gap:8px">
+   ${["festival","holiday","other"].map(k=>`<button class="chip" data-a="evKind" data-x="${k}" data-on="${f.kind===k?1:0}">${ic(EV_IC[k])}${esc(T()["ev_"+k])}</button>`).join("")}</div></div>
+  <div class="fld"><label class="flbl" for="evFrom">${esc(T().evFrom)}</label><input class="tf" type="date" id="evFrom" value="${esc(f.from)}"></div>
+  <div class="fld"><label class="flbl" for="evTo">${esc(T().evTo)}</label><input class="tf" type="date" id="evTo" value="${esc(f.to)}"></div>
+  <div class="fld"><label class="flbl" for="evNote">${esc(T().evNote)}</label><input class="tf" id="evNote" value="${esc(f.note||"")}" autocomplete="off"></div>
+  <div class="g2"><button class="btn g nomt" data-a="evCancel">${esc(T().cancel)}</button><button class="btn good nomt" data-a="evSave">${ic("check")}${esc(T().save)}</button></div>
+  ${f.id?`<button class="btn bt" data-a="evDel">${ic("trash")}${esc(T().evDelete)}</button>`:""}</div>`;
+}
+function keepEv(){const f=S.evForm;if(!f)return;const g=id=>$(id)?$(id).value:null;
+ f.name=g("evName")??f.name;f.from=g("evFrom")||f.from;f.to=g("evTo")||f.to;f.note=g("evNote")??f.note;}
+/* the days a lot sat on the shelf: from delivery until the day before it was collected (or today) */
+function shelfDays(x){
+ const end=x.collected?addDays(x.collected,-1):S.today,days=[];
+ for(let d=x.d;d<=end&&days.length<14;d=addDays(d,1)) days.push(d);
+ return days.length?days:[x.d];
+}
+function lotCtx(x){
+ const days=shelfDays(x),ws=days.map(d=>S.weather[d]).filter(w=>w&&w.tmax!=null);
+ const evs=[];days.forEach(d=>eventsOn(d).forEach(e=>{if(!evs.some(z=>z.name===e.name))evs.push(e);}));
+ const tavg=ws.length?ws.reduce((a,w)=>a+w.tmax,0)/ws.length:null,rain=ws.reduce((a,w)=>a+(w.rain_mm||0),0);
+ const worst=ws.slice().sort((a,b)=>(b.code||0)-(a.code||0))[0];
+ return {days,tavg,rain,evs,code:worst?worst.code:null,has:ws.length>0};
+}
+function lotCtxLine(x){
+ const c=lotCtx(x);
+ if(!c.has&&!c.evs.length) return "";
+ return `<div class="ctx" style="margin:8px 0 0">${c.has?`<span class="chip wxc">${ic(WX_IC(c.code))}${Math.round(c.tavg)}°${c.rain>=1?` · ${ic("droplet")}${Math.round(c.rain)} ${esc(T().mm)}`:""}</span>`:""}
+  ${c.evs.map(e=>evChip(e,false)).join("")}</div>`;
+}
+
+/* =================== simple building blocks =================== */
+/* one status per order card, most important first */
+function statusChip(o){
+ const sn=sup();
+ if(!o.sup_seen&&o.sup_adjusted&&o.sup_status!=="rejected") return `<span class="chip warn">${ic("adjustments")}${esc(T().adjustedBy(sn))}</span>`;
+ if(o.sup_status==="rejected") return `<span class="chip bad">${esc(T().supRejected(sn))}</span>`;
+ const dc=deliveryChip(o);if(dc) return dc;
+ return supChip(o.sup_status);
+}
+const madeDay=o=>o.created_at?dayDate(iso(new Date(o.created_at))):"";
+function orderCard(o){
+ const rej=o.sup_status==="rejected";
+ return `<button class="card tap ${rej?"bad":""}" data-a="editOrd" data-x="${o.id}" style="${!o.sup_seen&&!rej?"box-shadow:0 0 0 2px var(--gold),var(--sh)":""}">
+  <div class="row" style="padding:0"><span class="b">${esc(o.label||T().defaultLabel)}${o.recurring?` <i class="ti ti-repeat" style="color:var(--faint)" aria-label="${esc(T().repeat)}"></i>`:""}</span>
+   <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
+  <div class="fr" style="justify-content:space-between;gap:8px;margin-top:6px;flex-wrap:wrap">
+   <span class="mut">${esc(T().storesN(oStores(o)))}${o.created_at?` · ${esc(T().madeOn(madeDay(o)))}`:""}</span>${statusChip(o)}</div></button>`;
+}
+/* later orders (after the week on screen), as one short list */
+function comingUp(forSupplier){
+ const end=addDays(S.pick,6-dOf(S.pick).getDay());
+ const ahead=S.orders.filter(o=>o.for_delivery_on>end&&o.sup_status!=="rejected")
+  .sort((a,b)=>a.for_delivery_on<b.for_delivery_on?-1:a.for_delivery_on>b.for_delivery_on?1:0).slice(0,8);
+ if(!ahead.length) return "";
+ return `<div class="lbl">${esc(T().comingUp)}</div><div class="card list">`+ahead.map(o=>`<button class="lrow tap" data-a="pick" data-x="${o.for_delivery_on}" data-top="1">
+  ${dateTileMini(o.for_delivery_on)}<span class="grow"><span class="b">${esc(o.label||T().defaultLabel)}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span>
+  ${forSupplier&&o.sup_status==="pending"?`<span class="chip warn">${esc(T().needsAnswer)}</span>`:relChip(o.for_delivery_on)}</button>`).join("")+`</div>`;
+}
+function moreBtn(key){
+ const open=!!S.more[key];
+ return `<button class="btn g" data-a="more" data-x="${key}" aria-expanded="${open}">${ic(open?"chevron-up":"chevron-down")}${esc(open?T().hideDetail:T().showDetail)}</button>`;
+}
+
 /* =================== PIN entry =================== */
 function pinScreen(){
  S.screen="pin"; $("tabs").hidden=true; $("pt").classList.add("bare"); applyType(); applyTheme(null);
@@ -717,7 +923,7 @@ async function start(){
 async function q(p){const {data,error}=await p;if(error) throw error;return data||[];}
 async function load(){
  const since=addDays(S.today,-70);
- const [sup,pr,st,hb,sp,dl,pay,spy,spp,po,so,dv,apps]=await Promise.all([
+ const [sup,pr,st,hb,sp,dl,pay,spy,spp,po,so,dv,apps,wx,evs]=await Promise.all([
   q(db.from("suppliers").select("id,name,name_th,cost_cfg").eq("active",true).limit(1)),
   q(db.from("products").select("id,name,name_th,type,returnable,photo_1").eq("active",true).order("created_at")),
   q(db.from("stores").select("id,name,suburb,address,price_tag_required,delivery_days,weeks_of_month,route_position,latitude,longitude,parking_note,parking_note_th,regular,photo_approach,driver_note")
@@ -729,9 +935,14 @@ async function load(){
   q(db.from("supplier_payments").select("amount,paid_on,covers_dates")),
   q(db.from("supplier_products").select("product_id,unit_cost,make_cost")),
   q(db.from("purchase_orders").select(PO_COLS).gte("for_delivery_on",since).order("for_delivery_on").order("created_at")),
-  q(db.from("lot_signoffs").select("lot_date,amount,waste_pct,dist_signed_at,dist_signed_by,sup_signed_at,sup_signed_by")),
+  q(db.from("lot_signoffs").select("lot_date,amount,waste_pct,dist_signed_at,dist_signed_by,sup_signed_at,sup_signed_by,note")),
   q(db.from("deliveries").select("id,store_id,delivered_on,purchase_order_id,completed_at").gte("delivered_on",since)),
-  q(db.from("app_settings").select("key,value")).catch(()=>[])]);
+  q(db.from("app_settings").select("key,value")).catch(()=>[]),
+  q(db.from("weather_days").select("day,tmax,tmin,rain_mm,code").gte("day",addDays(since,-7))).catch(()=>[]),
+  q(db.from("events").select("id,starts_on,ends_on,name,kind,note").gte("ends_on",addDays(since,-7)).order("starts_on")).catch(()=>[])]);
+ S.weather={};(wx||[]).forEach(w=>{S.weather[w.day]={tmax:num(w.tmax),tmin:num(w.tmin),rain_mm:num(w.rain_mm),code:w.code};});
+ S.events=evs||[];
+ setTimeout(refreshContext,0);
  const th=(apps||[]).find(x=>x.key==="themes");
  S.themes=Object.assign({},THEME_DEFAULT,th&&th.value||{});S.themesLoaded=true;applyTheme(role());
  S.supplier=sup[0]||null;S.signoffs=so;S.dels=dv;LAST_LOAD=Date.now();
@@ -849,64 +1060,36 @@ function dayStrip(sel,from,to,mark,act){
   h+=`<button data-a="${act}" data-x="${dISO}" data-sel="${isSel?1:0}" class="${n?"has":due?"due":""} ${tdy?"tdy":""}" ${off?"disabled":""}
    aria-label="${esc(dayName(d.getDay())+" "+d.getDate()+" "+monName(d.getMonth()))}${n?" · "+esc(T().ordersN(n)):""}">
    <span class="w">${esc(dayAb(d.getDay()))}</span><span class="n">${d.getDate()}</span>
-   <i class="c ${pend?"p":""}">${n||""}</i>${tdy?`<span class="tl">${esc(T().relToday)}</span>`:""}</button>`;
+   <i class="c ${pend?"p":""}">${n||""}</i>${tdy?`<span class="tl">${esc(T().relToday)}</span>`:""}${eventsOn(dISO).length?`<span class="evf">${ic("flag-3")}</span>`:""}</button>`;
  }
  const prevT=start<=min?null:(addDays(sel,-7)<min?min:addDays(sel,-7));
  const nextT=end>=max?null:(addDays(sel,7)>max?max:addDays(sel,7));
  const showToday=!(S.today>=start&&S.today<=end)&&S.today>=min&&S.today<=max;
- return `<div class="wkhead"><span class="wkl">${esc(shortDate(start))} – ${esc(shortDate(end))}</span>
-  ${showToday?`<button class="chip" data-a="${act}" data-x="${S.today}">${ic("calendar")}${esc(T().backToday)}</button>`:""}</div>
- <div class="wkg">${h}</div>
- <div class="wkbtns"><button class="btn g" data-a="${act}" data-x="${prevT||""}" ${prevT?"":"disabled"}>${ic("chevron-left")}${esc(T().prevWeek)}</button>
-  <button class="btn g" data-a="${act}" data-x="${nextT||""}" ${nextT?"":"disabled"}>${esc(T().nextWeek)}${ic("chevron-right")}</button></div>`;
+ return `<div class="wkhead"><button class="wkn" data-a="${act}" data-x="${prevT||""}" ${prevT?"":"disabled"} aria-label="${esc(T().prevWeek)}">${ic("chevron-left")}</button>
+  <span class="wkl">${esc(shortDate(start))} – ${esc(shortDate(end))}
+   ${showToday?`<button class="chip" data-a="${act}" data-x="${S.today}" style="margin-top:4px">${ic("calendar")}${esc(T().backToday)}</button>`:""}</span>
+  <button class="wkn" data-a="${act}" data-x="${nextT||""}" ${nextT?"":"disabled"} aria-label="${esc(T().nextWeek)}">${ic("chevron-right")}</button></div>
+ <div class="wkg">${h}</div>`;
 }
-function legend(usual){
- return `<div class="legend"><span><i class="lh"></i>${esc(T().lgOrders)}</span><span><i class="lp"></i>${esc(T().lgPending)}</span>
-  ${usual?`<span><i class="lu"></i>${esc(T().lgUsual)}</span>`:""}</div>`;
-}
+
+function legend(){return "";}
+
 
 /* =================== DISTRIBUTOR: orders =================== */
 function orderTab(){
- const d=dOf(S.pick),list=ordersOn(S.pick),today=new Date();
- const past=S.pick<S.today,sn=sup();
- const rej=list.filter(o=>o.sup_status==="rejected").length,pend=list.filter(o=>o.sup_status==="pending").length;
+ const list=ordersOn(S.pick),past=S.pick<S.today,sn=sup();
  const labels=list.map(o=>(o.label||"").trim());
  const reps=past?[]:ordersOn(addDays(S.pick,-7)).filter(o=>o.recurring&&!labels.includes((o.label||"").trim()));
- // anything the supplier changed or declined that the distributor hasn't opened yet, on any day
  const unseen=S.orders.filter(o=>!o.sup_seen);
  const days=[...new Set(unseen.map(o=>o.for_delivery_on))];
- // every order still to come, so advance orders are never hidden behind the date strip
- const ahead=S.orders.filter(o=>o.for_delivery_on>S.today&&o.for_delivery_on!==S.pick&&o.sup_status!=="rejected")
-  .sort((a,b)=>a.for_delivery_on<b.for_delivery_on?-1:a.for_delivery_on>b.for_delivery_on?1:0).slice(0,12);
- return statusBar()+dayStrip(S.pick,-7,21,(s,dd)=>dueOn(dd).length>0)+legend(true)+
- hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+
+ return statusBar()+dayStrip(S.pick,-7,21,(s,dd)=>dueOn(dd).length>0)+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,true)+
  (unseen.length?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().adjAlert(unseen.length,sn))}</b>
-  ${esc(T().adjAlertBody)}<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${days.map(x=>`<button class="chip" data-a="pick" data-x="${x}"
-   style="background:#fff">${esc(dayName(dOf(x).getDay()))} ${esc(shortDate(x))}</button>`).join("")}</div></span></div>`:"")+
- (rej?alertBox("bad",T().rejectedAlert(rej,sn),T().rejectedBody(sn)):"")+
- (!rej&&pend&&!past?alertBox("warn",T().pendingAlert(pend,sn),"","clock"):"")+
- (past?"":`<button class="btn gold" data-a="newOrd">${ic("plus")}${esc(T().addOrder)}</button>`)+
- reps.map(o=>`<button class="card tap" data-a="repOrd" data-x="${o.id}" style="margin-top:10px;box-shadow:0 0 0 2px var(--a),var(--sh)">
-  <div class="fr">${ic("repeat")}<div class="grow"><div class="b">${esc(o.label||T().defaultLabel)} · ${esc(T().boxes(oBoxes(o)))}</div>
-  <div class="mut">${esc(T().repeatFrom(shortDate(o.for_delivery_on)))} · ${esc(T().repeatTap)}</div></div></div></button>`).join("")+
- `<div class="lbl">${esc(T().ordersOnDay)}</div>`+
- (list.length?list.map(o=>{const done=isDelivered(o),ro=past||done;
-  return `<button class="card tap ${o.sup_status==="rejected"?"bad":""}" data-a="editOrd" data-x="${o.id}"
-   style="${!o.sup_seen&&o.sup_status!=="rejected"?"box-shadow:0 0 0 2px var(--gold),var(--sh)":""}">
-   <div class="row" style="padding-top:0"><span class="b">${esc(o.label||T().defaultLabel)}
-    ${o.recurring?`<span class="chip" data-on="1" style="margin-left:4px">${ic("repeat")}${esc(T().repeat)}</span>`:""}
-    ${!o.sup_seen?`<span class="chip gold" style="margin-left:4px">${esc(T().newTag)}</span>`:""}</span>
-    <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
-   <div class="fr" style="justify-content:space-between;flex-wrap:wrap;gap:6px">
-    <span class="mut">${esc(T().storesN(oStores(o)))} · ${esc(ro?T().viewOnly:T().tapEdit)}</span>
-    <span style="display:flex;gap:5px;flex-wrap:wrap">${o.sup_adjusted?`<span class="chip warn">${ic("adjustments")}${esc(T().adjustedBy(sn))}</span>`:""}${done?deliveryChip(o):deliveryChip(o)+supChip(o.sup_status)}</span></div>
-   ${orderWhen(o)}</button>`;}).join("")
-  :`<div class="empty">${esc(T().noOrdersDay)}</div>`)+
- (ahead.length?`<div class="lbl">${esc(T().comingUp)}</div>`+ahead.map(o=>`<button class="card tap" data-a="pick" data-x="${o.for_delivery_on}" data-top="1">
-  <div class="fr">${dateTileMini(o.for_delivery_on)}<div class="grow"><div class="row" style="padding:0"><span class="b">${esc(o.label||T().defaultLabel)}</span>
-   <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
-   <div class="fr" style="flex-wrap:wrap;gap:5px;margin-top:3px">${relChip(o.for_delivery_on)}${supChip(o.sup_status)}</div>
-   <div class="mut" style="margin-top:4px">${ic("clock")} ${esc(T().made)} ${esc(madeText(o))}</div></div></div></button>`).join(""):"");
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${days.map(x=>`<button class="chip" data-a="pick" data-x="${x}" style="background:#fff">${esc(dayDate(x))}</button>`).join("")}</div></span></div>`:"")+
+ (past?"":`<button class="btn gold" data-a="newOrd" style="margin:0 0 12px">${ic("plus")}${esc(T().addOrder)}</button>`)+
+ reps.map(o=>`<button class="card tap" data-a="repOrd" data-x="${o.id}" style="box-shadow:0 0 0 2px var(--a),var(--sh)">
+  <div class="fr">${ic("repeat")}<span class="grow"><span class="b">${esc(T().repeatShort(o.label||T().defaultLabel))}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span></div></button>`).join("")+
+ (list.length?list.map(orderCard).join(""):`<div class="empty">${esc(T().noOrdersDay)}</div>`)+
+ comingUp(false);
 }
 function prefill(dISO){
  const m={};
@@ -943,22 +1126,26 @@ function orderBuild(){
  (cur&&cur.sup_status!=="pending"?alertBox("info",T().resetNote(sup()),"","info-circle"):"")+
  `<div class="card"><span class="flbl">${esc(T().neededOn)}</span>
   <div class="fr" style="gap:6px;flex-wrap:wrap;margin-bottom:10px"><b style="font-size:calc(var(--fs)*1.15)">${esc(dayDate(ob.date))}</b>${relChip(ob.date)}${n>=2?`<span class="chip warn">${esc(T().advance)}</span>`:""}</div>
+  ${ctxRow(ob.date,false)}
   ${dayStrip(ob.date,0,27,(x,dd)=>dueOn(dd).length>0,"obDate")}
   ${cur&&cur.created_at?`<div class="mut">${ic("clock")} ${esc(T().made)} ${esc(madeText(cur))}</div>`:""}</div>
  <div class="card"><label class="flbl" for="lbl">${esc(T().runName)}</label>
   <input class="tf" id="lbl" data-in="label" value="${esc(ob.label)}" placeholder="${esc(T().runPh)}" autocomplete="off"></div>
- ${S.stores.map(s=>{
-  const on=ob.stores[s.id]!=null;
+ ${S.stores.filter(s=>ob.stores[s.id]!=null).map(s=>{
+  const on=true;
   const pids=S.prices.filter(p=>p.store_id===s.id).map(p=>p.product_id);
   if(on) Object.keys(ob.stores[s.id]).forEach(p=>{if(!pids.includes(p))pids.push(p);});
   return `<div class="card ${on?"on":""}">
   <div class="row" style="padding-top:0"><span><span class="b">${esc(s.name)}</span>
    ${s.regular===false?`<span class="chip" style="margin-left:4px">${esc(T().notRegular)}</span>`:""}</span>
-   <button class="chip" data-a="togStore" data-x="${s.id}" data-on="${on?1:0}">${esc(on?T().inOrder:T().addStore)}</button></div>
+   <button class="chip" data-a="togStore" data-x="${s.id}">${ic("x")}${esc(T().removeShort)}</button></div>
   ${on?pids.map(p=>`<div class="row"><span>${pline(p,32)}${ob.ordered&&ob.ordered[s.id+"|"+p]!=null?`<div class="mut" style="color:var(--warn);font-weight:600;margin-top:2px">${esc(T().ordered(ob.ordered[s.id+"|"+p]))} · ${esc(T().adjustedBy(sup()))}</div>`:""}</span>
    <span class="stp"><button data-a="bq" data-x="${s.id}|${p}|-1" aria-label="−">−</button>
    <span class="v" id="q-${s.id}-${p}">${ob.stores[s.id][p]||0}</span>
    <button data-a="bq" data-x="${s.id}|${p}|1" aria-label="+">+</button></span></div>`).join(""):""}</div>`;}).join("")}
+ ${(()=>{const rest=S.stores.filter(s=>ob.stores[s.id]==null);return rest.length?`<div class="lbl">${esc(T().otherStores)}</div><div class="card list">${rest.map(s=>`<button class="lrow" data-a="togStore" data-x="${s.id}">
+  <span class="grow"><span class="b">${esc(s.name)}</span>${s.regular===false?`<span class="mut"> · ${esc(T().notRegular)}</span>`:""}</span>
+  <span class="chip" data-on="1">${ic("plus")}${esc(T().addShort)}</span></button>`).join("")}</div>`:"";})()}
  <button class="card row" data-a="togRec" style="padding:12px 14px"><span>${ic("repeat")} ${esc(T().repeatWeekly)}</span>
   <span class="chip" data-on="${ob.recurring?1:0}">${esc(ob.recurring?T().on:T().off)}</span></button>
  <button class="btn good" data-a="saveOrd">${ic("check")}${esc(T().saveOrder)}</button>
@@ -1133,12 +1320,13 @@ function lots(){
  const M={};
  S.lines.filter(l=>isRet(l.product_id)).forEach(l=>{
   const d=l.deliveries.delivered_on,sid=l.deliveries.store_id;
-  const m=M[d]=M[d]||{d,stores:{},items:{},cost:0,out:0,back:0,counted:true};
+  const m=M[d]=M[d]||{d,stores:{},items:{},cost:0,out:0,back:0,counted:true,collected:null};
   const it=m.items[l.product_id]=m.items[l.product_id]||{pid:l.product_id,out:0,sold:0,left:0};
   const ss=(m.stores[sid]=m.stores[sid]||{})[l.product_id]=(m.stores[sid]||{})[l.product_id]||{out:0,left:0,counted:true};
   it.out+=l.qty_out;m.out+=l.qty_out;ss.out+=l.qty_out;
   if(!l.settled_at){m.counted=false;ss.counted=false;}
-  else{const b=l.qty_back||0,sold=l.qty_out-b;it.sold+=sold;it.left+=b;ss.left+=b;m.back+=b;m.cost+=sold*Number(l.unit_cost);}
+  else{const b=l.qty_back||0,sold=l.qty_out-b;it.sold+=sold;it.left+=b;ss.left+=b;m.back+=b;m.cost+=sold*Number(l.unit_cost);
+   const cd=iso(new Date(l.settled_at));if(!m.collected||cd>m.collected)m.collected=cd;}
  });
  const paid={};S.supPay.forEach(p=>(p.covers_dates||[]).forEach(d=>{paid[d]=1;}));
  const so={};S.signoffs.forEach(x=>{so[x.lot_date]=x;});
@@ -1168,7 +1356,7 @@ function lotHead(x,withBox){
  return `<div class="row" style="padding-top:0"><span class="fr">${withBox?`<span class="cb" data-on="${sel?1:0}">${sel?"✓":""}</span>`:""}
   <span><span class="b">${esc(dayName(d.getDay()))} ${esc(shortDate(x.d))}</span>
   <div class="mut">${esc(T().storesN(Object.keys(x.stores).length))}${x.counted?` · <b style="color:${wasteColor(x.waste)}">${esc(T().wastePct(x.waste))}</b>`:""}</div></span></span>
-  <span class="rv">${x.counted?money(x.cost):"—"}</span></div>`;
+  <span class="rv">${x.counted?money(x.cost):"—"}</span></div>${lotCtxLine(x)}${x.so&&x.so.note?`<div class="mut" style="margin-top:6px">${ic("note")} ${esc(x.so.note)}</div>`:""}`;
 }
 /* selectable list + one signature for however many are ticked (batch sign) */
 function signList(list,state,label){
@@ -1178,7 +1366,9 @@ function signList(list,state,label){
  if(selL.length) after(()=>sigPad($("sig")));
  return `<div style="display:flex;justify-content:flex-end;margin:-2px 0 6px"><button class="chip" data-a="selAll" data-x="${state}">${esc(allSel?T().clearSel:T().selectAll)}</button></div>`+
  list.map(x=>`<div class="card pick ${S.sel.has(x.d)?"on":""}" data-a="lotSel" data-x="${x.d}" role="checkbox" aria-checked="${S.sel.has(x.d)}">
-  ${lotHead(x,true)}${lotItems(x)}</div>`).join("")+
+  ${lotHead(x,true)}${S.sel.has(x.d)?lotItems(x):""}
+  ${state==="check"&&S.sel.has(x.d)?`<label class="flbl" style="margin-top:10px" for="ln-${x.d}">${esc(T().lotNote)}</label>
+   <input class="tf" id="ln-${x.d}" data-a="noop" data-in="lotnote:${x.d}" value="${esc(S.lotNotes[x.d]||"")}" placeholder="${esc(T().lotNotePh)}" autocomplete="off">`:""}</div>`).join("")+
  (selL.length?`<div class="card on" style="margin-top:4px"><div class="row" style="padding-top:0"><span class="b">${esc(label(selL.length))}</span><span class="rv">${money(tot)}</span></div>
   <span class="flbl">${esc(T().signHere)}</span><canvas class="sig" id="sig"></canvas>
   <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="selNone">${esc(T().cancel)}</button>
@@ -1219,9 +1409,10 @@ function payTab(){
   :`<button class="btn g" data-a="payOpen">${ic("receipt")}${esc(T().recordPay)}</button>`}
  <div class="lbl">${esc(T().toCheck(sn))}</div>
  ${signList(chk,"check",n=>T().signSend(n,sn))}
- ${sp.length?`<div class="lbl">${esc(T().withSup(sn))}</div>${sp.map(x=>`<div class="card">${lotHead(x,false)}
-  <div class="mut">${esc(T().checkedBy(x.so.dist_signed_by||"",shortDate(iso(new Date(x.so.dist_signed_at)))))}</div></div>`).join("")}`:""}
- ${cnt.length?`<div class="lbl">${esc(T().waitCountL)}</div>${cnt.map(x=>`<div class="card" style="opacity:.62">${lotHead(x,false)}${lotItems(x)}</div>`).join("")}`:""}
+ ${sp.length?`<div class="lbl">${esc(T().withSup(sn))}</div><div class="card list">${sp.map(x=>`<div class="lrow"><span class="grow"><span class="b">${esc(dayDate(x.d))}</span>
+  <span class="mut"> · ${esc(T().wastePct(x.waste))}</span></span><span class="rv">${money(x.cost)}</span></div>`).join("")}</div>`:""}
+ ${cnt.length?`<div class="lbl">${esc(T().waitCountL)}</div><div class="card list">${cnt.map(x=>`<div class="lrow"><span class="grow"><span class="b">${esc(dayDate(x.d))}</span>
+  <span class="mut"> · ${esc(T().storesN(Object.keys(x.stores).length))}</span></span>${ic("hourglass")}</div>`).join("")}</div>`:""}
  ${lotHistory(cl)}`;
 }
 function supPayTab(){
@@ -1273,7 +1464,49 @@ function statsTab(){
   <span>${esc(shortDate(w.start))}</span></div>`).join("")}</div></div>
  <div class="lbl">${esc(T().sellThrough)}</div>
  <div class="card">${sp.length?sp.map(x=>`<div class="row"><span>${esc(x.s.name)}</span><span class="rv" style="color:${x.p<75?"var(--bad)":"inherit"}">${x.p}%</span></div>`).join("")
-  :`<div class="empty">${esc(T().noData)}</div>`}</div>`;
+  :`<div class="empty">${esc(T().noData)}</div>`}</div>`+effectsHtml();
+}
+
+/* What moved sales: every counted lot, grouped by the weather and events while it was on the shelf.
+   "Sold %" = boxes sold / boxes left out, fresh (returnable) desserts only, weighted by boxes. */
+function salesEffects(){
+ const L=lots().filter(x=>x.state!=="count"&&x.out>0).map(x=>({x,c:lotCtx(x),sold:x.out-x.back,out:x.out}));
+ const pct=a=>{const o=a.reduce((t,y)=>t+y.out,0);return o?Math.round(100*a.reduce((t,y)=>t+y.sold,0)/o):null;};
+ const g=(label,list)=>({label,n:list.length,p:pct(list)});
+ const wT=L.filter(y=>y.c.tavg!=null),wW=L.filter(y=>y.c.has);
+ const temp=[g(T().hot,wT.filter(y=>y.c.tavg>=30)),g(T().warm,wT.filter(y=>y.c.tavg>=25&&y.c.tavg<30)),g(T().cool,wT.filter(y=>y.c.tavg<25))];
+ const rain=[g(T().rainy,wW.filter(y=>y.c.rain>=5)),g(T().dryDays,wW.filter(y=>y.c.rain<5))];
+ const ev=[g(T().withEvent,L.filter(y=>y.c.evs.length)),g(T().noEvent,L.filter(y=>!y.c.evs.length))];
+ const day=[0,1,2,3,4,5,6].map(k=>g(dayName(k),L.filter(y=>dOf(y.x.d).getDay()===k))).filter(x=>x.n);
+ return {L,all:pct(L),temp,rain,ev,day};
+}
+function effectsHtml(){
+ const E=salesEffects();
+ const head=`<div class="lbl">${esc(T().whatAffects)}</div>`;
+ if(!E.L.length) return head+`<div class="card"><div class="empty">${esc(T().noData)}</div></div>`;
+ const row=x=>{const d=x.p==null?null:x.p-E.all;
+  const col=d==null?"var(--mut)":d<=-5?"var(--bad)":d>=5?"var(--good)":"var(--ink)";
+  return `<div class="eff"><span>${esc(x.label)} <span class="mut">· ${esc(T().nLots(x.n))}</span></span>
+   <span class="d" style="color:${col}">${x.p==null?"—":x.p+"%"}${d?` <span class="mut">(${d>0?"+":""}${d})</span>`:""}</span>
+   <div class="hbar" style="grid-column:1/-1"><i style="width:${x.p||0}%"></i></div></div>`;};
+ const sec=(t,list)=>`<div class="mut b" style="margin-top:12px;color:var(--ink)">${esc(t)}</div>${list.map(row).join("")}`;
+ // one plain-language headline: the biggest gap from normal that has at least 2 lots behind it
+ const cands=E.temp.concat([E.rain[0],E.ev[0]]).filter(x=>x.n>=2&&x.p!=null);
+ const top=cands.sort((a,b)=>Math.abs(b.p-E.all)-Math.abs(a.p-E.all))[0];
+ const insight=top&&Math.abs(top.p-E.all)>=5?alertBox(top.p<E.all?"warn":"good",T().insight(top.label,top.p,E.all),"",top.p<E.all?"trending-down":"trending-up"):"";
+ return head+
+ (E.L.length<8?alertBox("info",T().needMore,"","info-circle"):"")+insight+
+ (S.more.eff?`<div class="card"><div class="eff" style="padding-top:0"><span class="b">${esc(T().allLots)} <span class="mut">· ${esc(T().nLots(E.L.length))}</span></span>
+   <span class="d">${E.all}%</span><div class="hbar" style="grid-column:1/-1"><i style="width:${E.all}%"></i></div></div>
+  ${sec(T().byTemp,E.temp)}${sec(T().byRain,E.rain)}${sec(T().byEvent,E.ev)}${sec(T().byDay,E.day)}
+  <div class="mut" style="margin-top:12px">${esc(T().sellBasis)}</div></div>
+ <div class="lbl">${esc(T().lotReview)}</div>
+ <div class="card">${E.L.slice(0,12).map(y=>{const p=Math.round(100*y.sold/y.out);
+  return `<div class="row" style="align-items:flex-start"><span style="min-width:0"><span class="b">${esc(dayDate(y.x.d))}</span>
+   <div class="mut">${esc(T().storesN(Object.keys(y.x.stores).length))} · ${y.out} → ${y.x.back}</div>${lotCtxLine(y.x)}
+   ${y.x.so&&y.x.so.note?`<div class="mut" style="margin-top:6px">${ic("note")} ${esc(y.x.so.note)}</div>`:""}</span>
+   <span class="rv" style="color:${p<75?"var(--bad)":"inherit"}">${esc(T().soldPct(p))}</span></div>`;}).join("")}</div>`:`<div class="card"><div class="eff" style="padding:0"><span class="b">${esc(T().allLots)} <span class="mut">· ${esc(T().nLots(E.L.length))}</span></span>
+   <span class="d">${E.all}%</span><div class="hbar" style="grid-column:1/-1"><i style="width:${E.all}%"></i></div></div></div>`)+moreBtn("eff");
 }
 
 /* =================== settings (all roles; accounts for distributor) =================== */
@@ -1286,12 +1519,15 @@ function setTab(){
  <div class="lbl">${esc(T().textSize)}</div>
  <div class="sub" style="grid-template-columns:repeat(3,1fr)">${[0,1,2].map(i=>`<button data-a="fz" data-x="${i}" data-on="${S.fz===i?1:0}" style="font-size:${14+i*3}px">A</button>`).join("")}</div>
  ${isDist()?`<div class="lbl">${esc(T().themes)}</div>
+  ${!S.more.theme?`<button class="card tap" data-a="more" data-x="theme"><div class="fr">${roles.map(([r])=>`<span class="av" style="flex-basis:40px;height:40px;font-size:20px;box-shadow:none;background:${THEMES[S.themes[r]||THEME_DEFAULT[r]].a}">${ic(ROLE_IC[r])}</span>`).join("")}
+   <span class="mut">${esc(T().showDetail)}</span></div></button>`:`
   <div class="card"><div class="mut">${esc(T().themeHint)}</div>
   ${roles.map(([r,k])=>{const cur=S.themes[r]||THEME_DEFAULT[r];
    return `<div style="margin-top:14px"><div class="fr"><span class="av" style="flex-basis:36px;height:36px;font-size:18px;box-shadow:none;background:${THEMES[cur].a}">${ic(ROLE_IC[r])}</span>
     <span class="b">${esc(T()[k])}</span><span class="mut" style="margin-left:auto">${esc(S.lang==="th"?THEMES[cur].th:THEMES[cur].en)}</span></div>
     <div class="swatches">${Object.keys(THEMES).map(t=>`<button class="sw" data-a="setTheme" data-x="${r}|${t}" data-on="${cur===t?1:0}"
-     style="background:${THEMES[t].a}" aria-label="${esc(T()[k]+" · "+(S.lang==="th"?THEMES[t].th:THEMES[t].en))}">${cur===t?ic("check"):""}</button>`).join("")}</div></div>`;}).join("")}</div>
+     style="background:${THEMES[t].a}" aria-label="${esc(T()[k]+" · "+(S.lang==="th"?THEMES[t].th:THEMES[t].en))}">${cur===t?ic("check"):""}</button>`).join("")}</div></div>`;}).join("")}
+   <button class="btn g" data-a="more" data-x="theme">${ic("chevron-up")}${esc(T().hideDetail)}</button></div>`}
   <div class="lbl">${esc(T().accounts)}</div>${alertBox("info",T().pinHint,"","key")}
   ${roles.map(([r,k])=>{const L=S.accounts.filter(x=>x.role===r);return `<div class="lbl" style="margin-top:10px">${esc(T()[k])}</div>`+
    (L.length?L.map(x=>{const me=x.id===S.acct.id;
@@ -1385,27 +1621,23 @@ function roundList(){
  const live=o=>o.sup_status!=="rejected"&&oBoxes(o)>0;
  const todays=ordersOn(S.today).filter(live);
  const next=S.orders.filter(o=>o.for_delivery_on>S.today&&live(o))
-  .sort((a,b)=>a.for_delivery_on<b.for_delivery_on?-1:a.for_delivery_on>b.for_delivery_on?1:0).slice(0,6);
+  .sort((a,b)=>a.for_delivery_on<b.for_delivery_on?-1:a.for_delivery_on>b.for_delivery_on?1:0).slice(0,5);
  const card=o=>{
   if(isDelivered(o)) return `<div class="card" style="background:var(--goodw);color:var(--good);box-shadow:none">
-   <div class="row" style="padding:0"><span class="b">✓ ${esc(o.label||T().defaultLabel)}</span><span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
-   <div style="margin-top:4px;font-weight:600">${esc(T().deliveredAt(deliveredTime(o)))}</div></div>`;
+   <div class="row" style="padding:0"><span class="b">✓ ${esc(o.label||T().defaultLabel)}</span><span>${esc(T().deliveredAt(deliveredTime(o)))}</span></div></div>`;
   const p=oProgress(o);
   return `<button class="card tap" data-a="pickRound" data-x="${o.id}" style="box-shadow:0 0 0 2px var(--a),var(--sh)">
-   <div class="fr"><span class="av" style="flex-basis:44px;height:44px;font-size:22px;box-shadow:none">${ic("bell-ringing")}</span>
-   <div class="grow"><div class="row" style="padding:0"><span class="b" style="font-size:calc(var(--fs)*1.08)">${esc(o.label||T().defaultLabel)}</span>
+   <div class="fr"><span class="av" style="flex-basis:48px;height:48px;font-size:24px;box-shadow:none">${ic("truck-delivery")}</span>
+   <div class="grow"><div class="row" style="padding:0"><span class="b" style="font-size:calc(var(--fs)*1.1)">${esc(o.label||T().defaultLabel)}</span>
     <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
    <div class="mut">${esc(p.done?T().roundProgress(p.done,p.total):T().tapLoad(p.total))}</div>
-   ${o.sup_status==="pending"?`<div style="margin-top:5px">${supChip(o.sup_status)}</div>`:""}</div></div>
-   ${orderWhen(o)}</button>`;
+   ${o.sup_status==="pending"?`<div style="margin-top:6px">${supChip(o.sup_status)}</div>`:""}</div></div></button>`;
  };
- return statusBar()+
- `<div class="lbl">${esc(T().todaysRounds)}</div>`+
+ return statusBar()+ctxRow(S.today,false)+
  (todays.length?todays.map(card).join(""):`<div class="empty">${ic("mood-empty")} ${esc(T().noRoundToday)}</div>`)+
- (next.length?`<div class="lbl">${esc(T().nextRounds)}</div>`+next.map(o=>`<div class="k" style="margin-bottom:8px">
-  <div class="fr">${dateTileMini(o.for_delivery_on)}<div class="grow"><div class="row" style="padding:0"><span class="b">${esc(o.label||T().defaultLabel)}</span>
-   <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
-   <div class="mut">${esc(T().storesN(oStores(o)))}</div></div></div>${orderWhen(o)}</div>`).join(""):"")+
+ (next.length?`<div class="lbl">${esc(T().nextRounds)}</div><div class="card list">`+next.map(o=>`<div class="lrow">
+  ${dateTileMini(o.for_delivery_on)}<span class="grow"><span class="b">${esc(o.label||T().defaultLabel)}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span>
+  ${relChip(o.for_delivery_on)}</div>`).join("")+`</div>`:"")+
  `<button class="btn g" data-a="refresh">${ic("refresh")}${esc(T().refresh)}</button>`;
 }
 function dvBriefV(R,o){
@@ -1510,16 +1742,9 @@ async function saveStop(st){
  st.done=true;
 }
 function driverHistory(){
- const list=ordersOn(S.pick),past=S.pick<S.today;
- return statusBar()+dayStrip(S.pick,-7,21,null)+legend(false)+
- hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+
- (list.length?list.map(o=>{const ro=past||isDelivered(o);
-  return `<button class="card tap ${o.sup_status==="rejected"?"bad":""}" data-a="editOrd" data-x="${o.id}">
-  <div class="row" style="padding-top:0"><span class="b">${esc(o.label||T().defaultLabel)}</span><span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
-  <div class="fr" style="justify-content:space-between;flex-wrap:wrap;gap:6px"><span class="mut">${esc(T().storesN(oStores(o)))} · ${esc(ro?T().viewOnly:T().tapFix)}</span>
-   <span style="display:flex;gap:5px;flex-wrap:wrap">${isDelivered(o)?deliveryChip(o):deliveryChip(o)+supChip(o.sup_status)}</span></div>
-  ${orderWhen(o)}</button>`;}).join("")
- :`<div class="empty">${esc(T().noOrdersDay)}</div>`);
+ const list=ordersOn(S.pick);
+ return statusBar()+dayStrip(S.pick,-7,21,null)+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,false)+
+ (list.length?list.map(orderCard).join(""):`<div class="empty">${esc(T().noOrdersDay)}</div>`);
 }
 function qtyEditor(){
  const o=S.orders.find(x=>x.id===S.ob.id);if(!o){S.ob=null;return driverHistory();}
@@ -1544,17 +1769,14 @@ function supOrders(){
  const waiting=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending").length;
  const d=dOf(S.pick);
  const tagChip=n=>n?` <span class="chip gold">${esc(T().tagged(n))}</span>`:"";
- const ahead=S.orders.filter(o=>o.for_delivery_on>S.today&&o.for_delivery_on!==S.pick&&o.sup_status!=="rejected")
-  .sort((a,b)=>a.for_delivery_on<b.for_delivery_on?-1:a.for_delivery_on>b.for_delivery_on?1:0).slice(0,12);
- return statusBar()+dayStrip(S.pick,-3,21,null)+legend(false)+
- hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+
+ return statusBar()+dayStrip(S.pick,-3,21,null)+
+ hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,false)+
  (waiting?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().needAnswer(waiting))}</b>
   <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${[...new Set(S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending").map(o=>o.for_delivery_on))]
    .map(x=>`<button class="chip" data-a="pick" data-x="${x}" style="background:#fff">${esc(dayDate(x))}</button>`).join("")}</div></span></div>`:"")+
  `<div class="lbl" style="margin-top:6px"><span>${esc(T().toMake)}</span><span>${esc(T().acceptedOnly)}</span></div>
- <div class="g3">${TYPES.map(ty=>`<div class="k c"><div class="kk">${esc(T()[ty])}</div><div class="kv">${t[ty]}</div></div>`).join("")}</div>
- ${Object.keys(pt).length?`<div class="card" style="margin-top:8px">${Object.keys(pt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.05)">
-  <span>${pline(pid,40)}${tagChip(pt[pid].tag)}</span><span class="rv">${pt[pid].q}</span></div>`).join("")}</div>`:""}
+ ${Object.keys(pt).length?`<div class="card">${Object.keys(pt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.05)">
+  <span>${pline(pid,40)}${tagChip(pt[pid].tag)}</span><span class="rv">${pt[pid].q}</span></div>`).join("")}</div>`:`<div class="empty">—</div>`}
  <div class="lbl">${esc(T().incoming)}</div>
  ${list.length?list.map(o=>{
   const st=o.sup_status,editing=S.adj&&S.adj.id===o.id;
@@ -1569,7 +1791,6 @@ function supOrders(){
       ${v!==was?`<div class="mut" style="color:var(--warn);font-weight:600">${esc(T().ordered(was))}</div>`:""}</span>
       <span class="stp"><button data-a="adjQ" data-x="${l.id}|-1" aria-label="−">−</button><span class="v" id="aq-${l.id}">${v}</span>
       <button data-a="adjQ" data-x="${l.id}|1" aria-label="+">+</button></span></div>`;}).join("")}`;}).join("")}
-    ${orderWhen(o)}
     <button class="btn good" data-a="supAccept" data-x="${o.id}">${ic("check")}${esc(T().acceptAdj)}</button>
     <button class="btn g" data-a="adjCancel">${esc(T().cancel)}</button></div>`;
   }
@@ -1579,17 +1800,11 @@ function supOrders(){
   ${Object.keys(tt).map(pid=>`<div class="row" style="font-size:calc(var(--fs)*1.05)"><span>${pline(pid,40)}${tagChip(tt[pid].tag)}
    ${o.sup_adjusted&&ordered[pid]!==tt[pid].q?`<div class="mut" style="color:var(--warn);font-weight:600;margin-left:50px">${esc(T().ordered(ordered[pid]))}</div>`:""}</span>
    <span class="rv">${tt[pid].q}</span></div>`).join("")}
-  ${orderWhen(o)}
   ${st==="pending"?`<button class="btn g" data-a="adjOpen" data-x="${o.id}">${ic("adjustments")}${esc(T().adjust)}</button>
    <div class="g2" style="margin-top:8px"><button class="btn good nomt" data-a="supAccept" data-x="${o.id}">${ic("check")}${esc(T().accept)}</button>
    <button class="btn bad nomt" data-a="supAns" data-x="${o.id}|rejected">${ic("x")}${esc(T().reject)}</button></div>`
    :`<div style="text-align:right;margin-top:4px"><button class="chip" data-a="supAns" data-x="${o.id}|pending">${esc(T().undo)}</button></div>`}</div>`;}).join("")
-  :`<div class="empty">${esc(T().noOrders)}</div>`}`+
- (ahead.length?`<div class="lbl">${esc(T().comingUp)}</div>`+ahead.map(o=>`<button class="card tap" data-a="pick" data-x="${o.for_delivery_on}" data-top="1">
-  <div class="fr">${dateTileMini(o.for_delivery_on)}<div class="grow"><div class="row" style="padding:0"><span class="b">${esc(o.label||T().defaultLabel)}</span>
-   <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
-   <div class="fr" style="flex-wrap:wrap;gap:5px;margin-top:3px">${relChip(o.for_delivery_on)}${o.sup_status==="pending"?`<span class="chip warn">${esc(T().needsAnswer)}</span>`:`<span class="chip good">${esc(T().accepted)}</span>`}</div>
-   <div class="mut" style="margin-top:4px">${ic("clock")} ${esc(T().made)} ${esc(madeText(o))}</div></div></div></button>`).join(""):"");
+  :`<div class="empty">${esc(T().noOrders)}</div>`}`+comingUp(true);
 }
 function periodFrom(){
  if(S.period==="month") return S.today.slice(0,8)+"01";
@@ -1653,10 +1868,10 @@ const ACT={
  key:(el)=>pressKey(el.dataset.x),
  retry:()=>start(),
  out:()=>signOut(),
- tab:(el)=>{S.tab=el.dataset.x;S.ob=null;S.open=null;S.confirm=null;S.ctype=null;S.payForm=null;
+ tab:(el)=>{S.tab=el.dataset.x;S.evForm=null;S.ob=null;S.open=null;S.confirm=null;S.ctype=null;S.payForm=null;
   S.addAcct=null;S.pinEdit=null;S.sel=new Set();S.sigDrawn=false;S.lotOpen=null;S.adj=null;S.reset=false;if(S.tab==="sorder"&&S.pick<S.today)S.pick=nextOrderDay();render();
   softReload(false);},
- pick:(el)=>{S.pick=el.dataset.x;render();if(el.dataset.top)window.scrollTo(0,0);},
+ pick:(el)=>{S.pick=el.dataset.x;S.evForm=null;render();if(el.dataset.top)window.scrollTo(0,0);},
  obDate:(el)=>{keepLabel();const ob=S.ob,nd=el.dataset.x;
   // a new order nobody has touched yet follows the new day's regular stores
   if(!ob.id&&ob.auto&&JSON.stringify(ob.stores)===ob.auto){ob.stores=prefill(nd);ob.auto=JSON.stringify(ob.stores);}
@@ -1748,9 +1963,10 @@ const ACT={
   el.disabled=true;const now=new Date().toISOString(),sig=$("sig").toDataURL("image/png"),who=nm(S.acct);
   try{
    if(state==="check"){
-    const rows=L.map(x=>({lot_date:x.d,amount:x.cost,waste_pct:x.waste,dist_signed_at:now,dist_signed_by:who,dist_signature:sig}));
+    L.forEach(x=>{const e=$("ln-"+x.d);if(e)S.lotNotes[x.d]=e.value.trim();});
+    const rows=L.map(x=>({lot_date:x.d,amount:x.cost,waste_pct:x.waste,dist_signed_at:now,dist_signed_by:who,dist_signature:sig,note:S.lotNotes[x.d]||null}));
     const {error}=await db.from("lot_signoffs").upsert(rows,{onConflict:"lot_date"});if(error) throw error;
-    rows.forEach(r=>{const o=S.signoffs.find(x=>x.lot_date===r.lot_date);const v={lot_date:r.lot_date,amount:r.amount,waste_pct:r.waste_pct,dist_signed_at:now,dist_signed_by:who};
+    rows.forEach(r=>{const o=S.signoffs.find(x=>x.lot_date===r.lot_date);const v={lot_date:r.lot_date,amount:r.amount,waste_pct:r.waste_pct,dist_signed_at:now,dist_signed_by:who,note:r.note};
      o?Object.assign(o,v):S.signoffs.push(v);});
     S.sel=new Set();render();toast(T().signSend(L.length,sup()));
    }else{
@@ -1771,6 +1987,27 @@ const ACT={
 
  /* settings / accounts */
  resetOpen:()=>{S.reset=true;render();},
+ noop:()=>{},
+ more:(el)=>{S.more[el.dataset.x]=!S.more[el.dataset.x];render();},
+ evNew:()=>{S.evForm={id:null,name:"",kind:"festival",from:S.pick,to:S.pick,note:""};render();setTimeout(()=>{const e=$("evName");if(e)e.focus();},50);},
+ evEdit:(el)=>{const e=S.events.find(x=>x.id===el.dataset.x);if(!e)return;
+  S.evForm={id:e.id,name:e.name,kind:e.kind,from:e.starts_on,to:e.ends_on,note:e.note||""};render();},
+ evKind:(el)=>{keepEv();S.evForm.kind=el.dataset.x;render();},
+ evCancel:()=>{S.evForm=null;render();},
+ evSave:async(el)=>{keepEv();const f=S.evForm;
+  if(!f.name||!f.name.trim()) return fail(T().evNeedName);
+  let from=f.from||S.pick,to=f.to||from;if(to<from){const t=from;from=to;to=t;}
+  const row={name:f.name.trim(),kind:f.kind,starts_on:from,ends_on:to,note:(f.note||"").trim()||null};
+  el.disabled=true;
+  const r=f.id?await db.from("events").update(row).eq("id",f.id).select("id,starts_on,ends_on,name,kind,note").single()
+   :await db.from("events").insert(row).select("id,starts_on,ends_on,name,kind,note").single();
+  if(r.error){el.disabled=false;return fail(r.error.message);}
+  S.events=S.events.filter(x=>x.id!==f.id).concat([r.data||Object.assign({id:f.id},row)]).sort((a,b)=>a.starts_on<b.starts_on?-1:1);
+  S.evForm=null;render();},
+ evDel:async(el)=>{const f=S.evForm;if(!f||!f.id)return;el.disabled=true;
+  const {error}=await db.from("events").delete().eq("id",f.id);
+  if(error){el.disabled=false;return fail(error.message);}
+  S.events=S.events.filter(x=>x.id!==f.id);S.evForm=null;render();},
  setTheme:async(el)=>{const [r,t]=el.dataset.x.split("|");if(!THEMES[t])return;
   const prev=S.themes[r];S.themes=Object.assign({},S.themes,{[r]:t});
   if(r===role()) applyTheme(r);
@@ -1875,6 +2112,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("change",async e=>{
  const el=e.target,k=el.dataset&&el.dataset.in;if(!k) return;
  if(k==="label"){if(S.ob)S.ob.label=el.value;return;}
+ if(k.startsWith("lotnote:")){S.lotNotes[k.slice(8)]=el.value.trim();return;}
  if(k.startsWith("f:")){const o=openObj(),f=k.slice(2);if(!o)return;o[f]=el.value.trim()||null;
   if(await upd(TBL[S.open.kind],o.id,{[f]:o[f]})) render();return;}
  if(k.startsWith("sp:")){const [,pid,f]=k.split(":"),s=openObj(),sp=spOf(s.id,pid);if(!sp)return;
@@ -1939,7 +2177,7 @@ async function finishStop(el){
 async function softReload(force,btn){
  if(S.screen!=="app"||!S.acct) return;
  if(!force&&Date.now()-LAST_LOAD<20000) return;
- const busy=S.ob||S.adj||S.sel.size||S.reset||S.payForm||S.addAcct||S.open||(S.round&&S.dv.phase!=="brief");
+ const busy=S.ob||S.adj||S.sel.size||S.reset||S.payForm||S.addAcct||S.open||S.evForm||S.pinEdit||(S.round&&S.dv.phase!=="brief");
  if(busy&&!force) return;
  if(btn) btn.disabled=true;
  try{
