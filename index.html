@@ -20,8 +20,8 @@
    One rule carries the UI: white lifted card + ›  = tap it · soft tinted tile = just a number · coloured border + icon disc = warning.
    The accent (--a) is the signed-in role's theme colour, set by the distributor in Settings. */
 :root{
- --ink:#11171C;--mut:#46525C;--faint:#66727C;--line:#DAE0E5;--paper:#fff;--wash:#F1F4F6;--flat:#EEF1F4;
- --bg:#F3F6F8;--a:#0B8277;--a2:#0A5F57;--aw:#E1F3F0;
+ --ink:#11171C;--mut:#46525C;--faint:#66727C;--line:#DAE0E5;--paper:#fff;--wash:rgba(17,23,28,.045);--flat:rgba(17,23,28,.06);
+ --bg:#E9EDF0;--a:#0B8277;--a2:#0A5F57;--aw:#E1F3F0;
  --gold:#E0A020;--good:#1E7B3C;--goodw:#E7F4EA;--bad:#B3261E;--badw:#FDEEEC;--badl:#EFB3AD;
  --warn:#8A5000;--warnw:#FFF4DE;--warnl:#F2C66E;--info:#1D4F86;--infow:#EAF2FB;--infol:#BCD2EA;
  --fs:18px;--r:22px;--r2:16px;
@@ -340,11 +340,11 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
 .band .wkg .evf{color:#FFD27A}
 .band .wkg button[data-sel="1"] .evf{color:#B7791F}
 /* information panels: flat, no shadow */
-.card{background:rgba(255,255,255,.62);box-shadow:none;border:1px solid rgba(255,255,255,.85)}
+.card{background:rgba(255,255,255,.74);box-shadow:none;border:1px solid rgba(255,255,255,.9)}
 .card.on{box-shadow:0 0 0 2px var(--a)}
 .card.bad{box-shadow:0 0 0 2px var(--bad)}
 /* things you tap: frosted, lifted */
-button.card,.card.tap,.card.pick,.k.tap,.card.tapl{background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.95);
+button.card,.card.tap,.card.pick,.k.tap,.card.tapl{background:rgba(255,255,255,.93);border:1px solid rgba(255,255,255,.95);
  -webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
  box-shadow:0 12px 26px -14px rgba(var(--argb),.45),0 2px 6px rgba(20,26,31,.06)}
 button.card.bad,.card.tap.bad{box-shadow:0 0 0 2px var(--bad),0 12px 26px -14px rgba(179,38,30,.4)}
@@ -410,12 +410,12 @@ const MON_TH=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","ม�
 const MON_EN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const TYPES=["fresh","dry","frozen"];
 const THEMES={
- aqua:  {a:"#0B8277",a2:"#0A5F57",aw:"#E1F3F0",bg:"#F2F7F6",th:"เขียวน้ำทะเล",en:"Aqua"},
- green: {a:"#1E7F3E",a2:"#155C2D",aw:"#E5F3E9",bg:"#F3F7F4",th:"เขียว",en:"Green"},
- blue:  {a:"#3360C1",a2:"#274C99",aw:"#E8EEFA",bg:"#F3F5FA",th:"น้ำเงิน",en:"Blue"},
- violet:{a:"#6742BD",a2:"#4D3290",aw:"#EFEAFA",bg:"#F6F4FA",th:"ม่วง",en:"Violet"},
- orange:{a:"#C2410C",a2:"#8F360C",aw:"#FCEDE4",bg:"#FAF6F3",th:"ส้ม",en:"Orange"},
- slate: {a:"#334155",a2:"#1E293B",aw:"#EAEEF3",bg:"#F4F6F8",th:"เทาเข้ม",en:"Slate"}};
+ aqua:  {a:"#0B8277",a2:"#0A5F57",aw:"#E1F3F0",bg:"#E6EEEC",th:"เขียวน้ำทะเล",en:"Aqua"},
+ green: {a:"#1E7F3E",a2:"#155C2D",aw:"#E5F3E9",bg:"#E7EEE9",th:"เขียว",en:"Green"},
+ blue:  {a:"#3360C1",a2:"#274C99",aw:"#E8EEFA",bg:"#E7EBF3",th:"น้ำเงิน",en:"Blue"},
+ violet:{a:"#6742BD",a2:"#4D3290",aw:"#EFEAFA",bg:"#ECE9F3",th:"ม่วง",en:"Violet"},
+ orange:{a:"#C2410C",a2:"#8F360C",aw:"#FCEDE4",bg:"#F1EBE6",th:"ส้ม",en:"Orange"},
+ slate: {a:"#334155",a2:"#1E293B",aw:"#EAEEF3",bg:"#E8ECF0",th:"เทาเข้ม",en:"Slate"}};
 const THEME_DEFAULT={distributor:"aqua",driver:"green",supplier:"blue"};
 
 const I18N={
@@ -643,7 +643,7 @@ function applyType(){
 function applyTheme(r){
  let k=r?(S.themes[r]||THEME_DEFAULT[r]):null;
  if(r&&!S.themesLoaded){try{k=localStorage.getItem("ss_theme_"+r)||k;}catch(e){}}
- const t=THEMES[k]||{a:"#141A1F",a2:"#141A1F",aw:"#EEF1F4",bg:"#F3F6F8"};
+ const t=THEMES[k]||{a:"#141A1F",a2:"#141A1F",aw:"#EEF1F4",bg:"#E9EDF0"};
  const st=document.documentElement.style;
  st.setProperty("--a",t.a);st.setProperty("--a2",t.a2);st.setProperty("--aw",t.aw);st.setProperty("--bg",t.bg);
  const rgb=x=>{const h=x.replace("#","");return [0,2,4].map(i=>parseInt(h.substr(i,2),16));};
@@ -1036,7 +1036,7 @@ async function load(){
   q(db.from("hubs").select("id,name,name_th,note,address,latitude,longitude,is_kitchen,position").eq("active",true).order("position",{ascending:true,nullsFirst:false})),
   q(db.from("store_products").select("store_id,product_id,sell_price,retail_price,default_qty")),
   q(db.from("delivery_lines").select("id,product_id,qty_out,qty_back,unit_price,unit_cost,settled_at,deliveries!inner(id,store_id,delivered_on)")),
-  q(db.from("store_payments").select("store_id,amount,paid_on")),
+  q(db.from("store_payments").select("store_id,amount,paid_on,delivery_id")),
   q(db.from("supplier_payments").select("amount,paid_on,covers_dates")),
   q(db.from("supplier_products").select("product_id,unit_cost,make_cost")),
   q(db.from("purchase_orders").select(PO_COLS).gte("for_delivery_on",since).order("for_delivery_on").order("created_at")),
@@ -1807,34 +1807,21 @@ function dvDoneV(R){
  <button class="btn good big" data-a="dvFinish">${ic("flag")}${esc(T().finish)}</button>`;
 }
 async function saveStop(st){
- const now=new Date().toISOString();
- for(const b of st.back){
-  for(const a of alloc(b)){
-   const {error}=await db.from("delivery_lines").update({qty_back:a.back,reason:a.back>0?"unsold":null,settled_at:now}).eq("id",a.id);
-   if(error) throw error;
-   const l=S.lines.find(x=>x.id===a.id);if(l){l.qty_back=a.back;l.settled_at=now;}
-  }
- }
- const amt=dueFor(st);
- if(amt>0){
-  const {error}=await db.from("store_payments").insert({store_id:st.store.id,amount:amt,paid_on:S.today,notes:"Collected by "+(S.acct.name||"")});
-  if(error) throw error;
-  S.payments.push({store_id:st.store.id,amount:amt,paid_on:S.today});
- }
- st.got=amt;
- const rows=st.out.filter(o=>o.qty>0);
- // the delivery row is written even if nothing was dropped, so the stop stays done
- const {data:del,error:de}=await db.from("deliveries").insert({store_id:st.store.id,delivered_on:S.today,completed_at:now,
-  purchase_order_id:S.round,driver_ref:role()==="driver"?S.acct.id:null}).select("id").single();
- if(de) throw de;
- S.dels.push({id:del.id,store_id:st.store.id,delivered_on:S.today,purchase_order_id:S.round,completed_at:now});
- if(rows.length){
-  const {data:nl,error:le}=await db.from("delivery_lines").insert(rows.map(o=>({delivery_id:del.id,product_id:o.pid,
-   supplier_id:S.supplier?S.supplier.id:null,qty_out:o.qty,unit_price:o.price,unit_cost:o.cost})))
-   .select("id,product_id,qty_out,qty_back,unit_price,unit_cost,settled_at");
-  if(le) throw le;
-  (nl||[]).forEach(l=>S.lines.push(Object.assign(l,{deliveries:{id:del.id,store_id:st.store.id,delivered_on:S.today}})));
- }
+ // one call, one transaction on the server: today's drop + last lot's leftovers + the cash.
+ // All or nothing, and safe to repeat (a second tap after a lost reply changes nothing).
+ const back=[];st.back.forEach(b=>alloc(b).forEach(a=>back.push({id:a.id,back:a.back})));
+ const {data:r,error}=await db.rpc("finish_stop",{p:{order:S.round,store:st.store.id,day:S.today,
+  driver:role()==="driver"?S.acct.id:null,note:"Collected by "+(S.acct.name||""),
+  back,out:st.out.filter(o=>o.qty>0).map(o=>({product_id:o.pid,supplier_id:S.supplier?S.supplier.id:null,qty_out:o.qty,unit_price:o.price,unit_cost:o.cost}))}});
+ if(error) throw error;
+ const at=r.at||new Date().toISOString();
+ if(!S.dels.some(d=>d.id===r.delivery_id)) S.dels.push({id:r.delivery_id,store_id:st.store.id,delivered_on:S.today,purchase_order_id:S.round,completed_at:at});
+ const bk={};back.forEach(x=>{bk[x.id]=x.back;});
+ (r.settled||[]).forEach(id=>{const l=S.lines.find(x=>x.id===id);if(l){l.qty_back=bk[id];l.settled_at=at;}});
+ (r.lines||[]).forEach(l=>{if(!S.lines.some(x=>x.id===l.id)) S.lines.push(Object.assign(l,{deliveries:{id:r.delivery_id,store_id:st.store.id,delivered_on:S.today}}));});
+ const paid=Number(r.paid)||0;
+ if(paid>0&&!S.payments.some(x=>x.delivery_id===r.delivery_id)) S.payments.push({store_id:st.store.id,amount:paid,paid_on:S.today,delivery_id:r.delivery_id});
+ st.got=paid;
  st.done=true;
 }
 function driverHistory(){
