@@ -432,7 +432,7 @@ const THEMES={
  violet:{a:"#6742BD",a2:"#4D3290",aw:"#EFEAFA",bg:"#ECE9F3",th:"ม่วง",en:"Violet"},
  orange:{a:"#C2410C",a2:"#8F360C",aw:"#FCEDE4",bg:"#F1EBE6",th:"ส้ม",en:"Orange"},
  slate: {a:"#334155",a2:"#1E293B",aw:"#EAEEF3",bg:"#E8ECF0",th:"เทาเข้ม",en:"Slate"}};
-const THEME_DEFAULT={distributor:"aqua",driver:"green",supplier:"blue",admin:"slate",maker:"orange"};
+const THEME_DEFAULT={reseller:"aqua",driver:"green",production:"orange",admin:"slate"};
 
 const I18N={
 th:{
@@ -470,7 +470,7 @@ th:{
  countFirst:"รอนับของคืนก่อนถึงจะจ่ายได้",noBatches:"ยังไม่มีรอบที่ต้องจ่าย",
  profitAll:"กำไรรวม",waste:"ของเสีย",profit6:"กำไร 6 สัปดาห์ล่าสุด",sellThrough:"อัตราขายได้",noData:"ยังไม่มีข้อมูล",
  language:"ภาษา",textSize:"ขนาดตัวอักษร",accounts:"บัญชีและรหัส",roleDist:"ผู้สั่ง",roleAdmin:"แอดมิน",roleMaker:"คนทำขนม",tAll:"ออเดอร์",tAcct:"บัญชี",tMake:"ต้องทำ",myOrders:"ออเดอร์ของฉัน",orderMine:"สั่งให้ลูกค้าของฉัน",noMyStores:"ยังไม่มีลูกค้าของคุณ ให้แอดมินเพิ่มร้านให้ก่อน",waitSup:(n,s)=>"รอ"+s+"ตอบอีก "+n+" ออเดอร์ ยังไม่รวมในยอดนี้",makeOrders:"ออเดอร์ของวันนี้",loadAllBtn:"ขึ้นรถครบแล้ว",shopOwner:"ร้านนี้เป็นลูกค้าของ",mainShops:"ร้านของผู้สั่ง",myCash:"เงินจากลูกค้าของฉัน",totalW:"รวม",by:n=>"โดย "+n,adminOnlyDel:"ลบออเดอร์ได้เฉพาะแอดมิน",roleDriver:"คนขับ",roleSup:"ซัพพลายเออร์",
- pin:"รหัส",changePin:"เปลี่ยนรหัส",newPin:"รหัสใหม่ 4 ตัว",addAccount:"เพิ่มบัญชี",role:"ประเภทบัญชี",
+ pin:"รหัส",changePin:"แก้ไข",newPin:"รหัสใหม่ 4 ตัว",addAccount:"เพิ่มบัญชี",role:"ประเภทบัญชี",
  pinRule:"ต้องเป็นตัวเลข 4 ตัว",pinTaken:"รหัสนี้มีคนใช้แล้ว",needName:"ใส่ชื่อก่อน",you:"คุณ",cantRemoveSelf:"ลบบัญชีตัวเองไม่ได้",
  removeAcctQ:n=>"ลบบัญชี "+n+"?",yesRemove:"ใช่ ลบเลย",remove:"ลบ",pinHint:"แต่ละคนใช้รหัสของตัวเองเข้าแอป รหัสบอกว่าเป็นใคร",
  noRound:"ยังไม่มีออเดอร์ให้ส่ง",newRound:"มีรอบส่งใหม่!",tapLoad:n=>n+" ร้าน · แตะเพื่อเริ่มโหลดของ",
@@ -522,7 +522,7 @@ th:{
  addEventShort:"งาน/วันหยุด",repeatShort:l=>"ทำซ้ำ "+l,otherStores:"ร้านอื่น แตะเพื่อเพิ่ม",addShort:"เพิ่ม",removeShort:"เอาออก",
  showDetail:"ดูรายละเอียด",hideDetail:"ซ่อนรายละเอียด",madeOn:d=>"สั่ง "+d,
  totalBoxes:n=>"รวม "+n+" กล่อง",notIncl:n=>"ยังไม่รวม "+n+" ออเดอร์ที่รอคุณตอบ",byStoreOf:p=>p+" แยกตามร้าน",
- tapTile:"แตะช่องเพื่อดูว่าแต่ละร้านได้เท่าไร",boxesWord:"กล่อง",makeLockT:"ตอบออเดอร์ให้ครบก่อน",makeLockB:n=>"ยอดที่ต้องทำของวันนี้จะขึ้นตรงนี้ เมื่อตอบครบทุกออเดอร์ (เหลืออีก "+n+")",answered:"ตอบแล้ว",waitingHere:n=>"รอคุณตอบ "+n,
+ tapTile:"แตะช่องเพื่อดูว่าแต่ละร้านได้เท่าไร",boxesWord:"กล่อง",roleRes:"ตัวแทนขาย",roleProd:"ฝ่ายผลิต",roleDistr:"ผู้จัดจำหน่าย",roundOf:n=>"รอบ"+n,pickDriver:"คนขับ",noDriver:"ยังไม่เลือก (คนขับทุกคนเห็น)",resOwe:"ตัวแทนค้างจ่าย",fromRes:"ยอดจากตัวแทน รอคุณเซ็นรับ",beingChecked:n=>n+" รอบ รอตัวแทนตรวจก่อน",allW:"ทั้งหมด",viewSales:"ภาพรวม",viewCost:"ต้นทุน",trim:"ของไม่พอ ปรับจำนวน",trimmed:"ปรับจำนวนแล้ว",adjAlert:(n,s)=>s+"ปรับจำนวน "+n+" ออเดอร์",distSwitch:"ผู้จัดจำหน่าย (เซ็นรับเงินจากตัวแทน)",reportsTo:"ส่งยอดเงินให้",noneW:"ไม่มี",needOwner:"ยังไม่ได้เลือกตัวแทน",shopOwner:"ร้านนี้เป็นของตัวแทน",tStats:"สถิติ",lotBy:n=>"ของ "+n,makeLockT:"ตอบออเดอร์ให้ครบก่อน",makeLockB:n=>"ยอดที่ต้องทำของวันนี้จะขึ้นตรงนี้ เมื่อตอบครบทุกออเดอร์ (เหลืออีก "+n+")",answered:"ตอบแล้ว",waitingHere:n=>"รอคุณตอบ "+n,
  noSupplier:"ยังไม่ได้ตั้งซัพพลายเออร์"},
 en:{
  enterPin:"Enter your 4-digit PIN",wrongPin:"PIN not recognised",locked:"Too many tries. Wait 10 minutes.",del:"Delete",
@@ -559,7 +559,7 @@ en:{
  countFirst:"Count the leftovers before this can be paid",noBatches:"Nothing to pay yet",
  profitAll:"Profit to date",waste:"Wastage",profit6:"Profit, last 6 weeks",sellThrough:"Sell-through",noData:"No data yet",
  language:"Language",textSize:"Text size",accounts:"Accounts & PINs",roleDist:"Orderer",roleAdmin:"Admin",roleMaker:"Maker",tAll:"Orders",tAcct:"Accounts",tMake:"To make",myOrders:"My orders",orderMine:"Order for my customers",noMyStores:"No customers of yours yet. Ask the admin to add them.",waitSup:(n,s)=>n+(n===1?" order":" orders")+" still waiting for "+s+" — not in this total yet",makeOrders:"Orders for this day",loadAllBtn:"All loaded",shopOwner:"Whose customer is this shop",mainShops:"Orderer's shops",myCash:"From my customers",totalW:"Total",by:n=>"by "+n,adminOnlyDel:"Only the admin can delete orders",roleDriver:"Driver",roleSup:"Supplier",
- pin:"PIN",changePin:"Change PIN",newPin:"New 4-digit PIN",addAccount:"Add account",role:"Account type",
+ pin:"PIN",changePin:"Edit",newPin:"New 4-digit PIN",addAccount:"Add account",role:"Account type",
  pinRule:"PIN must be 4 digits",pinTaken:"That PIN is already in use",needName:"Enter a name first",you:"you",cantRemoveSelf:"You can't remove your own account",
  removeAcctQ:n=>"Remove "+n+"?",yesRemove:"Yes, remove",remove:"Remove",pinHint:"Everyone signs in with their own PIN. The PIN decides which app they see.",
  noRound:"No orders to deliver yet",newRound:"New round ready!",tapLoad:n=>n+" store"+(n===1?"":"s")+" · tap to start loading",
@@ -611,7 +611,7 @@ en:{
  addEventShort:"Event",repeatShort:l=>"Repeat "+l,otherStores:"Other stores, tap to add",addShort:"Add",removeShort:"Remove",
  showDetail:"Show details",hideDetail:"Hide details",madeOn:d=>"made "+d,
  totalBoxes:n=>"Total "+n+" boxes",notIncl:n=>"Not counting "+n+(n===1?" order":" orders")+" waiting for your answer",byStoreOf:p=>p+" by store",
- tapTile:"Tap a box to see how many go to each store",boxesWord:"boxes",makeLockT:"Answer every order first",makeLockB:n=>"The total to make for this day shows here once every order is answered ("+n+" left).",answered:"Answered",waitingHere:n=>n+" waiting for you",
+ tapTile:"Tap a box to see how many go to each store",boxesWord:"boxes",roleRes:"Reseller",roleProd:"Production",roleDistr:"Distributor",roundOf:n=>n+"'s round",pickDriver:"Driver",noDriver:"Not picked (every driver sees it)",resOwe:"Resellers owe you",fromRes:"Resellers' deliveries to sign off",beingChecked:n=>n+(n===1?" lot":" lots")+" waiting for the reseller to check",allW:"All",viewSales:"Sales",viewCost:"Costs",trim:"Short? Change amounts",trimmed:"Changed",adjAlert:(n,s)=>s+" changed "+n+(n===1?" order":" orders"),distSwitch:"Distributor (signs off resellers' money)",reportsTo:"Money goes to",noneW:"None",needOwner:"No reseller picked yet",shopOwner:"Whose shop (reseller)",tStats:"Stats",lotBy:n=>"from "+n,makeLockT:"Answer every order first",makeLockB:n=>"The total to make for this day shows here once every order is answered ("+n+" left).",answered:"Answered",waitingHere:n=>n+" waiting for you",
  noSupplier:"No supplier set up yet"}};
 
 /* =================== setup =================== */
@@ -625,7 +625,7 @@ const S={lang:localStorage.getItem("ss_lang")||"th",fz:+(localStorage.getItem("s
  payments:[],supPay:[],orders:[],accounts:[],
  tab:null,pick:null,ob:null,confirm:null,st:"store",open:null,payForm:null,signing:null,sigDrawn:false,
  period:"week",ctype:null,stops:null,dv:{phase:"notify",si:0,pi:0,loaded:{},photos:[]},addAcct:null,pinEdit:null,
- round:null,more:{},mk:null,dels:[],weather:{},events:[],holidays:[],evForm:null,lotNotes:{},themes:Object.assign({},THEME_DEFAULT),signoffs:[],sel:new Set(),lotOpen:null,sigCache:{},adj:null,reset:false,photoTarget:null,uploading:null,names:{},sOpen:null,accounts:[]};
+ round:null,more:{},mk:null,dels:[],weather:{},events:[],holidays:[],evForm:null,lotNotes:{},themes:Object.assign({},THEME_DEFAULT),signoffs:[],sel:new Set(),lotOpen:null,sigCache:{},adj:null,reset:false,photoTarget:null,uploading:null,names:{},sOpen:null,accounts:[],statR:null,statView:"sales",selInit:new Set(),sigOk:{}};
 
 const $=id=>document.getElementById(id);
 const T=()=>I18N[S.lang];
@@ -647,21 +647,38 @@ const isRet=pid=>!S.prods[pid]||S.prods[pid].returnable!==false;
 const storeOf=id=>S.stores.find(s=>s.id===id);
 const spOf=(s,p)=>S.prices.find(x=>x.store_id===s&&x.product_id===p);
 const qty=l=>(l.qty_plain||0)+(l.qty_price_tagged||0);
-const role=()=>S.acct&&S.acct.role;
-const isDist=()=>role()==="distributor";   // the Orderer
+/* old account types map onto the new ones (phones that signed in before the change) */
+const ROLE_MAP={distributor:"reseller",supplier:"reseller",maker:"production"};
+const role=()=>{const r=S.acct&&S.acct.role;return ROLE_MAP[r]||r;};
 const isAdmin=()=>role()==="admin";
-const isSup=()=>role()==="supplier";
-const isMaker=()=>role()==="maker";
-/* whose shop: null = the orderer's own shops; otherwise the account it belongs to (e.g. the supplier's own customers) */
+const isRes=()=>role()==="reseller";
+const isProd=()=>role()==="production";
+const isDriver=()=>role()==="driver";
+const me=()=>S.acct?S.acct.id:null;
+const acc=id=>(S.names&&S.names[id])||null;
+const accName=id=>{const a=acc(id);return a?nm(a):"";};
+const amDistributor=()=>{const a=acc(me());return !!(a&&a.is_distributor);};
+/* who signs off a reseller's money: the distributor the admin picked; if none is picked and there is exactly one
+   distributor, that one. A distributor's own deliveries need no sign-off. */
+function distOf(rid){
+ const a=acc(rid);if(!a) return null;
+ if(a.distributor_id&&a.distributor_id!==rid&&acc(a.distributor_id)) return a.distributor_id;
+ if(a.is_distributor) return null;
+ const ds=Object.values(S.names||{}).filter(x=>x.is_distributor&&x.id!==rid);
+ return ds.length===1?ds[0].id:null;
+}
+const resellers=()=>Object.values(S.names||{}).filter(a=>a.role==="reseller");
+const myResellers=()=>resellers().filter(a=>a.id!==me()&&distOf(a.id)===me());
+/* every shop belongs to one reseller (stores.owner_id) */
 const ownerOf=sid=>{const s=storeOf(sid);return s&&s.owner_id||null;};
-/* the orderer's business = shops nobody else owns. Sign-offs, balances and what the supplier is owed only use these */
-const BL=()=>S.lines.filter(l=>!ownerOf(l.deliveries.store_id));
-const BP=()=>S.payments.filter(p=>!ownerOf(p.store_id));
-/* shops this account orders for */
-const myStores=()=>isSup()?S.stores.filter(s=>s.owner_id===S.acct.id):isAdmin()?S.stores:S.stores.filter(s=>!s.owner_id);
-const accName=id=>{const a=S.names&&S.names[id];return a?nm(a):"";};
-const orderer=()=>{const a=Object.values(S.names||{}).find(x=>x.role==="distributor");return a?nm(a):T().roleDist;};
-const whoOrdered=o=>o.ordered_by?accName(o.ordered_by):orderer();
+const linesOf=rid=>S.lines.filter(l=>ownerOf(l.deliveries.store_id)===rid);
+const paysOf=rid=>S.payments.filter(p=>ownerOf(p.store_id)===rid);
+const myStores=()=>isAdmin()?S.stores:S.stores.filter(s=>s.owner_id===me());
+const prodName=()=>{const a=Object.values(S.names||{}).find(x=>x.role==="production");return a?nm(a):T().roleProd;};
+const driverList=()=>Object.values(S.names||{}).filter(a=>a.role==="driver");
+/* an order is called after its driver ("Dad's round"); older orders keep their typed name */
+const orderTitle=o=>o.driver_id&&acc(o.driver_id)?T().roundOf(accName(o.driver_id)):(o.label||T().defaultLabel);
+const whoOrdered=o=>accName(o.ordered_by)||"—";
 
 function applyType(){
  const b=[16,17,20][S.fz]||17;
@@ -693,11 +710,9 @@ const alertBox=(k,title,body,icon)=>`<div class="alert ${k}"><span class="ai">${
  <span class="grow"><b>${esc(title)}</b>${body?esc(body):""}</span></div>`;
 /* the supplier's name, whatever the distributor called her account */
 function sup(){
- if(role()==="supplier"&&S.acct) return nm(S.acct);
- const a=Object.values(S.names||{}).find(x=>x.role==="supplier");
- if(a) return nm(a);
- if(S.supplier&&(S.supplier.name||S.supplier.name_th)) return nm(S.supplier);
- return T().supplierWord;
+ const d=distOf(me());if(d) return accName(d);
+ const a=Object.values(S.names||{}).find(x=>x.is_distributor);
+ return a?nm(a):T().roleDistr;
 }
 function supChip(st){
  if(st==="accepted") return `<span class="chip good">${esc(T().supAccepted(sup()))}</span>`;
@@ -903,20 +918,17 @@ const bandTitle=t=>`<div class="btitle">${esc(t)}</div>`;
 const bandStats=items=>`<div class="bst">${items.map(([k,v])=>`<div><div class="bk">${esc(k)}</div><div class="bv">${v}</div></div>`).join("")}</div>`;
 /* one status per order card, most important first */
 function statusChip(o){
- const sn=sup();
- if(!o.sup_seen&&o.sup_adjusted&&o.sup_status!=="rejected") return `<span class="chip warn">${ic("adjustments")}${esc(T().adjustedBy(sn))}</span>`;
- if(o.sup_status==="rejected") return `<span class="chip bad">${esc(T().supRejected(sn))}</span>`;
- const dc=deliveryChip(o);if(dc) return dc;
- return supChip(o.sup_status);
+ if(o.sup_adjusted&&(!o.sup_seen||isProd())) return `<span class="chip warn">${ic("adjustments")}${esc(isProd()?T().trimmed:T().adjustedBy(prodName()))}</span>`;
+ return deliveryChip(o)||"";
 }
 const madeDay=o=>o.created_at?dayDate(iso(new Date(o.created_at))):"";
 function orderCard(o){
  const rej=o.sup_status==="rejected";
  return `<button class="card tap ${rej?"bad":""}" data-a="editOrd" data-x="${o.id}" style="${!o.sup_seen&&!rej?"box-shadow:0 0 0 2px var(--gold),var(--sh)":""}">
-  <div class="row" style="padding:0"><span class="b">${esc(o.label||T().defaultLabel)}${o.recurring?` <i class="ti ti-repeat" style="color:var(--faint)" aria-label="${esc(T().repeat)}"></i>`:""}</span>
+  <div class="row" style="padding:0"><span class="b">${esc(orderTitle(o))}${o.recurring?` <i class="ti ti-repeat" style="color:var(--faint)" aria-label="${esc(T().repeat)}"></i>`:""}</span>
    <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
   <div class="fr" style="justify-content:space-between;gap:8px;margin-top:6px;flex-wrap:wrap">
-   <span class="mut">${esc(T().storesN(oStores(o)))}${o.created_at?` · ${esc(T().madeOn(madeDay(o)))}`:""}${isAdmin()?` · ${esc(T().by(whoOrdered(o)))}`:""}</span>${o.ordered_by?(deliveryChip(o)||""):statusChip(o)}</div></button>`;
+   <span class="mut">${esc(T().storesN(oStores(o)))}${o.created_at?` · ${esc(T().madeOn(madeDay(o)))}`:""}${isRes()?"":` · ${esc(T().by(whoOrdered(o)))}`}</span>${statusChip(o)}</div></button>`;
 }
 /* later orders (after the week on screen), as one short list */
 function comingUp(forSupplier){
@@ -925,8 +937,8 @@ function comingUp(forSupplier){
   .sort((a,b)=>a.for_delivery_on<b.for_delivery_on?-1:a.for_delivery_on>b.for_delivery_on?1:0).slice(0,8);
  if(!ahead.length) return "";
  return `<div class="lbl">${esc(T().comingUp)}</div><div class="card list tapl">`+ahead.map(o=>`<button class="lrow tap" data-a="pick" data-x="${o.for_delivery_on}" data-top="1">
-  ${dateTileMini(o.for_delivery_on)}<span class="grow"><span class="b">${esc(o.label||T().defaultLabel)}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span>
-  ${forSupplier&&o.sup_status==="pending"?`<span class="chip warn">${esc(T().needsAnswer)}</span>`:relChip(o.for_delivery_on)}</button>`).join("")+`</div>`;
+  ${dateTileMini(o.for_delivery_on)}<span class="grow"><span class="b">${esc(orderTitle(o))}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span>
+  ${relChip(o.for_delivery_on)}</button>`).join("")+`</div>`;
 }
 function moreBtn(key){
  const open=!!S.more[key];
@@ -990,7 +1002,7 @@ function saveProgress(){
  try{
   if(!S.acct||S.screen!=="app") return;
   localStorage.setItem(NKEY,JSON.stringify({acct:S.acct.id,tab:S.tab,pick:S.pick,at:Date.now()}));
-  if(role()!=="driver") return;
+  if(!isDriver()) return;
   if(!S.round||!S.stops){localStorage.removeItem(RKEY);return;}
   const d={date:S.today,acct:S.acct.id,round:S.round,
    dv:{phase:S.dv.phase,si:S.dv.si,pi:S.dv.pi,loaded:S.dv.loaded},
@@ -1005,7 +1017,7 @@ function restoreNav(){
   if(n&&S.acct&&n.acct===S.acct.id&&Date.now()-n.at<6*3600e3){if(n.tab)S.tab=n.tab;if(n.pick)S.pick=n.pick;}}catch(e){}
 }
 function restoreRound(){
- if(role()!=="driver") return;
+ if(!isDriver()) return;
  let d=null;try{d=JSON.parse(localStorage.getItem(RKEY)||"null");}catch(e){}
  if(!d||d.date!==S.today||d.acct!==S.acct.id) return clearProgress();
  const o=S.orders.find(x=>x.id===d.round);
@@ -1046,7 +1058,7 @@ async function start(){
   const fresh=!S.tab;
   if(fresh) restoreNav();
   if(!S.tab||!tabsFor(role()).some(t=>t[0]===S.tab)) S.tab=tabsFor(role())[0][0];
-  if(fresh&&(isSup()||isMaker())&&S.pick===S.today) S.pick=nextOrderDay();
+  if(fresh&&isProd()&&S.pick===S.today) S.pick=nextOrderDay();
   S.stops=null;
   if(fresh) restoreRound();
   render();
@@ -1068,10 +1080,10 @@ async function load(){
   q(db.from("store_products").select("store_id,product_id,sell_price,retail_price,default_qty")),
   q(db.from("delivery_lines").select("id,product_id,qty_out,qty_back,unit_price,unit_cost,settled_at,deliveries!inner(id,store_id,delivered_on)")),
   q(db.from("store_payments").select("store_id,amount,paid_on,delivery_id")),
-  q(db.from("supplier_payments").select("amount,paid_on,covers_dates")),
+  q(db.from("supplier_payments").select("amount,paid_on,covers_dates,reseller_id")),
   q(db.from("supplier_products").select("product_id,unit_cost,make_cost")),
   q(db.from("purchase_orders").select(PO_COLS).gte("for_delivery_on",since).order("for_delivery_on").order("created_at")),
-  q(db.from("lot_signoffs").select("lot_date,amount,waste_pct,dist_signed_at,dist_signed_by,sup_signed_at,sup_signed_by,note")),
+  q(db.from("lot_signoffs").select("reseller_id,lot_date,amount,waste_pct,dist_signed_at,dist_signed_by,sup_signed_at,sup_signed_by,note")),
   q(db.from("deliveries").select("id,store_id,delivered_on,purchase_order_id,completed_at").gte("delivered_on",since)),
   q(db.from("app_settings").select("key,value")).catch(()=>[]),
   q(db.from("weather_days").select("day,tmax,tmin,rain_mm,code").gte("day",addDays(since,-7))).catch(()=>[]),
@@ -1080,6 +1092,9 @@ async function load(){
  S.weather={};(wx||[]).forEach(w=>{S.weather[w.day]={tmax:num(w.tmax),tmin:num(w.tmin),rain_mm:num(w.rain_mm),code:w.code};});
  S.events=evs||[];
  S.names={};(names||[]).forEach(a=>{S.names[a.id]=a;});
+ // the admin may have changed this account's type since it signed in
+ const mine=S.acct&&S.names[S.acct.id];
+ if(mine&&mine.role!==S.acct.role){S.acct.role=mine.role;try{localStorage.setItem("ss_acct",JSON.stringify(S.acct));}catch(e){}applyTheme(role());}
  setTimeout(refreshContext,0);
  const th=(apps||[]).find(x=>x.key==="themes");
  S.themes=Object.assign({},THEME_DEFAULT,th&&th.value||{});S.themesLoaded=true;applyTheme(role());
@@ -1090,13 +1105,13 @@ async function load(){
  const pol=po.length?await q(db.from("purchase_order_lines").select(POL_COLS).in("purchase_order_id",po.map(o=>o.id))):[];
  S.orders=scopeOrders(po.map(o=>Object.assign(o,{lines:pol.filter(l=>l.purchase_order_id===o.id)})));
  if(isAdmin()){
-  S.accounts=await q(db.from("drivers").select("id,name,name_th,pin,role,active").eq("active",true).order("name"));
+  S.accounts=await q(db.from("drivers").select("id,name,name_th,pin,role,active,is_distributor,distributor_id").eq("active",true).order("name"));
   syncSupplierName();
  }
 }
-const PO_COLS="id,for_delivery_on,label,recurring,status,sup_status,sup_adjusted,sup_seen,sent_at,created_at,delivered_at,photos,ordered_by";
-/* the orderer only sees the orders they placed; everyone else sees them all */
-const scopeOrders=list=>isDist()?list.filter(o=>!o.ordered_by):list;
+const PO_COLS="id,for_delivery_on,label,recurring,status,sup_status,sup_adjusted,sup_seen,sent_at,created_at,delivered_at,photos,ordered_by,driver_id";
+/* a reseller sees their own orders; a driver sees theirs + ones with no driver; everyone else sees all */
+const scopeOrders=list=>isRes()?list.filter(o=>o.ordered_by===me()):isDriver()?list.filter(o=>!o.driver_id||o.driver_id===me()):list;
 let LAST_LOAD=0;
 const POL_COLS="id,purchase_order_id,product_id,store_id,qty_plain,qty_price_tagged,qty_ordered,unit_cost";
 /* keep the suppliers row named after the supplier account, so drivers see the same name */
@@ -1112,7 +1127,7 @@ async function reloadOrders(){
  S.orders=scopeOrders(po.map(o=>Object.assign(o,{lines:pol.filter(l=>l.purchase_order_id===o.id)})));
 }
 function nextOrderDay(){
- const f=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending"&&!o.ordered_by)[0]
+ const f=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status!=="rejected")[0]
   ||S.orders.filter(o=>o.for_delivery_on>=S.today)[0];
  return f?f.for_delivery_on:S.today;
 }
@@ -1123,10 +1138,9 @@ const after=fn=>AFTER.push(fn);
 const screenKey=()=>[role(),S.tab,S.ob?S.ob.id||"new":"",S.open&&S.open.kind+S.open.id,S.st,S.ctype,S.dv.phase,S.dv.si,S.dv.pi].join("|");
 /* each account type gets only the tabs it needs */
 const TABS={
- admin:[["aorder","clipboard-list","tAll"],["sp","building-store","tSP"],["acct","users","tAcct"],["set","settings","tSet"]],
- distributor:[["order","clipboard-list","tOrder"],["pay","cash","tPay"],["stats","chart-bar","tStats"],["set","settings","tSet"]],
- supplier:[["sorder","clipboard-list","tOrder"],["spay","cash","tPay"],["sstats","chart-bar","tStats"],["set","settings","tSet"]],
- maker:[["make","chef-hat","tMake"],["set","settings","tSet"]],
+ admin:[["aorder","clipboard-list","tAll"],["astats","chart-bar","tStats"],["sp","building-store","tSP"],["acct","users","tAcct"],["set","settings","tSet"]],
+ reseller:[["order","clipboard-list","tOrder"],["pay","cash","tPay"],["set","settings","tSet"]],
+ production:[["make","chef-hat","tMake"],["set","settings","tSet"]],
  driver:[["round","truck-delivery","tRound"],["hist","history","tHist"],["set","settings","tSet"]]};
 const tabsFor=r=>TABS[r]||TABS.driver;
 function render(){
@@ -1147,12 +1161,9 @@ function render(){
 }
 function badges(){
  const b={};
- if(isDist()){
-  b.order=S.orders.filter(o=>!o.sup_seen).length;
-  b.pay=lots().filter(x=>x.state==="check").length;
- }else if(role()==="supplier"){
-  b.sorder=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending"&&!o.ordered_by).length;
-  b.spay=lots().filter(x=>x.state==="sup").length;
+ if(isRes()){
+  b.order=S.orders.filter(o=>!o.sup_seen&&o.sup_adjusted).length;
+  b.pay=lots(me()).filter(x=>x.state==="check").length+myResellers().reduce((a,r)=>a+lots(r.id).filter(x=>x.state==="sup").length,0);
  }
  return b;
 }
@@ -1162,21 +1173,18 @@ function screen(){
  if(isAdmin()){
   if(t==="sp") return S.open?(S.open.kind==="store"?storeDetail():S.open.kind==="hub"?hubDetail():productDetail()):spTab();
   if(t==="acct") return acctTab();
+  if(t==="astats") return S.ctype?supTypeDetail():adminStats();
   return S.ob?orderBuild():adminOrders();
  }
- if(isDist()){
+ if(isRes()){
   if(t==="pay") return payTab();
-  if(t==="stats") return statsTab();
   return S.ob?orderBuild():orderTab();
  }
- if(role()==="driver"){
+ if(isDriver()){
   if(t==="hist") return S.ob?qtyEditor():driverHistory();
   return driverRound();
  }
- if(isMaker()) return makerTab();
- if(t==="spay") return supPayTab();
- if(t==="sstats") return S.ctype?supTypeDetail():supStats();
- return S.ob?orderBuild():supOrders();
+ return makerTab();
 }
 
 /* shared pieces */
@@ -1185,8 +1193,8 @@ function hero(t,s,r){
  return `<div class="hero"><div style="min-width:0"><div class="h1">${esc(t)}</div>${s?`<div class="h2">${esc(s)}</div>`:""}</div>
   <div class="hd">${r||`<div class="dn">${d.getDate()}</div><div class="dm">${esc(monName(d.getMonth()))}</div>`}</div></div>`;
 }
-const ROLE_IC={distributor:"clipboard-list",driver:"truck-delivery",supplier:"tools-kitchen-2",admin:"shield-lock",maker:"chef-hat"};
-const roleName=r=>T()[{distributor:"roleDist",driver:"roleDriver",supplier:"roleSup",admin:"roleAdmin",maker:"roleMaker"}[r]]||"";
+const ROLE_IC={reseller:"building-store",driver:"truck-delivery",production:"chef-hat",admin:"shield-lock"};
+const roleName=r=>T()[{reseller:"roleRes",driver:"roleDriver",production:"roleProd",admin:"roleAdmin"}[r]]||"";
 function statusBar(){
  const d=new Date(),r=role();
  return `<header class="top"><span class="av">${ic(ROLE_IC[r]||"user")}</span>
@@ -1226,45 +1234,51 @@ function legend(){return "";}
 
 /* =================== DISTRIBUTOR: orders =================== */
 function orderTab(){
- const list=ordersOn(S.pick),past=S.pick<S.today,sn=sup();
- const labels=list.map(o=>(o.label||"").trim());
- const reps=past?[]:ordersOn(addDays(S.pick,-7)).filter(o=>o.recurring&&!labels.includes((o.label||"").trim()));
- const unseen=S.orders.filter(o=>!o.sup_seen);
+ const list=ordersOn(S.pick),past=S.pick<S.today;
+ const key=o=>o.driver_id||(o.label||"").trim();
+ const keys=list.map(key);
+ const reps=past?[]:ordersOn(addDays(S.pick,-7)).filter(o=>o.recurring&&!keys.includes(key(o)));
+ const unseen=S.orders.filter(o=>!o.sup_seen&&o.sup_adjusted);
  const days=[...new Set(unseen.map(o=>o.for_delivery_on))];
- return band(statusBar()+dayStrip(S.pick,-7,21,(s,dd)=>dueOn(dd).length>0))+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(ordersOn(S.pick).length),relChip(S.pick))+ctxRow(S.pick,false)+
- (unseen.length?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().adjAlert(unseen.length,sn))}</b>
+ return band(statusBar()+dayStrip(S.pick,-7,21,(s,dd)=>dueOn(dd).length>0))+hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(list.length),relChip(S.pick))+ctxRow(S.pick,false)+
+ (unseen.length?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().adjAlert(unseen.length,prodName()))}</b>
   <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${days.map(x=>`<button class="chip" data-a="pick" data-x="${x}" style="background:#fff">${esc(dayDate(x))}</button>`).join("")}</div></span></div>`:"")+
  (past?"":`<button class="btn gold" data-a="newOrd" style="margin:0 0 12px">${ic("plus")}${esc(T().addOrder)}</button>`)+
  reps.map(o=>`<button class="card tap" data-a="repOrd" data-x="${o.id}" style="box-shadow:0 0 0 2px var(--a),var(--sh)">
-  <div class="fr">${ic("repeat")}<span class="grow"><span class="b">${esc(T().repeatShort(o.label||T().defaultLabel))}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span></div></button>`).join("")+
+  <div class="fr">${ic("repeat")}<span class="grow"><span class="b">${esc(T().repeatShort(orderTitle(o)))}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span></div></button>`).join("")+
  (list.length?list.map(orderCard).join(""):`<div class="empty">${esc(T().noOrdersDay)}</div>`)+
  comingUp(false);
 }
 function prefill(dISO){
  const m={};
  let due=dueOn(dOf(dISO)).filter(s=>s.regular!==false);
- // the supplier's own customers rarely have set days: start with all of them
- if(isSup()&&!due.length) due=myStores().filter(s=>s.regular!==false);
+ // shops with no set delivery days: start with all of them
+ if(!due.length&&myStores().every(s=>!(s.delivery_days||[]).length)) due=myStores().filter(s=>s.regular!==false);
  due.forEach(s=>{
   const u={};S.prices.filter(p=>p.store_id===s.id).forEach(p=>{u[p.product_id]=p.default_qty||0;});m[s.id]=u;});
  return m;
+}
+function lastDriver(){
+ let d=null;try{d=localStorage.getItem("ss_drv_"+me());}catch(e){}
+ if(d&&acc(d)) return d;
+ const L=driverList();return L.length===1?L[0].id:null;
 }
 function openBuilder(o,fromRepeat){
  const date=o&&!fromRepeat?o.for_delivery_on:(S.pick<S.today?S.today:S.pick);
  const m=o?oMap(o):prefill(date);
  const ordered={};
  if(o&&!fromRepeat) o.lines.forEach(l=>{if(l.qty_ordered!=null&&l.qty_ordered!==qty(l)) ordered[l.store_id+"|"+l.product_id]=l.qty_ordered;});
- if(isDist()&&o&&!fromRepeat&&!o.sup_seen){o.sup_seen=true;db.from("purchase_orders").update({sup_seen:true}).eq("id",o.id).then(()=>{},()=>{});}
+ if(isRes()&&o&&!fromRepeat&&!o.sup_seen){o.sup_seen=true;db.from("purchase_orders").update({sup_seen:true}).eq("id",o.id).then(()=>{},()=>{});}
  S.ob={id:fromRepeat?null:(o?o.id:null),date,origDate:o&&!fromRepeat?o.for_delivery_on:null,
-  label:o?(o.label||""):"",recurring:o?!!o.recurring:false,
-  stores:m,orig:fromRepeat?"":JSON.stringify(m),auto:o?null:JSON.stringify(m),copied:false,confirm:false,ordered};
+  label:o?(o.label||""):"",recurring:o?!!o.recurring:false,driver:o?(o.driver_id||null):lastDriver(),
+  stores:m,orig:fromRepeat?"":JSON.stringify(m),confirm:false,ordered};
  render();
 }
 function orderBuild(){
  const ob=S.ob,d=dOf(ob.date),cur=S.orders.find(o=>o.id===ob.id);
  const delivered=cur&&isDelivered(cur),locked=(ob.origDate||ob.date)<S.today||delivered||isAdmin();
- const own=isSup();   // the supplier ordering for her own customers: no answer step, no message to send
- const canDel=ob.id&&(isAdmin()||(own?!delivered:cur&&cur.sup_status==="pending"));
+ // a reseller can cancel an order for a later day; anything else is deleted by the admin
+ const canDel=ob.id&&(isAdmin()||(!delivered&&(ob.origDate||ob.date)>S.today));
  const delBlock=!canDel?"":ob.confirm?`<div style="margin-top:12px">${alertBox("bad",T().deleteQ,"","trash")}
    <div class="g2"><button class="btn g nomt" data-a="delNo">${esc(T().cancel)}</button>
    <button class="btn bad nomt" data-a="delYes">${ic("trash")}${esc(T().yesDelete)}</button></div></div>`
@@ -1272,7 +1286,8 @@ function orderBuild(){
  const boxes=mapBoxes(ob.stores),cost=Object.values(ob.stores).reduce((a,ps)=>a+Object.keys(ps).reduce((x,p)=>x+ps[p]*(S.costs[p]||0),0),0);
  const sub=dayName(d.getDay())+" "+d.getDate()+" "+monName(d.getMonth())+" · "+T().boxes(boxes)+" · "+money(cost);
  if(locked){
-  return hero(isAdmin()?(cur&&cur.label||T().defaultLabel):T().orderRO,sub)+(isAdmin()?`<div class="mut" style="margin:-8px 2px 10px">${esc(T().by(cur?whoOrdered(cur):""))}</div>`:alertBox("info",delivered?T().deliveredLock:T().pastLocked,"","lock"))+
+  return hero(cur?orderTitle(cur):T().orderRO,sub)+
+  (isAdmin()?`<div class="mut" style="margin:-8px 2px 10px">${esc(T().by(cur?whoOrdered(cur):""))}</div>`:alertBox("info",delivered?T().deliveredLock:T().pastLocked,"","lock"))+
   (cur?`<div class="card" style="padding-top:4px">${orderWhen(cur)}${delivered?`<div style="margin-top:8px">${deliveryChip(cur)}</div>`:""}</div>`:"")+
   Object.keys(ob.stores).map(sid=>{const s=storeOf(sid),ph=((cur&&cur.photos)||[]).filter(p=>p.store_id===sid);
    return `<div class="card"><div class="b">${esc(s?s.name:"—")}</div>
@@ -1282,41 +1297,38 @@ function orderBuild(){
    return end.length?`<div class="lbl">${esc(T().driverPhotos)} · ${esc(T().atEnd)}</div><div class="card">${phView(end)}</div>`:"";})()+
   delBlock+`<button class="btn g" data-a="closeOrd">${ic("arrow-left")}${esc(T().back)}</button>`;
  }
- const n=daysBetween(S.today,ob.date);
+ const n=daysBetween(S.today,ob.date),DL=driverList();
  return hero(ob.id?T().editOrder:T().newOrder,sub)+
- (!own&&cur&&cur.sup_status!=="pending"?alertBox("info",T().resetNote(sup()),"","info-circle"):"")+
  `<div class="card"><span class="flbl">${esc(T().neededOn)}</span>
   <div class="fr" style="gap:6px;flex-wrap:wrap;margin-bottom:10px"><b style="font-size:calc(var(--fs)*1.15)">${esc(dayDate(ob.date))}</b>${relChip(ob.date)}${n>=2?`<span class="chip warn">${esc(T().advance)}</span>`:""}</div>
   ${ctxRow(ob.date,false)}
   ${dayStrip(ob.date,0,27,(x,dd)=>dueOn(dd).length>0,"obDate")}
   ${cur&&cur.created_at?`<div class="mut">${ic("clock")} ${esc(T().made)} ${esc(madeText(cur))}</div>`:""}</div>
- <div class="card"><label class="flbl" for="lbl">${esc(T().runName)}</label>
-  <input class="tf" id="lbl" data-in="label" value="${esc(ob.label)}" placeholder="${esc(T().runPh)}" autocomplete="off"></div>
+ <div class="card"><span class="flbl">${esc(T().pickDriver)}</span>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">${DL.map(x=>`<button class="chip" data-a="obDriver" data-x="${x.id}" data-on="${ob.driver===x.id?1:0}">${ic("truck-delivery")}${esc(nm(x))}</button>`).join("")}</div>
+  ${ob.driver?"":`<div class="mut" style="margin-top:6px">${esc(T().noDriver)}</div>`}</div>
  ${myStores().filter(s=>ob.stores[s.id]!=null).map(s=>{
-  const on=true;
   const pids=S.prices.filter(p=>p.store_id===s.id).map(p=>p.product_id);
-  if(on) Object.keys(ob.stores[s.id]).forEach(p=>{if(!pids.includes(p))pids.push(p);});
-  return `<div class="card ${on?"on":""}">
+  Object.keys(ob.stores[s.id]).forEach(p=>{if(!pids.includes(p))pids.push(p);});
+  return `<div class="card on">
   <div class="row" style="padding-top:0"><span><span class="b">${esc(s.name)}</span>
    ${s.regular===false?`<span class="chip" style="margin-left:4px">${esc(T().notRegular)}</span>`:""}</span>
    <button class="chip" data-a="togStore" data-x="${s.id}">${ic("x")}${esc(T().removeShort)}</button></div>
-  ${on?pids.map(p=>`<div class="row"><span>${pline(p,32)}${ob.ordered&&ob.ordered[s.id+"|"+p]!=null?`<div class="mut" style="color:var(--warn);font-weight:600;margin-top:2px">${esc(T().ordered(ob.ordered[s.id+"|"+p]))} · ${esc(T().adjustedBy(sup()))}</div>`:""}</span>
+  ${pids.map(p=>`<div class="row"><span>${pline(p,32)}${ob.ordered&&ob.ordered[s.id+"|"+p]!=null?`<div class="mut" style="color:var(--warn);font-weight:600;margin-top:2px">${esc(T().ordered(ob.ordered[s.id+"|"+p]))} · ${esc(T().adjustedBy(prodName()))}</div>`:""}</span>
    <span class="stp"><button data-a="bq" data-x="${s.id}|${p}|-1" aria-label="−">−</button>
    <span class="v" id="q-${s.id}-${p}">${ob.stores[s.id][p]||0}</span>
-   <button data-a="bq" data-x="${s.id}|${p}|1" aria-label="+">+</button></span></div>`).join(""):""}</div>`;}).join("")}
+   <button data-a="bq" data-x="${s.id}|${p}|1" aria-label="+">+</button></span></div>`).join("")}</div>`;}).join("")}
  ${(()=>{const rest=myStores().filter(s=>ob.stores[s.id]==null);return rest.length?`<div class="lbl">${esc(T().otherStores)}</div><div class="card list">${rest.map(s=>`<button class="lrow" data-a="togStore" data-x="${s.id}">
   <span class="grow"><span class="b">${esc(s.name)}</span>${s.regular===false?`<span class="mut"> · ${esc(T().notRegular)}</span>`:""}</span>
   <span class="chip" data-on="1">${ic("plus")}${esc(T().addShort)}</span></button>`).join("")}</div>`:"";})()}
  <button class="card row" data-a="togRec" style="padding:12px 14px"><span>${ic("repeat")} ${esc(T().repeatWeekly)}</span>
   <span class="chip" data-on="${ob.recurring?1:0}">${esc(ob.recurring?T().on:T().off)}</span></button>
  <button class="btn good" data-a="saveOrd">${ic("check")}${esc(T().saveOrder)}</button>
- ${own?"":`<button class="btn g" data-a="copyOrd">${ic(ob.copied?"check":"copy")}${esc(ob.copied?T().copied:T().copyMsg(sup()))}</button>`}
  ${delBlock}
  <button class="btn g" data-a="closeOrd">${esc(T().cancel)}</button>`;
 }
 async function saveOrder(btn){
- const ob=S.ob;const lab=($("lbl")?$("lbl").value:ob.label).trim();
- const rows=[];
+ const ob=S.ob,rows=[];
  Object.keys(ob.stores).forEach(sid=>{const s=storeOf(sid);Object.keys(ob.stores[sid]).forEach(pid=>{
   const n=ob.stores[sid][pid];if(!n)return;
   rows.push({product_id:pid,store_id:sid,qty_plain:s&&s.price_tag_required?0:n,qty_price_tagged:s&&s.price_tag_required?n:0,unit_cost:S.costs[pid]||0});});});
@@ -1325,9 +1337,9 @@ async function saveOrder(btn){
  try{
   let id=ob.id;
   if(id){
-   const changed=JSON.stringify(ob.stores)!==ob.orig||ob.date!==ob.origDate;
-   const patch={label:lab||null,recurring:ob.recurring,for_delivery_on:ob.date};
-   if(changed&&!isSup()){patch.sup_status="pending";patch.sup_at=null;patch.sup_adjusted=false;patch.sup_seen=true;}
+   const changed=JSON.stringify(ob.stores)!==ob.orig;
+   const patch={recurring:ob.recurring,for_delivery_on:ob.date,driver_id:ob.driver||null};
+   if(changed) patch.sup_adjusted=false;
    const {error}=await db.from("purchase_orders").update(patch).eq("id",id);if(error) throw error;
    if(changed){
     const {error:e1}=await db.from("purchase_order_lines").delete().eq("purchase_order_id",id);if(e1) throw e1;
@@ -1335,12 +1347,15 @@ async function saveOrder(btn){
    }
   }else{
    if(!S.supplier) throw new Error(T().noSupplier);
+   const now=new Date().toISOString();
+   // straight to production: no answer step
    const {data,error}=await db.from("purchase_orders").insert({supplier_id:S.supplier.id,ordered_on:S.today,for_delivery_on:ob.date,
-    label:lab||null,recurring:ob.recurring,status:"sent",sent_at:new Date().toISOString(),
-    ...(isSup()?{ordered_by:S.acct.id,sup_status:"accepted",sup_at:new Date().toISOString(),sup_seen:true}:{sup_status:"pending"})}).select("id").single();
+    label:null,driver_id:ob.driver||null,recurring:ob.recurring,status:"sent",sent_at:now,
+    ordered_by:me(),sup_status:"accepted",sup_at:now,sup_seen:true}).select("id").single();
    if(error) throw error;id=data.id;
    const {error:e2}=await db.from("purchase_order_lines").insert(rows.map(r=>Object.assign({purchase_order_id:id},r)));if(e2) throw e2;
   }
+  if(ob.driver){try{localStorage.setItem("ss_drv_"+me(),ob.driver);}catch(e){}}
   await reloadOrders();S.pick=ob.date;S.ob=null;S.stops=null;render();
  }catch(e){btn.disabled=false;fail(e.message||String(e));}
 }
@@ -1373,7 +1388,7 @@ function storeList(){
  <div class="lbl">${esc(T().stores)}</div>
  ${S.stores.map((s,i)=>`<button class="card tap" data-a="open" data-x="store|${s.id}"><div class="fr">
   <span class="pinm" style="background:var(--ink)">${i+1}</span>
-  <div class="grow"><span class="b">${esc(s.name)}</span> ${s.regular===false?`<span class="chip">${esc(T().notRegular)}</span>`:""}${s.owner_id?` <span class="chip blue">${esc(accName(s.owner_id))}</span>`:""}
+  <div class="grow"><span class="b">${esc(s.name)}</span> ${s.regular===false?`<span class="chip">${esc(T().notRegular)}</span>`:""}${s.owner_id?` <span class="chip blue">${esc(accName(s.owner_id))}</span>`:` <span class="chip bad">${esc(T().needOwner)}</span>`}
   <div class="mut">${esc(s.suburb||"")}${(s.delivery_days||[]).length?" · "+s.delivery_days.map(k=>esc(dayAb(k))).join(" "):""}</div></div></div></button>`).join("")}`;
 }
 function productList(){
@@ -1408,10 +1423,10 @@ function storeDetail(){
   <label class="flbl">${esc(T().driverNote)}</label><input class="tf" data-in="f:driver_note" value="${esc(s.driver_note||"")}" placeholder="${esc(T().driverNoteHint)}"></div>
  <button class="card row" data-a="togField" data-x="regular" style="padding:12px 14px"><span><span class="b">${esc(T().regular)}</span><div class="mut">${esc(T().regularHint)}</div></span>
   <span class="chip" data-on="${s.regular!==false?1:0}">${esc(s.regular!==false?T().on:T().off)}</span></button>
- ${(()=>{const sups=(S.accounts||[]).filter(x=>x.role==="supplier");if(!sups.length&&!s.owner_id) return "";
-  return `<div class="card"><span class="flbl">${esc(T().shopOwner)}</span><div style="display:flex;flex-wrap:wrap;gap:6px">
-   <button class="chip" data-a="setOwner" data-x="" data-on="${s.owner_id?0:1}">${esc(T().mainShops)}</button>
-   ${sups.map(x=>`<button class="chip" data-a="setOwner" data-x="${x.id}" data-on="${s.owner_id===x.id?1:0}">${esc(nm(x))}</button>`).join("")}</div></div>`;})()}
+ ${(()=>{const rs=(S.accounts||[]).filter(x=>x.role==="reseller");
+  return `<div class="card ${s.owner_id?"":"bad"}"><span class="flbl">${esc(T().shopOwner)}</span><div style="display:flex;flex-wrap:wrap;gap:6px">
+   ${rs.map(x=>`<button class="chip" data-a="setOwner" data-x="${x.id}" data-on="${s.owner_id===x.id?1:0}">${esc(nm(x))}</button>`).join("")}</div>
+   ${s.owner_id?"":`<div class="mut" style="color:var(--bad);margin-top:6px">${esc(T().needOwner)}</div>`}</div>`;})()}
  <button class="card row" data-a="togField" data-x="price_tag_required" style="padding:12px 14px"><span class="b">${esc(T().priceTag)}</span>
   <span class="chip" data-on="${s.price_tag_required?1:0}">${esc(s.price_tag_required?T().on:T().off)}</span></button>
  <div class="lbl">${esc(T().schedule)}</div>
@@ -1479,9 +1494,10 @@ function drawMap(stores,hubs,numbered){
 /* =================== money (shared by distributor & supplier) =================== */
 /* A lot = everything delivered on one date. It moves through:
    count (waiting for leftovers) -> check (distributor checks wastage & signs) -> sup (supplier signs) -> closed */
-function lots(){
+function lots(rid){
+ rid=rid||me();
  const M={};
- BL().filter(l=>isRet(l.product_id)).forEach(l=>{
+ linesOf(rid).filter(l=>isRet(l.product_id)).forEach(l=>{
   const d=l.deliveries.delivered_on,sid=l.deliveries.store_id;
   const m=M[d]=M[d]||{d,stores:{},items:{},cost:0,out:0,back:0,counted:true,collected:null};
   const it=m.items[l.product_id]=m.items[l.product_id]||{pid:l.product_id,out:0,sold:0,left:0};
@@ -1491,20 +1507,25 @@ function lots(){
   else{const b=l.qty_back||0,sold=l.qty_out-b;it.sold+=sold;it.left+=b;ss.left+=b;m.back+=b;m.cost+=sold*Number(l.unit_cost);
    const cd=iso(new Date(l.settled_at));if(!m.collected||cd>m.collected)m.collected=cd;}
  });
- const paid={};S.supPay.forEach(p=>(p.covers_dates||[]).forEach(d=>{paid[d]=1;}));
- const so={};S.signoffs.forEach(x=>{so[x.lot_date]=x;});
+ const dist=distOf(rid);
+ const paid={};S.supPay.filter(p=>p.reseller_id===rid).forEach(p=>(p.covers_dates||[]).forEach(d=>{paid[d]=1;}));
+ const so={};S.signoffs.filter(x=>x.reseller_id===rid).forEach(x=>{so[x.lot_date]=x;});
  return Object.values(M).sort((a,b)=>a.d<b.d?1:-1).map(m=>{
   const o=so[m.d]||null;
-  m.so=o;m.waste=m.out?Math.round(100*m.back/m.out):0;
-  m.state=paid[m.d]||(o&&o.sup_signed_at)?"closed":o&&o.dist_signed_at?"sup":m.counted?"check":"count";
+  m.r=rid;m.k=rid+"_"+m.d;m.so=o;m.waste=m.out?Math.round(100*m.back/m.out):0;
+  // a distributor's own deliveries close as soon as they are counted: there is nobody to sign them off
+  m.state=!dist?(m.counted?"closed":"count"):paid[m.d]||(o&&o.sup_signed_at)?"closed":o&&o.dist_signed_at?"sup":m.counted?"check":"count";
   return m;});
 }
-function balances(){
- const BLs=BL(),set=BLs.filter(l=>l.settled_at);
+const allLots=rid=>rid?lots(rid):resellers().flatMap(a=>lots(a.id));
+const listFor=state=>state==="check"?lots(me()).filter(x=>x.state==="check"):myResellers().flatMap(a=>lots(a.id)).filter(x=>x.state==="sup");
+function balances(rid){
+ const L=rid?linesOf(rid):S.lines,set=L.filter(l=>l.settled_at);
  const sold=l=>l.qty_out-(l.qty_back||0);
  const rev=set.reduce((a,l)=>a+sold(l)*Number(l.unit_price),0),cost=set.reduce((a,l)=>a+sold(l)*Number(l.unit_cost),0);
- const paid=BP().reduce((a,p)=>a+Number(p.amount),0),supPaid=S.supPay.reduce((a,p)=>a+Number(p.amount),0);
- const flight=BLs.filter(l=>!l.settled_at&&isRet(l.product_id)).reduce((a,l)=>a+l.qty_out*Number(l.unit_price),0);
+ const paid=(rid?paysOf(rid):S.payments).reduce((a,p)=>a+Number(p.amount),0);
+ const supPaid=S.supPay.filter(p=>!rid||p.reseller_id===rid).reduce((a,p)=>a+Number(p.amount),0);
+ const flight=L.filter(l=>!l.settled_at&&isRet(l.product_id)).reduce((a,l)=>a+l.qty_out*Number(l.unit_price),0);
  const m=S.today.slice(0,7),mt=set.filter(l=>l.deliveries.delivered_on.slice(0,7)===m);
  return {owed:rev-paid,flight,sup:cost-supPaid,margin:rev-cost,
   month:mt.reduce((a,l)=>a+sold(l)*(Number(l.unit_price)-Number(l.unit_cost)),0)};
@@ -1515,35 +1536,36 @@ function lotItems(x){
   <span class="mut" style="text-align:right">${x.counted?esc(T().outSoldLeft(it.out,it.sold,it.left)):esc(T().waitCount)+" · "+it.out}</span></div>`).join("");
 }
 function lotHead(x,withBox){
- const d=dOf(x.d),sel=S.sel.has(x.d);
+ const d=dOf(x.d),sel=S.sel.has(x.k);
  return `<div class="row" style="padding-top:0"><span class="fr">${withBox?`<span class="cb" data-on="${sel?1:0}">${sel?"✓":""}</span>`:""}
-  <span><span class="b">${esc(dayName(d.getDay()))} ${esc(shortDate(x.d))}</span>
+  <span><span class="b">${esc(dayName(d.getDay()))} ${esc(shortDate(x.d))}</span>${x.r!==me()?` <span class="chip blue">${esc(T().lotBy(accName(x.r)))}</span>`:""}
   <div class="mut">${esc(T().storesN(Object.keys(x.stores).length))}${x.counted?` · <b style="color:${wasteColor(x.waste)}">${esc(T().wastePct(x.waste))}</b>`:""}</div></span></span>
   <span class="rv">${x.counted?money(x.cost):"—"}</span></div>${lotCtxLine(x)}${x.so&&x.so.note?`<div class="mut" style="margin-top:6px">${ic("note")} ${esc(x.so.note)}</div>`:""}`;
 }
 /* selectable list + one signature for however many are ticked (batch sign) */
 function signList(list,state,label){
  if(!list.length) return `<div class="empty">${esc(T().noBatches)}</div>`;
- if(S.selInit!==state){S.selInit=state;list.forEach(x=>S.sel.add(x.d));}
- const allSel=list.every(x=>S.sel.has(x.d)),selL=list.filter(x=>S.sel.has(x.d));
+ // everything waiting is ticked when the page opens: sign once, tap Done
+ if(!S.selInit.has(state)){S.selInit.add(state);list.forEach(x=>S.sel.add(x.k));}
+ const allSel=list.every(x=>S.sel.has(x.k)),selL=list.filter(x=>S.sel.has(x.k));
  const tot=selL.reduce((a,x)=>a+x.cost,0);
- if(selL.length) after(()=>sigPad($("sig")));
+ if(selL.length) after(()=>sigPad($("sig-"+state),state));
  return `<div style="display:flex;justify-content:flex-end;margin:-2px 0 6px"><button class="chip" data-a="selAll" data-x="${state}">${esc(allSel?T().clearSel:T().selectAll)}</button></div>`+
- list.map(x=>`<div class="card pick ${S.sel.has(x.d)?"on":""}" data-a="lotSel" data-x="${x.d}" role="checkbox" aria-checked="${S.sel.has(x.d)}">
-  ${lotHead(x,true)}${S.sel.has(x.d)?lotItems(x):""}
-  ${state==="check"&&S.sel.has(x.d)?`<label class="flbl" style="margin-top:10px" for="ln-${x.d}">${esc(T().lotNote)}</label>
-   <input class="tf" id="ln-${x.d}" data-a="noop" data-in="lotnote:${x.d}" value="${esc(S.lotNotes[x.d]||"")}" placeholder="${esc(T().lotNotePh)}" autocomplete="off">`:""}</div>`).join("")+
+ list.map(x=>`<div class="card pick ${S.sel.has(x.k)?"on":""}" data-a="lotSel" data-x="${x.k}" role="checkbox" aria-checked="${S.sel.has(x.k)}">
+  ${lotHead(x,true)}${S.sel.has(x.k)?lotItems(x):""}
+  ${state==="check"&&S.sel.has(x.k)?`<label class="flbl" style="margin-top:10px" for="ln-${x.k}">${esc(T().lotNote)}</label>
+   <input class="tf" id="ln-${x.k}" data-a="noop" data-in="lotnote:${x.k}" value="${esc(S.lotNotes[x.k]||"")}" placeholder="${esc(T().lotNotePh)}" autocomplete="off">`:""}</div>`).join("")+
  (selL.length?`<div class="card on" style="margin-top:4px"><div class="row" style="padding-top:0"><span class="b">${esc(label(selL.length))}</span><span class="rv">${money(tot)}</span></div>
-  <span class="flbl">${esc(T().signHere)}</span><canvas class="sig" id="sig"></canvas>
-  <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="selNone">${esc(T().cancel)}</button>
-  <button class="btn good nomt" id="sigOk" data-a="lotSign" data-x="${state}" ${S.sigDrawn?"":"disabled"}>${ic("signature")}${esc(T().done)}</button></div></div>`:"");
+  <span class="flbl">${esc(T().signHere)}</span><canvas class="sig" id="sig-${state}"></canvas>
+  <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="selNone" data-x="${state}">${esc(T().cancel)}</button>
+  <button class="btn good nomt" id="ok-${state}" data-a="lotSign" data-x="${state}" ${S.sigOk[state]?"":"disabled"}>${ic("signature")}${esc(T().done)}</button></div></div>`:"");
 }
 function lotHistory(list){
  if(!list.length) return "";
  return `<div class="lbl"><span>${esc(T().history)}</span><span>${esc(T().tapDetail)}</span></div>`+list.slice(0,20).map(x=>{
-  const open=S.lotOpen===x.d,o=x.so,sig=S.sigCache[x.d]||{};
+  const open=S.lotOpen===x.k,o=x.so,sig=S.sigCache[x.k]||{};
   const when=t=>t?shortDate(iso(new Date(t))):"";
-  return `<div class="card tap" data-a="lotOpen" data-x="${x.d}">${lotHead(x,false)}
+  return `<div class="card tap" data-a="lotOpen" data-x="${x.k}">${lotHead(x,false)}
   ${open?lotItems(x)+
    `<div class="lbl" style="margin-top:10px">${esc(T().byStore)}</div>`+Object.keys(x.stores).map(sid=>{const st=storeOf(sid),ps=x.stores[sid];
     const o2=Object.values(ps).reduce((a,v)=>a+v.out,0),l2=Object.values(ps).reduce((a,v)=>a+v.left,0);
@@ -1557,9 +1579,16 @@ function lotHistory(list){
   :""}</div>`;}).join("");
 }
 function payTab(){
- const b=balances(),f=S.payForm,L=lots(),sn=sup();
+ const rid=me(),b=balances(rid),f=S.payForm,L=lots(rid),dist=distOf(rid),dn=dist?accName(dist):"";
  const chk=L.filter(x=>x.state==="check"),sp=L.filter(x=>x.state==="sup"),cnt=L.filter(x=>x.state==="count"),cl=L.filter(x=>x.state==="closed");
- return band(bandTitle(T().tPay)+bandStats([[T().shopsOwe,money(b.owed)],[T().outCons,money(b.flight)],[T().supOwed(sn),money(b.sup)],[T().marginMonth,money(b.month)]]))+`
+ const R=amDistributor()?myResellers():[],RL=R.flatMap(a=>lots(a.id));
+ const inc=RL.filter(x=>x.state==="sup"),incChk=RL.filter(x=>x.state==="check"||x.state==="count").length;
+ const stats=[[T().shopsOwe,money(b.owed)],[T().outCons,money(b.flight)]];
+ if(dist) stats.push([T().supOwed(dn),money(b.sup)]);
+ if(R.length) stats.push([T().resOwe,money(R.reduce((a,x)=>a+balances(x.id).sup,0))]);
+ stats.push([T().marginMonth,money(b.month)]);
+ const hist=cl.concat(RL.filter(x=>x.state==="closed")).sort((a,b)=>a.d<b.d?1:-1);
+ return band(bandTitle(T().tPay)+bandStats(stats))+`
  ${f?`<div class="card on" style="margin-top:8px"><div class="b" style="margin-bottom:8px">${esc(T().recordPay)}</div>
    <label class="flbl">${esc(T().pickStore)}</label>
    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${myStores().map(s=>`<button class="chip" data-a="payStore" data-x="${s.id}" data-on="${f.sid===s.id?1:0}">${esc(s.name)}</button>`).join("")}</div>
@@ -1567,32 +1596,17 @@ function payTab(){
    <div class="g2" style="margin-top:8px"><button class="btn g nomt" data-a="payCancel">${esc(T().cancel)}</button>
    <button class="btn good nomt" data-a="paySave" ${f.sid?"":"disabled"}>${esc(T().save)}</button></div></div>`
   :`<button class="btn g" data-a="payOpen">${ic("receipt")}${esc(T().recordPay)}</button>`}
- <div class="lbl">${esc(T().toCheck(sn))}</div>
- ${signList(chk,"check",n=>T().signSend(n,sn))}
- ${sp.length?`<div class="lbl">${esc(T().withSup(sn))}</div><div class="card list">${sp.map(x=>`<div class="lrow"><span class="grow"><span class="b">${esc(dayDate(x.d))}</span>
+ ${R.length?`<div class="lbl">${esc(T().fromRes)}</div>${incChk?alertBox("info",T().beingChecked(incChk),"","hourglass"):""}${signList(inc,"sup",n=>T().signClose(n))}`:""}
+ ${dist?`<div class="lbl">${esc(T().toCheck(dn))}</div>${signList(chk,"check",n=>T().signSend(n,dn))}`:""}
+ ${sp.length?`<div class="lbl">${esc(T().withSup(dn))}</div><div class="card list">${sp.map(x=>`<div class="lrow"><span class="grow"><span class="b">${esc(dayDate(x.d))}</span>
   <span class="mut"> · ${esc(T().wastePct(x.waste))}</span></span><span class="rv">${money(x.cost)}</span></div>`).join("")}</div>`:""}
  ${cnt.length?`<div class="lbl">${esc(T().waitCountL)}</div><div class="card list">${cnt.map(x=>`<div class="lrow"><span class="grow"><span class="b">${esc(dayDate(x.d))}</span>
   <span class="mut"> · ${esc(T().storesN(Object.keys(x.stores).length))}</span></span>${ic("hourglass")}</div>`).join("")}</div>`:""}
- ${lotHistory(cl)}`;
+ ${lotHistory(hist)}`;
 }
-function supPayTab(){
- const L=lots(),sp=L.filter(x=>x.state==="sup"),chk=L.filter(x=>x.state==="check").length,cl=L.filter(x=>x.state==="closed");
- const owed=sp.reduce((a,x)=>a+x.cost,0);
- return band(bandTitle(T().tPay)+`<div class="bk" style="margin-top:6px">${esc(T().notReceived)}</div><div class="bv big1">${money(owed)}</div>`)+`
- ${chk?alertBox("info",T().beingChecked(chk),"","hourglass"):""}
- <div class="lbl">${esc(T().toSign)}</div>
- ${signList(sp,"sup",n=>T().signClose(n))}
- ${myCashCard()}
- ${lotHistory(cl)}`;
-}
-function myCashCard(){
- const mine=myStores();if(!isSup()||!mine.length) return "";
- const m=S.today.slice(0,7);
- const rows=mine.map(s=>({s,v:S.payments.filter(p=>p.store_id===s.id&&String(p.paid_on||"").slice(0,7)===m).reduce((a,p)=>a+Number(p.amount),0)}));
- return `<div class="lbl"><span>${esc(T().myCash)}</span><span>${esc(T().thisMonth)}</span></div><div class="card">${rows.map(x=>`<div class="row"><span>${esc(x.s.name)}</span><span class="rv">${money(x.v)}</span></div>`).join("")}
-  <div class="row"><span class="b">${esc(T().totalW)}</span><span class="rv">${money(rows.reduce((a,x)=>a+x.v,0))}</span></div></div>`;
-}
-function sigPad(cv){
+
+
+function sigPad(cv,state){
  if(!cv) return;
  const r=cv.getBoundingClientRect(),dp=window.devicePixelRatio||1;
  cv.width=r.width*dp;cv.height=r.height*dp;
@@ -1601,29 +1615,38 @@ function sigPad(cv){
  const pt=e=>{const b=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return[t.clientX-b.left,t.clientY-b.top];};
  const st=e=>{e.preventDefault();d=true;const p=pt(e);x.beginPath();x.moveTo(p[0],p[1]);};
  const mv=e=>{if(!d)return;e.preventDefault();const p=pt(e);x.lineTo(p[0],p[1]);x.stroke();
-  if(!S.sigDrawn){S.sigDrawn=true;const o=$("sigOk");if(o)o.disabled=false;}};
+  if(!S.sigOk[state]){S.sigOk[state]=true;const o=$("ok-"+state);if(o)o.disabled=false;}};
  cv.addEventListener("mousedown",st);cv.addEventListener("mousemove",mv);window.addEventListener("mouseup",()=>{d=false;});
  cv.addEventListener("touchstart",st,{passive:false});cv.addEventListener("touchmove",mv,{passive:false});cv.addEventListener("touchend",()=>{d=false;});
 }
 
-/* =================== DISTRIBUTOR: stats =================== */
+/* =================== ADMIN: stats (sales for everyone or one reseller, and production costs) =================== */
+function adminStats(){
+ const tog=`<div class="sub" style="grid-template-columns:1fr 1fr;margin:10px 0 4px"><button data-a="statView" data-x="sales" data-on="${S.statView==="sales"?1:0}">${esc(T().viewSales)}</button>
+  <button data-a="statView" data-x="cost" data-on="${S.statView==="cost"?1:0}">${esc(T().viewCost)}</button></div>`;
+ if(S.statView==="cost") return supStats(tog);
+ const R=resellers();
+ const chips=R.length>1?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px"><button class="chip" data-a="statR" data-x="" data-on="${S.statR?0:1}">${esc(T().allW)}</button>
+  ${R.map(a=>`<button class="chip" data-a="statR" data-x="${a.id}" data-on="${S.statR===a.id?1:0}">${esc(nm(a))}</button>`).join("")}</div>`:"";
+ return statsTab(tog).replace('</section>','</section>'+chips);
+}
 function sellPct(sid){
- const ls=BL().filter(l=>l.deliveries.store_id===sid&&l.settled_at&&isRet(l.product_id));
+ const ls=S.lines.filter(l=>l.deliveries.store_id===sid&&l.settled_at&&isRet(l.product_id));
  const o=ls.reduce((a,l)=>a+l.qty_out,0),b=ls.reduce((a,l)=>a+(l.qty_back||0),0);
  return o?Math.round(100*(o-b)/o):null;
 }
-function statsTab(){
- const b=balances();
- const rl=BL().filter(l=>l.settled_at&&isRet(l.product_id));
+function statsTab(extra){
+ const R=S.statR,SL=R?linesOf(R):S.lines,b=balances(R);
+ const rl=SL.filter(l=>l.settled_at&&isRet(l.product_id));
  const o=rl.reduce((a,l)=>a+l.qty_out,0),bk=rl.reduce((a,l)=>a+(l.qty_back||0),0);
  const wk=[];const mon=d=>{const x=dOf(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return iso(x);};
  const thisMon=mon(S.today);
  for(let i=5;i>=0;i--) wk.push({start:addDays(thisMon,-7*i),v:0});
- BL().filter(l=>l.settled_at).forEach(l=>{const w=wk.find(x=>x.start===mon(l.deliveries.delivered_on));
+ SL.filter(l=>l.settled_at).forEach(l=>{const w=wk.find(x=>x.start===mon(l.deliveries.delivered_on));
   if(w) w.v+=(l.qty_out-(l.qty_back||0))*(Number(l.unit_price)-Number(l.unit_cost));});
  const mx=Math.max(1,...wk.map(w=>Math.abs(w.v)));
- const sp=myStores().map(s=>({s,p:sellPct(s.id)})).filter(x=>x.p!=null).sort((a,b)=>b.p-a.p);
- return band(bandTitle(T().tStats)+bandStats([[T().profitAll,money0(b.margin)],[T().waste,o?Math.round(100*bk/o)+"%":"—"]]))+`
+ const sp=S.stores.filter(s=>!R||s.owner_id===R).map(s=>({s,p:sellPct(s.id)})).filter(x=>x.p!=null).sort((a,b)=>b.p-a.p);
+ return band(bandTitle(T().tStats)+(extra||"")+bandStats([[T().profitAll,money0(b.margin)],[T().waste,o?Math.round(100*bk/o)+"%":"—"]]))+`
  <div class="lbl">${esc(T().profit6)}</div>
  <div class="card"><div class="bars">${wk.map(w=>`<div><span>${w.v?money0(w.v):""}</span><i class="${w.v<0?"neg":""}" style="height:${Math.round(80*Math.abs(w.v)/mx)}%"></i>
   <span>${esc(shortDate(w.start))}</span></div>`).join("")}</div></div>
@@ -1635,7 +1658,7 @@ function statsTab(){
 /* What moved sales: every counted lot, grouped by the weather and events while it was on the shelf.
    "Sold %" = boxes sold / boxes left out, fresh (returnable) desserts only, weighted by boxes. */
 function salesEffects(){
- const L=lots().filter(x=>x.state!=="count"&&x.out>0).map(x=>({x,c:lotCtx(x),sold:x.out-x.back,out:x.out}));
+ const L=allLots(S.statR).filter(x=>x.state!=="count"&&x.out>0).map(x=>({x,c:lotCtx(x),sold:x.out-x.back,out:x.out}));
  const pct=a=>{const o=a.reduce((t,y)=>t+y.out,0);return o?Math.round(100*a.reduce((t,y)=>t+y.sold,0)/o):null;};
  const g=(label,list)=>({label,n:list.length,p:pct(list)});
  const wT=L.filter(y=>y.c.tavg!=null),wW=L.filter(y=>y.c.has);
@@ -1691,9 +1714,20 @@ function setTab(){
    :`<button class="btn bt" data-a="resetOpen">${ic("trash")}${esc(T().resetOpen)}</button>`}</div>`:""}
  <button class="btn g" data-a="out" style="margin-top:22px">${ic("logout")}${esc(T().signOut)}</button>`;
 }
+/* a reseller account: the Distributor switch, and which distributor their money goes to */
+function resellerCtl(x){
+ const ds=S.accounts.filter(y=>y.role==="reseller"&&y.is_distributor&&y.id!==x.id);
+ const cur=x.distributor_id&&ds.some(y=>y.id===x.distributor_id)?x.distributor_id:(!x.is_distributor&&ds.length===1?ds[0].id:null);
+ return `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line)">
+  <button class="card row" data-a="togDistr" data-x="${x.id}" style="padding:8px 0;margin:0;background:none;border:0;box-shadow:none">
+   <span>${ic("building-warehouse")} ${esc(T().distSwitch)}</span><span class="chip" data-on="${x.is_distributor?1:0}">${esc(x.is_distributor?T().on:T().off)}</span></button>
+  ${ds.length?`<div class="flbl" style="margin-top:6px">${esc(T().reportsTo)}</div><div style="display:flex;flex-wrap:wrap;gap:6px">
+   <button class="chip" data-a="setDist" data-x="${x.id}|" data-on="${cur?0:1}">${esc(T().noneW)}</button>
+   ${ds.map(y=>`<button class="chip" data-a="setDist" data-x="${x.id}|${y.id}" data-on="${cur===y.id?1:0}">${esc(nm(y))}</button>`).join("")}</div>`:""}</div>`;
+}
 /* admin: accounts, PINs and each account type's colour */
 function acctTab(){
- const roles=[["admin","roleAdmin"],["distributor","roleDist"],["supplier","roleSup"],["maker","roleMaker"],["driver","roleDriver"]];
+ const roles=[["admin","roleAdmin"],["reseller","roleRes"],["production","roleProd"],["driver","roleDriver"]];
  const a=S.addAcct;
  return band(bandTitle(T().tAcct))+`<div class="lbl">${esc(T().themes)}</div>
   ${!S.more.theme?`<button class="card tap" data-a="more" data-x="theme"><div class="fr">${roles.map(([r])=>`<span class="av" style="flex-basis:40px;height:40px;font-size:20px;box-shadow:none;background:${THEMES[S.themes[r]||THEME_DEFAULT[r]].a}">${ic(ROLE_IC[r])}</span>`).join("")}
@@ -1713,8 +1747,11 @@ function acctTab(){
      ${me?`<span class="chip">${esc(T().you)}</span>`:""}<div class="mut">${esc(T().pin)} <b class="rv" style="color:var(--ink);letter-spacing:.1em">${esc(x.pin)}</b></div></span>
      <span style="display:flex;gap:6px"><button class="chip" data-a="pinEdit" data-x="${x.id}">${esc(T().changePin)}</button>
      ${me?"":`<button class="chip" style="color:var(--bad)" data-a="cf" data-x="acct:${x.id}">${esc(T().remove)}</button>`}</span></div>
-     ${S.pinEdit===x.id?`<div class="g2" style="margin-top:10px"><input class="tf" id="pinNew" type="tel" inputmode="numeric" maxlength="4" placeholder="${esc(T().newPin)}">
-      <button class="btn good nomt" data-a="pinSave" data-x="${x.id}">${esc(T().save)}</button></div>`:""}</div>`;}).join("")
+     ${x.role==="reseller"?resellerCtl(x):""}
+     ${S.pinEdit===x.id?`<div style="margin-top:10px"><div class="g2 fld"><div><label class="flbl">${esc(T().nameTh)}</label><input class="tf" id="edTh" value="${esc(x.name_th||"")}"></div>
+      <div><label class="flbl">${esc(T().name)}</label><input class="tf" id="edEn" value="${esc(x.name||"")}"></div></div>
+      <div class="g2"><input class="tf" id="pinNew" type="tel" inputmode="numeric" maxlength="4" value="${esc(x.pin)}" aria-label="${esc(T().pin)}">
+      <button class="btn good nomt" data-a="pinSave" data-x="${x.id}">${esc(T().save)}</button></div></div>`:""}</div>`;}).join("")
    :`<div class="mut" style="padding:0 4px 4px">—</div>`);}).join("")}
   ${a?`<div class="card on" style="margin-top:10px"><div class="b" style="margin-bottom:8px">${esc(T().addAccount)}</div>
    <div class="fld"><label class="flbl">${esc(T().role)}</label><div style="display:flex;flex-wrap:wrap;gap:6px">
@@ -1775,7 +1812,7 @@ function driverRound(){
  if(!S.stops) S.stops=buildStops(o);
  const R=S.stops,dv=S.dv;
  if(dv.phase!=="done"&&nextTodo(0)<0) return band(statusBar())+`<div class="card center" style="padding:26px 14px;background:var(--goodw);color:var(--good)">
-  <div style="font-size:44px;line-height:1">✓</div><div class="b" style="font-size:calc(var(--fs)*1.2);margin-top:6px">${esc(o.label||T().defaultLabel)} · ${esc(T().roundDone)}</div></div>
+  <div style="font-size:44px;line-height:1">✓</div><div class="b" style="font-size:calc(var(--fs)*1.2);margin-top:6px">${esc(orderTitle(o))} · ${esc(T().roundDone)}</div></div>
   <button class="btn g" data-a="roundBack">${ic("arrow-left")}${esc(T().backRounds)}</button>`;
  if(dv.phase==="brief") return dvBriefV(R,o);
  if(dv.phase==="done") return dvDoneV(R);
@@ -1793,19 +1830,19 @@ function roundList(){
   .sort((a,b)=>a.for_delivery_on<b.for_delivery_on?-1:a.for_delivery_on>b.for_delivery_on?1:0).slice(0,5);
  const card=o=>{
   if(isDelivered(o)) return `<div class="card" style="background:var(--goodw);color:var(--good);box-shadow:none">
-   <div class="row" style="padding:0"><span class="b">✓ ${esc(o.label||T().defaultLabel)}</span><span>${esc(T().deliveredAt(deliveredTime(o)))}</span></div></div>`;
+   <div class="row" style="padding:0"><span class="b">✓ ${esc(orderTitle(o))}</span><span>${esc(T().deliveredAt(deliveredTime(o)))}</span></div></div>`;
   const p=oProgress(o);
   return `<button class="card tap" data-a="pickRound" data-x="${o.id}" style="box-shadow:0 0 0 2px var(--a),var(--sh)">
    <div class="fr"><span class="av" style="flex-basis:48px;height:48px;font-size:24px;box-shadow:none">${ic("truck-delivery")}</span>
-   <div class="grow"><div class="row" style="padding:0"><span class="b" style="font-size:calc(var(--fs)*1.1)">${esc(o.label||T().defaultLabel)}</span>
+   <div class="grow"><div class="row" style="padding:0"><span class="b" style="font-size:calc(var(--fs)*1.1)">${esc(orderTitle(o))}</span>
     <span class="rv">${esc(T().boxes(oBoxes(o)))}</span></div>
-   <div class="mut">${o.ordered_by?esc(T().by(whoOrdered(o)))+" · ":""}${esc(p.done?T().roundProgress(p.done,p.total):T().tapLoad(p.total))}</div>
+   <div class="mut">${o.ordered_by?esc(T().by(whoOrdered(o)))+" · ":""}${o.driver_id?"":esc(T().noDriver)+" · "}${esc(p.done?T().roundProgress(p.done,p.total):T().tapLoad(p.total))}</div>
    ${o.sup_status==="pending"?`<div style="margin-top:6px">${supChip(o.sup_status)}</div>`:""}</div></div></button>`;
  };
  return band(statusBar()+ctxRow(S.today,false))+
  (todays.length?todays.map(card).join(""):`<div class="empty">${ic("mood-empty")} ${esc(T().noRoundToday)}</div>`)+
  (next.length?`<div class="lbl">${esc(T().nextRounds)}</div><div class="card list">`+next.map(o=>`<div class="lrow">
-  ${dateTileMini(o.for_delivery_on)}<span class="grow"><span class="b">${esc(o.label||T().defaultLabel)}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span>
+  ${dateTileMini(o.for_delivery_on)}<span class="grow"><span class="b">${esc(orderTitle(o))}</span><span class="mut"> · ${esc(T().boxes(oBoxes(o)))}</span></span>
   ${relChip(o.for_delivery_on)}</div>`).join("")+`</div>`:"")+
  `<button class="btn g" data-a="refresh">${ic("refresh")}${esc(T().refresh)}</button>`;
 }
@@ -1813,7 +1850,7 @@ function dvBriefV(R,o){
  const it={};R.filter(s=>!s.done).forEach(s=>s.out.forEach(x=>{if(x.qty)it[x.pid]=(it[x.pid]||0)+x.qty;}));
  const keys=Object.keys(it),all=keys.length>0&&keys.every(k=>S.dv.loaded[k]),todo=R.filter(s=>!s.done);
  after(()=>drawMap(todo.map(s=>s.store),S.hubs,true));
- return band(statusBar())+`<div class="b" style="font-size:calc(var(--fs)*1.25);margin:2px 2px 8px">${esc(o.label||T().defaultLabel)}</div>
+ return band(statusBar())+`<div class="b" style="font-size:calc(var(--fs)*1.25);margin:2px 2px 8px">${esc(orderTitle(o))}</div>
  <div id="map"></div>
  <div class="lbl"><span>${esc(T().loadVan(todo.length))}</span><span>${keys.filter(k=>S.dv.loaded[k]).length}/${keys.length}</span></div>
  ${all?"":`<button class="btn g nomt" data-a="ldAll" style="margin-bottom:10px">${ic("checks")}${esc(T().loadAllBtn)}</button>`}
@@ -1924,7 +1961,7 @@ async function saveStop(st){
  // All or nothing, and safe to repeat (a second tap after a lost reply changes nothing).
  const back=[];st.back.forEach(b=>alloc(b).forEach(a=>back.push({id:a.id,back:a.back})));
  const {data:r,error}=await db.rpc("finish_stop",{p:{order:S.round,store:st.store.id,day:S.today,
-  driver:role()==="driver"?S.acct.id:null,note:"Collected by "+(S.acct.name||""),
+  driver:isDriver()?S.acct.id:null,note:"Collected by "+(S.acct.name||""),
   back,out:st.out.filter(o=>o.qty>0).map(o=>({product_id:o.pid,supplier_id:S.supplier?S.supplier.id:null,qty_out:o.qty,unit_price:o.price,unit_cost:o.cost}))}});
  if(error) throw error;
  const at=r.at||new Date().toISOString();
@@ -1946,7 +1983,7 @@ function qtyEditor(){
  const o=S.orders.find(x=>x.id===S.ob.id);if(!o){S.ob=null;return driverHistory();}
  const d=dOf(o.for_delivery_on),delivered=isDelivered(o),locked=o.for_delivery_on<S.today||delivered;
  const by={};o.lines.forEach(l=>{(by[l.store_id]=by[l.store_id]||[]).push(l);});
- return hero(o.label||T().defaultLabel,dayName(d.getDay())+" "+d.getDate()+" "+monName(d.getMonth())+" · "+T().boxes(oBoxes(o)))+
+ return hero(orderTitle(o),dayName(d.getDay())+" "+d.getDate()+" "+monName(d.getMonth())+" · "+T().boxes(oBoxes(o)))+
  (locked?alertBox("info",delivered?T().deliveredLock:T().pastLocked,"","lock"):alertBox("info",T().qtyOnly,T().savedNow,"pencil"))+
  `<div class="card" style="padding-top:4px">${orderWhen(o)}</div>`+
  Object.keys(by).map(sid=>{const s=storeOf(sid);
@@ -1957,66 +1994,7 @@ function qtyEditor(){
 }
 
 /* =================== SUPPLIER =================== */
-function supOrders(){
- const all=ordersOn(S.pick),list=all.filter(o=>!o.ordered_by),mine=all.filter(o=>o.ordered_by===S.acct.id);
- const acc=all.filter(o=>o.sup_status==="accepted"&&(!o.ordered_by||o.ordered_by===S.acct.id));
- const pt=makeTotals(acc);
- const pend=list.filter(o=>o.sup_status==="pending"),done=list.filter(o=>o.sup_status!=="pending");
- const others=S.orders.filter(o=>o.for_delivery_on>=S.today&&o.sup_status==="pending"&&!o.ordered_by&&o.for_delivery_on!==S.pick);  // waiting on other days
- const tagChip=n=>n?` <span class="chip gold">${esc(T().tagged(n))}</span>`:"";
- const head=o=>`<div class="row" style="padding-top:0"><span class="b">${esc(o.label||T().defaultLabel)}</span><span class="chip warn">${esc(T().needsAnswer)}</span></div>`;
- /* an order still waiting for an answer: everything on show, answer buttons at the bottom */
- const pendCard=o=>{
-  if(S.adj&&S.adj.id===o.id){
-   const by={};o.lines.forEach(l=>{(by[l.store_id]=by[l.store_id]||[]).push(l);});
-   return `<div class="card on">${head(o)}${Object.keys(by).map(sid=>{const s=storeOf(sid);
-    return `<div class="mut b" style="margin-top:8px">${esc(s?s.name:"—")}</div>${by[sid].map(l=>{const v=S.adj.q[l.id],was=l.qty_ordered!=null?l.qty_ordered:qty(l);
-     return `<div class="row"><span>${pline(l.product_id,32)}${tagChip(l.qty_price_tagged)}
-      ${v!==was?`<div class="mut" style="color:var(--warn);font-weight:600">${esc(T().ordered(was))}</div>`:""}</span>
-      <span class="stp"><button data-a="adjQ" data-x="${l.id}|-1" aria-label="−">−</button><span class="v" id="aq-${l.id}">${v}</span>
-      <button data-a="adjQ" data-x="${l.id}|1" aria-label="+">+</button></span></div>`;}).join("")}`;}).join("")}
-    <button class="btn good" data-a="supAccept" data-x="${o.id}">${ic("check")}${esc(T().acceptAdj)}</button>
-    <button class="btn g" data-a="adjCancel">${esc(T().cancel)}</button></div>`;
-  }
-  const tt=prodTotals(o);
-  return `<div class="card on">${head(o)}
-   ${Object.keys(tt).map(pid=>`<div class="row"><span>${pline(pid,36)}${tagChip(tt[pid].tag)}</span><span class="rv">${tt[pid].q}</span></div>`).join("")}
-   <button class="btn g" data-a="adjOpen" data-x="${o.id}">${ic("adjustments")}${esc(T().adjust)}</button>
-   <div class="g2" style="margin-top:8px"><button class="btn good nomt" data-a="supAccept" data-x="${o.id}">${ic("check")}${esc(T().accept)}</button>
-   <button class="btn bad nomt" data-a="supAns" data-x="${o.id}|rejected">${ic("x")}${esc(T().reject)}</button></div></div>`;
- };
- /* an answered order folds into one row; tap it to see what was in it (and change the answer) */
- const doneRow=o=>{
-  const acc=o.sup_status==="accepted",open=S.sOpen===o.id,tt=prodTotals(o);
-  const ordered={};o.lines.forEach(l=>{ordered[l.product_id]=(ordered[l.product_id]||0)+(l.qty_ordered!=null?l.qty_ordered:qty(l));});
-  return `<button class="lrow tap" data-a="sOpen" data-x="${o.id}" aria-expanded="${open}" style="${acc?"":"opacity:.7"}">
-    <span class="sdot ${acc?"good":"bad"}">${ic(acc?"check":"x")}</span>
-    <span class="grow"><span class="b">${esc(o.label||T().defaultLabel)}</span>
-     <span class="mut" style="display:block"><span style="color:var(--${acc?"good":"bad"});font-weight:600">${esc((acc?T().accepted:T().rejected).replace(/^[✓✕]\s*/,""))}</span> · ${esc(T().storesN(oStores(o)))} · ${esc(T().boxes(oBoxes(o)))}</span></span></button>
-   ${open?`<div class="odet">${Object.keys(tt).map(pid=>`<div class="row"><span>${pline(pid,32)}${tagChip(tt[pid].tag)}
-     ${o.sup_adjusted&&ordered[pid]!==tt[pid].q?`<div class="mut" style="color:var(--warn);font-weight:600">${esc(T().ordered(ordered[pid]))}</div>`:""}</span>
-     <span class="rv">${tt[pid].q}</span></div>`).join("")}
-    <div style="text-align:right;margin-top:6px"><button class="chip" data-a="supAns" data-x="${o.id}|pending">${ic("arrow-back-up")}${esc(T().undo)}</button></div></div>`:""}`;
- };
- const total=Object.values(pt).reduce((a,x)=>a+x.q,0);
- /* what to make: only once every order for the day has an answer, so no step gets skipped */
- const make=!all.length?"":pend.length
-  ?`<div class="lbl"><span>${esc(T().toMake)}</span></div><div class="card mklock">${ic("lock")}
-    <div class="grow"><div class="b">${esc(T().makeLockT)}</div><div class="mut">${esc(T().makeLockB(pend.length))}</div></div></div>`
-  :acc.length?`<div class="lbl"><span>${esc(T().toMake)}</span><span>${esc(T().totalBoxes(total))}</span></div>${makeTiles(pt)}`:"";
- return band(statusBar()+dayStrip(S.pick,-3,21,null))+
- hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(all.length),relChip(S.pick))+ctxRow(S.pick,false)+
- (others.length?`<div class="alert warn"><span class="ai">${ic("bell-ringing")}</span><span class="grow"><b>${esc(T().needAnswer(others.length))}</b>
-  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${[...new Set(others.map(o=>o.for_delivery_on))].sort()
-   .map(x=>`<button class="chip" data-a="pick" data-x="${x}" style="background:#fff">${esc(dayDate(x))}</button>`).join("")}</div></span></div>`:"")+
- `<div class="lbl"><span>${esc(T().incoming)}</span>${pend.length?`<span>${esc(T().waitingHere(pend.length))}</span>`:""}</div>
- ${list.length?pend.map(pendCard).join("")+(done.length?`<div class="card list tapl">${done.map(doneRow).join("")}</div>`:"")
-  :`<div class="empty">${esc(T().noOrders)}</div>`}
- <div class="lbl">${esc(T().myOrders)}</div>
- ${mine.map(orderCard).join("")}
- ${S.pick<S.today?"":myStores().length?`<button class="btn g" data-a="newOrd">${ic("plus")}${esc(T().orderMine)}</button>`:`<div class="mut" style="margin:0 4px">${esc(T().noMyStores)}</div>`}
- ${make}`+comingUp(true);
-}
+
 /* product totals for a set of orders, with the per-shop split behind each */
 function makeTotals(orders){
  const pt={};
@@ -2028,15 +2006,30 @@ function makeTotals(orders){
 /* the maker (cook): what to make for the chosen day, from every order that has been accepted. No money. */
 function makerTab(){
  const list=ordersOn(S.pick).filter(o=>o.sup_status!=="rejected");
- const acc=list.filter(o=>o.sup_status==="accepted"),pend=list.filter(o=>o.sup_status==="pending");
- const pt=makeTotals(acc),total=Object.values(pt).reduce((a,x)=>a+x.q,0);
+ const pt=makeTotals(list),total=Object.values(pt).reduce((a,x)=>a+x.q,0);
+ const canTrim=o=>!isDelivered(o)&&o.for_delivery_on>=S.today;
+ const row=o=>{
+  if(S.adj&&S.adj.id===o.id){
+   const by={};o.lines.forEach(l=>{(by[l.store_id]=by[l.store_id]||[]).push(l);});
+   return `<div class="card on"><div class="b">${esc(orderTitle(o))} <span class="mut">· ${esc(T().by(whoOrdered(o)))}</span></div>${Object.keys(by).map(sid=>{const s=storeOf(sid);
+    return `<div class="mut b" style="margin-top:8px">${esc(s?s.name:"—")}</div>${by[sid].map(l=>{const v=S.adj.q[l.id],was=l.qty_ordered!=null?l.qty_ordered:qty(l);
+     return `<div class="row"><span>${pline(l.product_id,32)}${v!==was?`<div class="mut" style="color:var(--warn);font-weight:600">${esc(T().ordered(was))}</div>`:""}</span>
+      <span class="stp"><button data-a="adjQ" data-x="${l.id}|-1" aria-label="−">−</button><span class="v" id="aq-${l.id}">${v}</span>
+      <button data-a="adjQ" data-x="${l.id}|1" aria-label="+">+</button></span></div>`;}).join("")}`;}).join("")}
+    <button class="btn good" data-a="supAccept" data-x="${o.id}">${ic("check")}${esc(T().save)}</button>
+    <button class="btn g" data-a="adjCancel">${esc(T().cancel)}</button></div>`;
+  }
+  return `<div class="lrow"><span class="grow"><span class="b">${esc(orderTitle(o))}</span>
+   <span class="mut" style="display:block">${esc(T().by(whoOrdered(o)))} · ${esc(T().storesN(oStores(o)))} · ${esc(T().boxes(oBoxes(o)))}</span>
+   ${o.sup_adjusted?`<span class="chip warn" style="margin-top:4px">${esc(T().trimmed)}</span>`:""}</span>
+   ${canTrim(o)?`<button class="chip" data-a="adjOpen" data-x="${o.id}">${ic("adjustments")}${esc(T().trim)}</button>`:""}</div>`;
+ };
+ const editing=list.find(o=>S.adj&&S.adj.id===o.id);
  return band(statusBar()+dayStrip(S.pick,-3,21,null))+
  hero(dayName(dOf(S.pick).getDay())+" "+dOf(S.pick).getDate()+" "+monName(dOf(S.pick).getMonth()),T().ordersN(list.length),relChip(S.pick))+ctxRow(S.pick,false)+
- (pend.length?alertBox("warn",T().waitSup(pend.length,sup()),"","hourglass"):"")+
- (acc.length?`<div class="lbl"><span>${esc(T().toMake)}</span><span>${esc(T().totalBoxes(total))}</span></div>${makeTiles(pt)}
-  <div class="lbl">${esc(T().makeOrders)}</div><div class="card list">${acc.map(o=>`<div class="lrow"><span class="grow"><span class="b">${esc(o.label||T().defaultLabel)}</span>
-   <span class="mut" style="display:block">${esc(T().by(whoOrdered(o)))} · ${esc(T().storesN(oStores(o)))} · ${esc(T().boxes(oBoxes(o)))}</span></span></div>`).join("")}</div>`
-  :pend.length?"":`<div class="empty">${esc(T().noOrdersDay)}</div>`)+
+ (list.length?`<div class="lbl"><span>${esc(T().toMake)}</span><span>${esc(T().totalBoxes(total))}</span></div>${makeTiles(pt)}
+  <div class="lbl">${esc(T().makeOrders)}</div>${editing?row(editing):""}<div class="card list">${list.filter(o=>o!==editing).map(row).join("")}</div>`
+  :`<div class="empty">${esc(T().noOrdersDay)}</div>`)+
  comingUp(false);
 }
 /* admin: every order from everyone, read-only; tap one to see it (and delete it) */
@@ -2081,7 +2074,7 @@ const cfg=()=>Object.assign({fresh:{mode:"pct",pct:35},dry:{mode:"pct",pct:35},f
 function supCalc(){
  const from=periodFrom(),c=cfg(),r={};
  TYPES.forEach(t=>{r[t]={rev:0,cost:0,out:0,back:0,made:0,ret:Object.values(S.prods).some(p=>p.type===t&&p.returnable!==false)};});
- BL().filter(l=>l.settled_at&&l.deliveries.delivered_on>=from).forEach(l=>{
+ S.lines.filter(l=>l.settled_at&&l.deliveries.delivered_on>=from).forEach(l=>{
   const p=S.prods[l.product_id];if(!p)return;const x=r[p.type];const sold=l.qty_out-(l.qty_back||0);
   x.rev+=sold*Number(l.unit_cost);x.made+=l.qty_out;
   if(c[p.type].mode==="prod") x.cost+=(S.make[l.product_id]||0)*l.qty_out;
@@ -2089,9 +2082,9 @@ function supCalc(){
  TYPES.forEach(t=>{if(c[t].mode!=="prod") r[t].cost=r[t].rev*(c[t].pct||0)/100;});
  return r;
 }
-function supStats(){
+function supStats(extra){
  const r=supCalc(),rev=TYPES.reduce((a,t)=>a+r[t].rev,0),cost=TYPES.reduce((a,t)=>a+r[t].cost,0),c=cfg();
- return band(bandTitle(T().tStats)+`<div class="sub" style="grid-template-columns:1fr 1fr"><button data-a="period" data-x="week" data-on="${S.period==="week"?1:0}">${esc(T().thisWeek)}</button>
+ return band(bandTitle(T().tStats)+(extra||"")+`<div class="sub" style="grid-template-columns:1fr 1fr"><button data-a="period" data-x="week" data-on="${S.period==="week"?1:0}">${esc(T().thisWeek)}</button>
   <button data-a="period" data-x="month" data-on="${S.period==="month"?1:0}">${esc(T().thisMonth)}</button></div>`+
   bandStats([[T().income,money0(rev)],[T().profit,money0(rev-cost)]]))+`
  <div class="lbl">${esc(T().costByType)}</div>
@@ -2135,7 +2128,7 @@ const ACT={
  retry:()=>start(),
  out:()=>signOut(),
  tab:(el)=>{S.tab=el.dataset.x;S.evForm=null;S.ob=null;S.open=null;S.confirm=null;S.ctype=null;S.payForm=null;
-  S.addAcct=null;S.pinEdit=null;S.sel=new Set();S.selInit=null;S.sigDrawn=false;S.lotOpen=null;S.adj=null;S.reset=false;if(S.tab==="sorder"&&S.pick<S.today)S.pick=nextOrderDay();render();
+  S.addAcct=null;S.pinEdit=null;S.sel=new Set();S.selInit=new Set();S.sigOk={};S.sigDrawn=false;S.lotOpen=null;S.adj=null;S.reset=false;if(S.tab==="sorder"&&S.pick<S.today)S.pick=nextOrderDay();render();
   softReload(false);},
  pick:(el)=>{S.pick=el.dataset.x;S.evForm=null;S.mk=null;S.sOpen=null;render();if(el.dataset.top)window.scrollTo(0,0);},
  obDate:(el)=>{keepLabel();const ob=S.ob,nd=el.dataset.x;
@@ -2148,7 +2141,7 @@ const ACT={
  newOrd:()=>openBuilder(null),
  repOrd:(el)=>openBuilder(S.orders.find(o=>o.id===el.dataset.x),true),
  editOrd:(el)=>{const o=S.orders.find(x=>x.id===el.dataset.x);if(!o)return;
-  if(isDist()||isAdmin()||(isSup()&&o.ordered_by===S.acct.id)) openBuilder(o); else if(role()==="driver"){S.ob={id:o.id};render();}},
+  if(isRes()||isAdmin()) openBuilder(o); else if(isDriver()){S.ob={id:o.id};render();}},
  closeOrd:()=>{S.ob=null;render();},
  togStore:(el)=>{keepLabel();const id=el.dataset.x;
   if(S.ob.stores[id]!=null) delete S.ob.stores[id];
@@ -2217,40 +2210,54 @@ const ACT={
  payStore:(el)=>{S.payForm.amt=$("payAmt")?$("payAmt").value:"";S.payForm.sid=el.dataset.x;render();},
  payCancel:()=>{S.payForm=null;render();},
  paySave:async(el)=>{const amt=Number($("payAmt").value);if(!(amt>0))return fail(T().amount);
-  el.disabled=true;const row={store_id:S.payForm.sid,amount:amt,paid_on:S.today,notes:"Recorded by distributor"};
+  el.disabled=true;const row={store_id:S.payForm.sid,amount:amt,paid_on:S.today,notes:"Recorded by "+(S.acct.name||"")};
   const {error}=await db.from("store_payments").insert(row);
   if(error){el.disabled=false;return fail(error.message);}
   S.payments.push(row);S.payForm=null;render();},
- lotSel:(el)=>{const d=el.dataset.x;S.sel.has(d)?S.sel.delete(d):S.sel.add(d);S.sigDrawn=false;render();},
- selAll:(el)=>{const L=lots().filter(x=>x.state===el.dataset.x),all=L.every(x=>S.sel.has(x.d));
-  S.sel=new Set(all?[]:L.map(x=>x.d));S.sigDrawn=false;render();},
- selNone:()=>{S.sel=new Set();S.sigDrawn=false;render();},
+ lotSel:(el)=>{const k=el.dataset.x;S.sel.has(k)?S.sel.delete(k):S.sel.add(k);S.sigOk={};render();},
+ selAll:(el)=>{const L=listFor(el.dataset.x),all=L.every(x=>S.sel.has(x.k));
+  L.forEach(x=>all?S.sel.delete(x.k):S.sel.add(x.k));S.sigOk={};render();},
+ selNone:(el)=>{listFor(el.dataset.x).forEach(x=>S.sel.delete(x.k));S.sigOk={};render();},
+ statView:(el)=>{S.statView=el.dataset.x;render();},
+ statR:(el)=>{S.statR=el.dataset.x||null;render();},
+ obDriver:(el)=>{S.ob.driver=S.ob.driver===el.dataset.x?null:el.dataset.x;render();},
+ togDistr:async(el)=>{const x=S.accounts.find(a=>a.id===el.dataset.x);if(!x)return;x.is_distributor=!x.is_distributor;
+  if(S.names[x.id])S.names[x.id].is_distributor=x.is_distributor;render();await upd("drivers",x.id,{is_distributor:x.is_distributor});},
+ setDist:async(el)=>{const [id,d]=el.dataset.x.split("|");const x=S.accounts.find(a=>a.id===id);if(!x)return;x.distributor_id=d||null;
+  if(S.names[id])S.names[id].distributor_id=x.distributor_id;render();await upd("drivers",id,{distributor_id:x.distributor_id});},
  lotSign:async(el)=>{
-  const state=el.dataset.x,L=lots().filter(x=>x.state===state&&S.sel.has(x.d));if(!L.length)return;
-  el.disabled=true;const now=new Date().toISOString(),sig=$("sig").toDataURL("image/png"),who=nm(S.acct);
+  const state=el.dataset.x,L=listFor(state).filter(x=>S.sel.has(x.k));if(!L.length)return;
+  el.disabled=true;const now=new Date().toISOString(),sig=$("sig-"+state).toDataURL("image/png"),who=nm(S.acct);
   try{
    if(state==="check"){
-    L.forEach(x=>{const e=$("ln-"+x.d);if(e)S.lotNotes[x.d]=e.value.trim();});
-    const rows=L.map(x=>({lot_date:x.d,amount:x.cost,waste_pct:x.waste,dist_signed_at:now,dist_signed_by:who,dist_signature:sig,note:S.lotNotes[x.d]||null}));
-    const {error}=await db.from("lot_signoffs").upsert(rows,{onConflict:"lot_date"});if(error) throw error;
-    rows.forEach(r=>{const o=S.signoffs.find(x=>x.lot_date===r.lot_date);const v={lot_date:r.lot_date,amount:r.amount,waste_pct:r.waste_pct,dist_signed_at:now,dist_signed_by:who,note:r.note};
+    // the reseller checks wastage and signs: goes to their distributor
+    L.forEach(x=>{const e=$("ln-"+x.k);if(e)S.lotNotes[x.k]=e.value.trim();});
+    const rows=L.map(x=>({reseller_id:x.r,lot_date:x.d,amount:x.cost,waste_pct:x.waste,dist_signed_at:now,dist_signed_by:who,dist_signature:sig,note:S.lotNotes[x.k]||null}));
+    const {error}=await db.from("lot_signoffs").upsert(rows,{onConflict:"reseller_id,lot_date"});if(error) throw error;
+    rows.forEach(r=>{const o=S.signoffs.find(x=>x.reseller_id===r.reseller_id&&x.lot_date===r.lot_date);
+     const v={reseller_id:r.reseller_id,lot_date:r.lot_date,amount:r.amount,waste_pct:r.waste_pct,dist_signed_at:now,dist_signed_by:who,note:r.note};
      o?Object.assign(o,v):S.signoffs.push(v);});
-    S.sel=new Set();render();toast(T().signSend(L.length,sup()));
+    L.forEach(x=>S.sel.delete(x.k));S.sigOk={};render();toast(T().signSend(L.length,sup()));
    }else{
-    const dates=L.map(x=>x.d),amt=L.reduce((a,x)=>a+x.cost,0);
-    const {data,error}=await db.from("supplier_payments").insert({supplier_id:S.supplier.id,amount:amt,paid_on:S.today,covers_dates:dates,
-     signed_at:now,signature:sig,signed_by:who}).select("id").single();if(error) throw error;
-    const {error:e2}=await db.from("lot_signoffs").update({sup_signed_at:now,sup_signed_by:who,sup_signature:sig,payment_id:data.id}).in("lot_date",dates);
-    if(e2) throw e2;
-    S.supPay.push({amount:amt,paid_on:S.today,covers_dates:dates});
-    S.signoffs.forEach(o=>{if(dates.includes(o.lot_date)){o.sup_signed_at=now;o.sup_signed_by=who;}});
-    S.sel=new Set();render();toast(T().signClose(L.length));
+    // the distributor signs to close: one payment per reseller
+    const by={};L.forEach(x=>{(by[x.r]=by[x.r]||[]).push(x);});
+    for(const rid of Object.keys(by)){
+     const dates=by[rid].map(x=>x.d),amt=by[rid].reduce((a,x)=>a+x.cost,0);
+     const {data,error}=await db.from("supplier_payments").insert({supplier_id:S.supplier.id,reseller_id:rid,amount:amt,paid_on:S.today,covers_dates:dates,
+      signed_at:now,signature:sig,signed_by:who}).select("id").single();if(error) throw error;
+     const {error:e2}=await db.from("lot_signoffs").update({sup_signed_at:now,sup_signed_by:who,sup_signature:sig,payment_id:data.id}).eq("reseller_id",rid).in("lot_date",dates);
+     if(e2) throw e2;
+     S.supPay.push({amount:amt,paid_on:S.today,covers_dates:dates,reseller_id:rid});
+     S.signoffs.forEach(o=>{if(o.reseller_id===rid&&dates.includes(o.lot_date)){o.sup_signed_at=now;o.sup_signed_by=who;}});
+    }
+    L.forEach(x=>S.sel.delete(x.k));S.sigOk={};render();toast(T().signClose(L.length));
    }
   }catch(e){el.disabled=false;fail(e.message||String(e));}},
- lotOpen:async(el)=>{const d=el.dataset.x;S.lotOpen=S.lotOpen===d?null:d;render();
-  if(S.lotOpen&&!S.sigCache[d]&&S.signoffs.some(x=>x.lot_date===d)){
-   const {data}=await db.from("lot_signoffs").select("dist_signature,sup_signature").eq("lot_date",d).single();
-   if(data){S.sigCache[d]={dist:data.dist_signature,sup:data.sup_signature};if(S.lotOpen===d)render();}}},
+ lotOpen:async(el)=>{const k=el.dataset.x;S.lotOpen=S.lotOpen===k?null:k;render();
+  const i=k.lastIndexOf("_"),rid=k.slice(0,i),d=k.slice(i+1);
+  if(S.lotOpen&&!S.sigCache[k]&&S.signoffs.some(x=>x.reseller_id===rid&&x.lot_date===d)){
+   const {data}=await db.from("lot_signoffs").select("dist_signature,sup_signature").eq("reseller_id",rid).eq("lot_date",d).single();
+   if(data){S.sigCache[k]={dist:data.dist_signature,sup:data.sup_signature};if(S.lotOpen===k)render();}}},
 
  /* settings / accounts */
  resetOpen:()=>{S.reset=true;render();},
@@ -2296,11 +2303,17 @@ const ACT={
   if(error){el.disabled=false;return fail(error.code==="23505"?T().pinTaken:error.message);}
   S.accounts.push(data);S.addAcct=null;syncSupplierName();render();},
  pinEdit:(el)=>{S.pinEdit=S.pinEdit===el.dataset.x?null:el.dataset.x;render();},
- pinSave:async(el)=>{const pin=$("pinNew").value.trim();if(!/^[0-9]{4}$/.test(pin)) return fail(T().pinRule);
+ pinSave:async(el)=>{const pin=$("pinNew").value.trim(),th=$("edTh")?$("edTh").value.trim():"",en=$("edEn")?$("edEn").value.trim():"";
+  if(!/^[0-9]{4}$/.test(pin)) return fail(T().pinRule);
+  if(!th&&!en) return fail(T().needName);
   if(S.accounts.some(x=>x.pin===pin&&x.id!==el.dataset.x)) return fail(T().pinTaken);
-  el.disabled=true;const {error}=await db.from("drivers").update({pin}).eq("id",el.dataset.x);
+  const patch={pin,name:en||th,name_th:th||null};
+  el.disabled=true;const {error}=await db.from("drivers").update(patch).eq("id",el.dataset.x);
   if(error){el.disabled=false;return fail(error.code==="23505"?T().pinTaken:error.message);}
-  const a=S.accounts.find(x=>x.id===el.dataset.x);if(a)a.pin=pin;S.pinEdit=null;render();},
+  const a=S.accounts.find(x=>x.id===el.dataset.x);if(a)Object.assign(a,patch);
+  if(S.names[el.dataset.x])Object.assign(S.names[el.dataset.x],{name:patch.name,name_th:patch.name_th});
+  if(S.acct&&S.acct.id===el.dataset.x){Object.assign(S.acct,{name:patch.name,name_th:patch.name_th});try{localStorage.setItem("ss_acct",JSON.stringify(S.acct));}catch(e){}}
+  S.pinEdit=null;render();},
  rmAcct:async()=>{const id=(S.confirm||"").split(":")[1];if(!id)return;
   if(id===S.acct.id) return fail(T().cantRemoveSelf);
   let {error}=await db.from("drivers").delete().eq("id",id);
@@ -2314,7 +2327,7 @@ const ACT={
  ldAll:()=>{S.stops.filter(s=>!s.done).forEach(s=>s.out.forEach(x=>{if(x.qty)S.dv.loaded[x.pid]=true;}));saveProgress();render();},
  ld:(el)=>{S.dv.loaded[el.dataset.x]=!S.dv.loaded[el.dataset.x];render();},
  dvStart:()=>{S.dv.si=nextTodo(0);S.dv.pi=0;S.dv.phase="go";render();
-  db.from("runs").upsert({run_date:S.today,driver_ref:role()==="driver"?S.acct.id:null},{onConflict:"run_date"}).then(()=>{},()=>{});},
+  db.from("runs").upsert({run_date:S.today,driver_ref:isDriver()?S.acct.id:null},{onConflict:"run_date"}).then(()=>{},()=>{});},
  mapOpen:()=>saveProgress(),
  dvHere:()=>{S.dv.pi=0;S.dv.phase="drop";render();},
  cnt:(el)=>{const st=S.stops[S.dv.si],b=st.back[S.dv.pi];b.qty=Math.max(0,Math.min(b.out,b.qty+ +el.dataset.x));
