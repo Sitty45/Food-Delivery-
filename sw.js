@@ -1,15 +1,16 @@
-/* Dessert run — offline shell.
+/* สั่ง/ส่ง — offline shell + phone notifications.
    The page itself is network-first so a new deploy always wins; the cached copy
    is only used when the network fails. Fonts, libraries and map tiles stay
    cache-first because they don't change. */
-const V = "dr-v3";
+const V = "dr-v4";
 const SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
-  "https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600&display=swap",
+  "https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&display=swap",
+  "https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css",
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -75,5 +76,36 @@ self.addEventListener("fetch", e => {
         }
         return r;
       }))
+  );
+});
+
+/* ---------- phone notifications ----------
+   Every push is shown (iPhone requires it). The app icon shows how many are waiting;
+   opening the app clears it. Tapping a notification opens the app on the right tab. */
+self.addEventListener("push", e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (_) { d = { body: e.data ? e.data.text() : "" }; }
+  const title = d.title || "สั่ง/ส่ง";
+  const opts = { body: d.body || "", icon: "icon-192.png", badge: "icon-192.png", lang: d.lang || "th",
+                 data: { url: d.url || "./" } };
+  if (d.tag) { opts.tag = d.tag; opts.renotify = true; }
+  e.waitUntil(
+    self.registration.showNotification(title, opts)
+      .then(() => self.registration.getNotifications())
+      .then(list => (self.navigator && self.navigator.setAppBadge) ? self.navigator.setAppBadge(list.length).catch(() => {}) : null)
+      .catch(() => {})
+  );
+});
+
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || "./", self.registration.scope).href;
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(ws => {
+      for (const w of ws) {
+        if ("focus" in w) { w.postMessage({ type: "open", url }); return w.focus(); }
+      }
+      return self.clients.openWindow(url);
+    })
   );
 });
